@@ -14,6 +14,7 @@
     let fooddata      = ref(null)
     let currentFoodId = ref(0)
     let edit          = ref(false)
+    let errorMsg      = ref('')
 
     // Read all foods from Api.
     let config =
@@ -28,26 +29,44 @@
 
     function loadFoods()
     {
+        errorMsg.value = ''
+
         axios.get('https://api.mon-menu.app/getFoods', config)
         .then((response) =>
         {
             foods.value = response.data.foods
-        })
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible de récupérer la liste des aliments dans la base de données.'
+        });
     }
 
     function loadFoodData(id)
     {
+        errorMsg.value = ''
+
         // Load food data from Api.
         axios.get('https://api.mon-menu.app/getFoodData/' + id, config)
         .then((response) =>
         {
-            fooddata.value = response.data
-            currentFoodId  = id
-        })
+            if (response.status == 200)
+            {
+                fooddata.value = response.data
+                currentFoodId  = id
+            }
+
+            else
+                errorMsg.value = 'Impossible de récupérer les données de l\'aliment sélectionné.'
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible de récupérer les données de l\'aliment sélectionné.'
+        });
     }
 
     function addFoodEntry()
     {
+        errorMsg.value = ''
+
         // Add entry into database through Api.
         axios.post('https://api.mon-menu.app/createFood', '', config)
         .then((response) =>
@@ -55,12 +74,18 @@
             if (response.status == 200)
                 loadFoods()
 
-            // TODO: check for error.
-        })
+            else
+                errorMsg.value = 'Impossible d\'ajouter un nouvel aliment.'    
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible d\'ajouter un nouvel aliment.'
+        });
     }
 
     function deleteFood(event, id)
     {
+        errorMsg.value = ''
+
         // Add entry into database through Api.
         axios.delete('https://api.mon-menu.app/deleteFood/' + id, config)
         .then((response) =>
@@ -68,20 +93,30 @@
             if (response.status == 200)
                 loadFoods()
 
-            // TODO: check for error.
-        })
+            else
+            errorMsg.value = 'Impossible de supprimer l\'aliment sélectionné.'
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible de supprimer l\'aliment sélectionné.'
+        });
 
         event.stopPropagation();
     }
 
     function saveFood()
     {
+        errorMsg.value = ''
+
         // Send food data to Api.
         axios.put('https://api.mon-menu.app/updateFood', fooddata.value, config)
         .then((response) =>
         {
-            // TODO: check for error.
-        })
+            if (response.status != 200)
+                errorMsg.value = 'Impossible d\'enregistrer les modifications effectuées dans la base de données.'
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible d\'enregistrer les modifications effectuées dans la base de données.'
+        });
     }
 
     function toogleEditMode()
@@ -191,6 +226,9 @@
         <div class="Foods_List_cls">
             <p class="Foods_List_Title_cls">Aliments</p>
             <button class="Foods_Add_Button_cls" @click="addFoodEntry()">Ajouter une entrée</button>
+            <div v-if="errorMsg" class="ErrorMsg_cls">
+                {{ errorMsg }}
+            </div>
             <ul>
                 <li v-for="entry in foods" @click="loadFoodData(entry.id)">
                     <span class="Foods_List_Entry_Title_cls">{{ entry.title }}</span><button class="Foods_Remove_Button_cls" @click="deleteFood($event, entry.id)">🗑️</button>
@@ -317,5 +355,16 @@
         right:      10px;
         height:     30px;
         width:      30px;
+    }
+
+    .ErrorMsg_cls
+    {
+        background-color: rgb(233, 206, 206);
+        border:             dashed 1px red;
+        border-radius:      5px;
+        margin:             10px;
+        text-align:         center;
+        padding:            10px;
+        color:            red;
     }
 </style>
