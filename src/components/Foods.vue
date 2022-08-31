@@ -2,12 +2,18 @@
     import EnvironmentalImpact from './Food/EnvironmentalImpact.vue'
     import Nutrition           from './Food/Nutrition.vue'
     import Months              from './Food/Months.vue'
+    import Title               from './Food/Title.vue'
+    import Subtitle            from './Food/Subtitle.vue'
+    import SupplyArea          from './Food/SupplyArea.vue'
+    import Cost                from './Food/Cost.vue'
 
     import { ref } from 'vue'
     import axios from 'axios'
 
-    let foods    = ref([])
-    let fooddata = ref(null)
+    let foods         = ref([])
+    let fooddata      = ref(null)
+    let currentFoodId = ref(0)
+    let edit          = ref(false)
 
     // Read all foods from Api.
     let config =
@@ -36,6 +42,7 @@
         .then((response) =>
         {
             fooddata.value = response.data
+            currentFoodId  = id
         })
     }
 
@@ -62,6 +69,72 @@
 
         event.stopPropagation();
     }
+
+    function toogleEditMode()
+    {
+        edit.value = !edit.value
+    }
+
+    function updateTitle(title)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.title = title
+
+        for (let i = 0 ; i < foods.value.length ; i++)
+        {
+            var id = foods.value[i].id
+            if (id == currentFoodId)
+                foods.value[i].title = title
+        }
+    }
+
+    function updateSubtitle(subtitle)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.details = subtitle
+
+        for (let i = 0 ; i < foods.value.length ; i++)
+        {
+            var id = foods.value[i].id
+            if (id == currentFoodId)
+                foods.value[i].details = subtitle
+        }
+    }
+
+    function toogleMonth(month)
+    {
+        if (!edit.value)
+            return
+
+        if (fooddata.value.months == null)
+            fooddata.value.months = []
+
+        if (fooddata.value.months.includes(month))
+            fooddata.value.months = fooddata.value.months.filter(e => {return e != month})
+
+        else
+            fooddata.value.months.push(month)
+    }
+
+    function updateSupplyArea(area)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.supplyArea = area
+    }
+
+    function updateCost(cost)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.cost = cost
+    }
 </script>
 
 <template>
@@ -78,12 +151,13 @@
         </div>
 
         <div v-if="fooddata" class="FoodData_cls">
-            <p class="FoodData_Title_cls">{{ fooddata.title }}</p>
-            <p class="FoodData_Subtitle_cls">{{ fooddata.details }}</p>
+            <button class="Food_Edit_Button_cls" @click="toogleEditMode()">✏️</button>
+            <Title :title="fooddata.title" :edit="edit" @changeTitle="(title) => updateTitle(title)"></Title>
+            <Subtitle :subtitle="fooddata.details" :edit="edit" @changeSubtitle="(subtitle) => updateSubtitle(subtitle)"></Subtitle>
             <div class="FoodData_Spacer_cls"></div>
-            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Disponibilité : </span> <Months :months="fooddata.months" /></p>
-            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span><span class="FoodData_Entry_Value">{{ fooddata.supplyArea == 1 ? "local" : fooddata.supplyArea == 2 ? "national" : fooddata.supplyArea == 4 ? "continental" : fooddata.supplyArea == 8 ? "mondial" : "non défini" }}</span></p>
-            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><span class="FoodData_Entry_Value">{{ fooddata.cost }} €/kg</span></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Disponibilité : </span> <Months :months="fooddata.months" :edit="edit" @toogleMonth="(month) => toogleMonth(month)"/></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span> <SupplyArea :area="fooddata.supplyArea" :edit="edit" @changeSupplyArea="(area) => updateSupplyArea(area)"></SupplyArea></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><Cost :cost="fooddata.cost" :edit="edit" @changeCost="(cost) => updateCost(cost)"></Cost></p>
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact"></EnvironmentalImpact>
             <Nutrition :data="fooddata.nutrition"></Nutrition>
@@ -158,20 +232,6 @@
         overflow:   auto;
     }
 
-    .FoodData_Title_cls
-    {
-        font-weight:    bold;
-        font-size:      1.3em;
-        color:        #66b2ff;
-        margin:         0px;
-    }
-
-    .FoodData_Subtitle_cls
-    {
-        margin:     0px;
-        font-style: italic;
-    }
-
     .FoodData_Entry_Title
     {
         display:        inline-block;
@@ -199,5 +259,14 @@
         display: inline;
         position: absolute;
         right: 15px;
+    }
+
+    .Food_Edit_Button_cls
+    {
+        position:   absolute;
+        top:        0px;
+        right:      10px;
+        height:     30px;
+        width:      30px;
     }
 </style>
