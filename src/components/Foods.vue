@@ -225,7 +225,7 @@
     <div>
         <div class="Foods_List_cls">
             <p class="Foods_List_Title_cls">Aliments</p>
-            <button class="Foods_Add_Button_cls" @click="addFoodEntry()">Ajouter une entrée</button>
+            <button class="Foods_Add_Button_cls" @click="addFoodEntry()">Ajouter un aliment</button>
             <div v-if="errorMsg" class="ErrorMsg_cls">
                 {{ errorMsg }}
             </div>

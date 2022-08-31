@@ -7,57 +7,43 @@
         "title": "Aliments"
     },
     {
-        "page": "about",
-        "title": "A propos"
+        "page": "recipes",
+        "title": "Recettes"
+    },
+    {
+        "page": "config",
+        "title": "Configuration"
     }])
 </script>
 
 <template>
-    <ul>
-        <li v-for="entry in entries">
-            <router-link :to="entry.page"><p>{{ entry.title }}</p></router-link>
-        </li>
-    </ul>
+    <div class="Menu_cls">
+        <span v-for="entry in entries">
+            <router-link :to="entry.page">{{ entry.title }}</router-link>
+        </span>
+    </div>
 </template>
 
 <style scoped>
-    ul
+    .Menu_cls
     {
-        list-style: none;
-        margin:     0px;
-        padding:    0px;
-    }
-
-    li
-    {
-        margin-top:     5px;
-        margin-bottom:  5px;
+        display:        inline-flex;
+        margin-left:    50px;
+        flex-direction: row;
+        gap:            20px;
     }
 
     a
     {
-        display:            inline-block;
-        background-color: #66b2ff;
-        
-        color:            blue;
-        font-size:          1.5em;
-        width:              100%;
-        margin:             0px;
-        padding:            0px;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:            #c8b273;
+        font-size:          1.3em;
         text-decoration:    none;
-        text-align:         center;
+        padding:            3px;
     }
 
     a:hover
     {
-        background-color: #3399ff;
-    }
-
-    p
-    {
-        margin:         0px;
-        vertical-align: middle;
-        height:         50px;
-        line-height:    50px;
+        border-bottom: solid 3px #9f5069;
     }
 </style>

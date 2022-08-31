@@ -2,14 +2,16 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import Foods from './components/Foods.vue';
-import About from './components/About.vue';
+import Configuration from './components/Configuration.vue';
+import Recipes       from './components/Recipes.vue';
+import Foods         from './components/Foods.vue';
 
 const routes =
 [
-    { path: '/foods', component: Foods },
-    { path: '/about', component: About },
-    { path: '/',      component: About },
+    { path: '/foods',   component: Foods         },
+    { path: '/recipes', component: Recipes       },
+    { path: '/config',  component: Configuration },
+    { path: '/',        component: null          },
 ]
 
 const router = createRouter(
