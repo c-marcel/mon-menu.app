@@ -1,6 +1,43 @@
 <script setup>
     import { ref } from 'vue'
-    const props = defineProps(['data'])
+    const props = defineProps(['data', 'edit'])
+
+    defineEmits(['changeNutritionData', 'changeNutritionDataSource'])
+
+    const metadata = ref([
+        { "key": "energy", "title": "Energie", "units": "kcal/100 g", "conversion": 10.0 },
+        { "key": "proteins", "title": "Protéines", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "carbohydrates", "title": "Glucides", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "lipids", "title": "Lipides", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "sugars", "title": "Sucres", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "fibers", "title": "Fibres", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega3_ala", "title": "Oméga 3 ALA", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega3_epa", "title": "Oméga 3 EPA", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega3_dha", "title": "Oméga 3 DHA", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega6_la", "title": "Oméga 6 LA", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega6_ara", "title": "Oméga 6 ARA", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "omega9", "title": "Oméga 9", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "salt", "title": "Sel", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "calcium", "title": "Calcium", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "copper", "title": "Cuivre", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "iron", "title": "Fer", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "iodine", "title": "Iode", "units": "µg/100 g", "conversion": 0.00000001 },
+        { "key": "magnesium", "title": "Magnésium", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "sodium", "title": "Sodium", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "zinc", "title": "Zinc", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "vitamin_c", "title": "Vitamine C", "units": "mg/100 g", "conversion": 0.00001 },
+        { "key": "vitamin_d", "title": "Vitamine D", "units": "µg/100 g", "conversion": 0.00000001 },
+    ])
+
+    function round(value)
+    {
+        return Math.round(value * 100.0) / 100.0;
+    }
+
+    function formatFloat(value)
+    {
+        return String(round(value)).replaceAll('.', ',')
+    }
 </script>
 
 <template>
@@ -8,29 +45,17 @@
         <p class="Nutrition_cls">Informations nutritionnelles</p>
         <table>
             <tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr>
-            <tr v-if="data.energy != undefined"><td>Energie</td><td>{{ data.energy.value }} kcal/kg</td><td>{{ data.energy.source }}</td></tr>
-            <tr v-if="data.proteins != undefined"><td>Protéines</td><td>{{ data.proteins.value }} kg/kg</td><td>{{ data.proteins.source }}</td></tr>
-            <tr v-if="data.carbohydrates != undefined"><td>Glucides</td><td>{{ data.carbohydrates.value }} kg/kg</td><td>{{ data.carbohydrates.source }}</td></tr>
-            <tr v-if="data.lipids != undefined"><td>Lipides</td><td>{{ data.lipids.value }} kg/kg</td><td>{{ data.lipids.source }}</td></tr>
-            <tr v-if="data.sugars != undefined"><td>Sucres</td><td>{{ data.sugars.value }} kg/kg</td><td>{{ data.sugars.source }}</td></tr>
-            <tr v-if="data.fibers != undefined"><td>Fibres</td><td>{{ data.fibers.value }} kg/kg</td><td>{{ data.fibers.source }}</td></tr>
-            <tr v-if="data.omega3_ala != undefined"><td>Oméga 3 ALA</td><td>{{ data.omega3_ala.value }} kg/kg</td><td>{{ data.omega3_ala.source }}</td></tr>
-            <tr v-if="data.omega3_epa != undefined"><td>Oméga 3 EPA</td><td>{{ data.omega3_epa.value }} kg/kg</td><td>{{ data.omega3_epa.source }}</td></tr>
-            <tr v-if="data.omega3_dha != undefined"><td>Oméga 3 DHA</td><td>{{ data.omega3_dha.value }} kg/kg</td><td>{{ data.omega3_dha.source }}</td></tr>
-            <tr v-if="data.omega6_la != undefined"><td>Oméga 6 LA</td><td>{{ data.omega6_la.value }} kg/kg</td><td>{{ data.omega6_la.source }}</td></tr>
-            <tr v-if="data.omega6_ara != undefined"><td>Oméga 6 ARA</td><td>{{ data.omega6_ara.value }} kg/kg</td><td>{{ data.omega6_ara.source }}</td></tr>
-            <tr v-if="data.omega9 != undefined"><td>Oméga 9</td><td>{{ data.omega9.value }} kg/kg</td><td>{{ data.omega9.source }}</td></tr>
-            <tr v-if="data.salt != undefined"><td>Sel</td><td>{{ data.salt.value }} kg/kg</td><td>{{ data.salt.source }}</td></tr>
-            <tr v-if="data.calcium != undefined"><td>Calcium</td><td>{{ data.calcium.value }} kg/kg</td><td>{{ data.calcium.source }}</td></tr>
-            <tr v-if="data.copper != undefined"><td>Cuivre</td><td>{{ data.copper.value }} kg/kg</td><td>{{ data.copper.source }}</td></tr>
-            <tr v-if="data.iron != undefined"><td>Fer</td><td>{{ data.iron.value }} kg/kg</td><td>{{ data.iron.source }}</td></tr>
-            <tr v-if="data.iodine != undefined"><td>Iode</td><td>{{ data.iodine.value }} kg/kg</td><td>{{ data.iodine.source }}</td></tr>
-            <tr v-if="data.magnesium != undefined"><td>Magnésium</td><td>{{ data.magnesium.value }} kg/kg</td><td>{{ data.magnesium.source }}</td></tr>
-            <tr v-if="data.sodium != undefined"><td>Sodium</td><td>{{ data.sodium.value }} kg/kg</td><td>{{ data.sodium.source }}</td></tr>
-            <tr v-if="data.zinc != undefined"><td>Zinc</td><td>{{ data.zinc.value }} kg/kg</td><td>{{ data.zinc.source }}</td></tr>
-            <tr v-if="data.vitamin_c != undefined"><td>Vitamine C</td><td>{{ data.vitamin_c.value }} kg/kg</td><td>{{ data.vitamin_c.source }}</td></tr>
-            <tr v-if="data.vitamin_d != undefined"><td>Vitamine D</td><td>{{ data.vitamin_d.value }} kg/kg</td><td>{{ data.vitamin_d.source }}</td></tr>
-            
+            <tr v-for="entry in metadata">
+                <td>{{entry.title}}</td>
+                <td>
+                    <span v-if="!edit && data[entry.key] != undefined">{{ formatFloat(data[entry.key].value / entry.conversion) + ' ' + entry.units }} </span>
+                    <span v-if="edit && data[entry.key] != undefined"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /> {{ entry.units }}</span>
+                </td>
+                <td>
+                    <span v-if="!edit && data[entry.key] != undefined">{{ data[entry.key].source }}</span>
+                    <input v-if="edit && data[entry.key] != undefined" type="text" class="NutritionField_cls" :value="data[entry.key].source" @change="$emit('changeNutritionDataSource', entry.key, $event.target.value)" />
+                </td>
+            </tr>
         </table>
     </div>
 </template>
@@ -59,7 +84,13 @@
 
     td
     {
-        color: gray;
-        border:  solid 1px #66b2ff;
+        color:      gray;
+        border:     solid 1px #66b2ff;
+        max-width:  300px;
+    }
+
+    .NutritionField_cls
+    {
+        width: 90%;
     }
 </style>

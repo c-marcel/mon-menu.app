@@ -54,6 +54,8 @@
         {
             if (response.status == 200)
                 loadFoods()
+
+            // TODO: check for error.
         })
     }
 
@@ -65,13 +67,28 @@
         {
             if (response.status == 200)
                 loadFoods()
+
+            // TODO: check for error.
         })
 
         event.stopPropagation();
     }
 
+    function saveFood()
+    {
+        // Send food data to Api.
+        axios.put('https://api.mon-menu.app/updateFood', fooddata.value, config)
+        .then((response) =>
+        {
+            // TODO: check for error.
+        })
+    }
+
     function toogleEditMode()
     {
+        if (edit.value)
+            saveFood()
+
         edit.value = !edit.value
     }
 
@@ -135,6 +152,38 @@
 
         fooddata.value.cost = cost
     }
+
+    function updateCo2eq(value)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.environmentalImpact.co2eq.kgco2e_kg = value
+    }
+
+    function changeCo2eqSource(value)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.environmentalImpact.co2eq.source = value
+    }
+
+    function updateNutrition(field, value)
+    {
+        if (!edit.value)
+            return
+
+        fooddata.value.nutrition[field].value = value
+    }
+
+    function updateNutritionSource(field, value)
+    {
+        if (!edit.value)
+            return
+
+            fooddata.value.nutrition[field].source = value
+    }
 </script>
 
 <template>
@@ -159,8 +208,8 @@
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span> <SupplyArea :area="fooddata.supplyArea" :edit="edit" @changeSupplyArea="(area) => updateSupplyArea(area)"></SupplyArea></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><Cost :cost="fooddata.cost" :edit="edit" @changeCost="(cost) => updateCost(cost)"></Cost></p>
             <div class="FoodData_Spacer_cls"></div>
-            <EnvironmentalImpact :data="fooddata.environmentalImpact"></EnvironmentalImpact>
-            <Nutrition :data="fooddata.nutrition"></Nutrition>
+            <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" ></EnvironmentalImpact>
+            <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)"></Nutrition>
         </div>
     </div>
 </template>
