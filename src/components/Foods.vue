@@ -18,11 +18,16 @@
         }
     }
 
-    axios.get('https://api.mon-menu.app/getFoods', config)
+    loadFoods()
+
+    function loadFoods()
+    {
+        axios.get('https://api.mon-menu.app/getFoods', config)
         .then((response) =>
         {
             foods.value = response.data.foods
         })
+    }
 
     function loadFoodData(id)
     {
@@ -33,16 +38,41 @@
             fooddata.value = response.data
         })
     }
+
+    function addFoodEntry()
+    {
+        // Add entry into database through Api.
+        axios.post('https://api.mon-menu.app/createFood', '', config)
+        .then((response) =>
+        {
+            if (response.status == 200)
+                loadFoods()
+        })
+    }
+
+    function deleteFood(event, id)
+    {
+        // Add entry into database through Api.
+        axios.delete('https://api.mon-menu.app/deleteFood/' + id, config)
+        .then((response) =>
+        {
+            if (response.status == 200)
+                loadFoods()
+        })
+
+        event.stopPropagation();
+    }
 </script>
 
 <template>
     <div>
         <div class="Foods_List_cls">
             <p class="Foods_List_Title_cls">Aliments</p>
+            <button class="Foods_Add_Button_cls" @click="addFoodEntry()">Ajouter une entrée</button>
             <ul>
                 <li v-for="entry in foods" @click="loadFoodData(entry.id)">
-                <p class="Foods_List_Entry_Title_cls">{{ entry.title }}</p>
-                <p class="Foods_List_Entry_Subtitle_cls">{{ entry.details }}</p>
+                    <span class="Foods_List_Entry_Title_cls">{{ entry.title }}</span><button class="Foods_Remove_Button_cls" @click="deleteFood($event, entry.id)">🗑️</button>
+                    <p class="Foods_List_Entry_Subtitle_cls">{{ entry.details }}</p>
                 </li>
             </ul>
         </div>
@@ -73,6 +103,7 @@
         bottom:             10px;
         border:             solid 1px blue;
         border-radius:      5px;
+        overflow:           auto;
     }
 
     .Foods_List_Title_cls
@@ -96,18 +127,25 @@
         cursor:     pointer;
     }
 
+    li:hover
+    {
+        background-color: #d0dbdf;
+    }
+
     .Foods_List_Entry_Title_cls
     {
         margin:         0px;
         font-weight:    bold;
         font-size:      1.1em;
         color:        #66b2ff;
+        min-height:     15px;
     }
 
     .Foods_List_Entry_Subtitle_cls
     {
         margin:     0px;
         font-style: italic;
+        min-height: 15px;
     }
 
     .FoodData_cls
@@ -140,11 +178,6 @@
         font-weight:    bold;
         min-width:      150px;
     }
-
-    .FoodData_Entry_Value
-    {
-    }
-
     .FoodData_Entry_cls
     {
         margin-top:     5px;
@@ -154,5 +187,17 @@
     .FoodData_Spacer_cls
     {
         height: 20px;
+    }
+
+    .Foods_Add_Button_cls
+    {
+        margin-left: 10px;
+    }
+
+    .Foods_Remove_Button_cls
+    {
+        display: inline;
+        position: absolute;
+        right: 15px;
     }
 </style>

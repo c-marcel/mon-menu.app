@@ -2,18 +2,30 @@
     import { ref, computed } from 'vue'
     const props = defineProps(['months'])
 
-    const month_01 = computed(() => { return props.months.includes(1) })
-    const month_02 = computed(() => { return props.months.includes(2) })
-    const month_03 = computed(() => { return props.months.includes(3) })
-    const month_04 = computed(() => { return props.months.includes(4) })
-    const month_05 = computed(() => { return props.months.includes(5) })
-    const month_06 = computed(() => { return props.months.includes(6) })
-    const month_07 = computed(() => { return props.months.includes(7) })
-    const month_08 = computed(() => { return props.months.includes(8) })
-    const month_09 = computed(() => { return props.months.includes(9) })
-    const month_10 = computed(() => { return props.months.includes(10) })
-    const month_11 = computed(() => { return props.months.includes(11) })
-    const month_12 = computed(() => { return props.months.includes(12) })
+    const month_01 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(1) })
+    const month_02 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(2) })
+    const month_03 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(3) })
+    const month_04 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(4) })
+    const month_05 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(5) })
+    const month_06 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(6) })
+    const month_07 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(7) })
+    const month_08 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(8) })
+    const month_09 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(9) })
+    const month_10 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(10) })
+    const month_11 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(11) })
+    const month_12 = computed(() => { if(!props.months) return false 
+        else return props.months.includes(12) })
 </script>
 
 <template>
