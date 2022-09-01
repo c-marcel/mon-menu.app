@@ -1,10 +1,7 @@
 <script setup>
     import { ref } from 'vue'
 
-    let active               = ref(true)
-    let isAddButtonActive    = ref(true)
-    let isRemoveButtonActive = ref(true)
-    let isEditButtonActive   = ref(true)
+    const props = defineProps(['active', 'isAddButtonActive', 'isRemoveButtonActive', 'isEditButtonActive'])
 
     defineEmits(['addFoodRequested', 'removeFoodRequested', 'editFoodRequested'])
 </script>

@@ -23,10 +23,16 @@
     // Watch props changes to update food sheet.
     watch(props, (value) =>
     {
-        if(loadedId != value.currentFoodId)
+        if(loadedId != value.currentFoodId && value.currentFoodId != 0)
         {
             foodModified.value = false
             loadFoodData(value.currentFoodId)
+        }
+
+        if (value.currentFoodId == 0)
+        {
+            loadedId       = 0
+            fooddata.value = null
         }
 
         // If edit mode has been terminated: save item.
