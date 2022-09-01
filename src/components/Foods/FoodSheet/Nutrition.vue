@@ -42,51 +42,84 @@
 
 <template>
     <div>
-        <p class="Nutrition_cls">Informations nutritionnelles</p>
-        <table>
-            <tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr>
-            <tr v-for="entry in metadata">
-                <td>{{entry.title}}</td>
-                <td>
-                    <span v-if="!edit && data[entry.key] != undefined">{{ formatFloat(data[entry.key].value / entry.conversion) + ' ' + entry.units }} </span>
-                    <span v-if="edit && data[entry.key] != undefined"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /> {{ entry.units }}</span>
-                </td>
-                <td>
-                    <span v-if="!edit && data[entry.key] != undefined">{{ data[entry.key].source }}</span>
-                    <input v-if="edit && data[entry.key] != undefined" type="text" class="NutritionField_cls" :value="data[entry.key].source" @change="$emit('changeNutritionDataSource', entry.key, $event.target.value)" />
-                </td>
-            </tr>
-        </table>
+        <p class="Nutrition_cls">Informations nutritionnelles :</p>
+        <div class="NutritionContent_cls">
+            <span class="Spacer_cls"></span>
+            <div class="NutritionGrid_cls">
+                <span v-for="entry in metadata">
+                    <span class="NutritionGridEntry_cls" v-if="!edit && data[entry.key] != undefined">
+                        <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
+                        <div class="NutritionGridEntryText_cls">{{ formatFloat(data[entry.key].value / entry.conversion) + ' ' + entry.units }}</div>
+                    </span>
+                </span>
+            </div>
+        </div>
+        
+        <span v-if="edit && data[entry.key] != undefined"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /> {{ entry.units }}</span>
+        <input v-if="edit && data[entry.key] != undefined" type="text" class="NutritionField_cls" :value="data[entry.key].source" @change="$emit('changeNutritionDataSource', entry.key, $event.target.value)" />
     </div>
 </template>
 
 <style scoped>
     .Nutrition_cls
     {
-        color:        #66b2ff;
+        color:          #c8b273;
         font-weight:    bold;
+        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 
-    table
+    .NutritionContent_cls
     {
-        text-align:         center;
-        margin:             0px auto;
-        border:             solid 1px #66b2ff;
-        border-collapse:    collapse;
+        display: flex;
     }
 
-    th
+    .Spacer_cls
     {
-        color:   #66b2ff;
-        min-width: 200px;
-        border:    solid 1px #66b2ff;
+        width: 200px;
     }
 
-    td
+    .NutritionGrid_cls
     {
-        color:      gray;
-        border:     solid 1px #66b2ff;
-        max-width:  300px;
+        display:    flex;
+        flex-wrap:  wrap;
+        flex:       1;
+    }
+
+    .NutritionGridEntry_cls
+    {
+        display:            inline-block;
+        width:              130px;
+        height:             60px;
+        margin-left:        5px;
+        margin-top:         5px;
+        background-color: #834655;
+    }
+
+    .NutritionSourceIcon_cls
+    {
+        font-size:      0.8em;
+        margin-left:    5px;
+        user-select:    none;
+    }
+
+    .NutritionGridEntryTitle_cls
+    {
+        color:          #c8b273;
+        font-weight:    bold;
+        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        text-align:     center;
+        height:         30px;
+        line-height:    30px;
+        vertical-align: middle;
+    }
+
+    .NutritionGridEntryText_cls
+    {
+        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        text-align:     center;
+        height:         30px;
+        line-height:    30px;
+        vertical-align: middle;
     }
 
     .NutritionField_cls

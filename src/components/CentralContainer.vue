@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <router-view class="CentralContainer_cls">
+    <router-view>
     </router-view>
 </template>
 

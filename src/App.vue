@@ -1,6 +1,6 @@
 <script setup>
     import CentralContainer from './components/CentralContainer.vue'
-    import Header           from './components/Header.vue'
+    import Header           from './components/Header/Header.vue'
 </script>
 
 <template>
@@ -11,10 +11,11 @@
 <style scoped>
     .CentralContainer_cls
     {
-        position:   fixed;
-        top:        125px;
-        left:       0px;
-        right:      0px;
-        bottom:     0px;
+        position:           fixed;
+        top:                120px;
+        left:               0px;
+        right:              0px;
+        bottom:             0px;
+        background-color: #9f5069;
     }
 </style>

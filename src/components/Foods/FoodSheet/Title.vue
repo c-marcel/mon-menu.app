@@ -15,10 +15,12 @@
     {
         font-weight:    bold;
         font-size:      1.3em;
-        color:        #66b2ff;
+        color:        #c8b273;
         margin:         0px;
-        min-height:     30px;
-        font-family:    Arial, Helvetica, sans-serif;
+        height:         30px;
+        line-height:    30px;
+        vertical-align: middle;
+        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 
     .FoodData_Title_Edit_cls

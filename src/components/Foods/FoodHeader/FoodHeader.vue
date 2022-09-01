@@ -1,0 +1,42 @@
+<script setup>
+    import { ref } from 'vue'
+
+    let active               = ref(true)
+    let isAddButtonActive    = ref(true)
+    let isRemoveButtonActive = ref(true)
+    let isEditButtonActive   = ref(true)
+
+    defineEmits(['addFoodRequested', 'removeFoodRequested', 'editFoodRequested'])
+</script>
+
+<template>
+    <div v-if="active" class="FoodsHeader_cls">
+        <button :disabled="!isAddButtonActive" title="Ajouter un nouvel aliment" @click="$emit('addFoodRequested')">➕</button>
+        <button :disabled="!isRemoveButtonActive" title="Supprimer l'aliment" @click="$emit('removeFoodRequested')">➖</button>
+        <button :disabled="!isEditButtonActive" title="Editer/sauvegarder l'aliment actuel" @click="$emit('editFoodRequested')">🖊️</button>
+    </div>
+</template>
+
+<style scoped>
+    .FoodsHeader_cls
+    {
+        position:           fixed;
+        top:                130px;
+        left:               25%;
+        transform:          translate(24px, 0%);
+        right:              34px;
+        height:             40px;
+        background-color: #834655;
+        vertical-align:     middle;
+        line-height:        40px;
+    }
+
+    button
+    {
+        height:         30px;
+        width:          30px;
+        border:         solid 1px #c8b273;
+        border-radius:  5px;
+        margin-left:    5px;
+    }
+</style>

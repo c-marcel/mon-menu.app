@@ -16,8 +16,9 @@
         display:        block;
         margin:         0px;
         font-style:     italic;
-        min-height:     15px;
-        font-family:    Arial, Helvetica, sans-serif;
+        height:         15px;
+        line-height:    15px;
+        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         font-size:      1em;
     }
 
