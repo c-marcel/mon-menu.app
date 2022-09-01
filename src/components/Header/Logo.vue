@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <a href="/"><img src="logo.png"/></a>
+    <a href="/"><img src="/logo.png"/></a>
 </template>
 
 <style scoped>

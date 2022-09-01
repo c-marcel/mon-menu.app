@@ -48,7 +48,7 @@
             <div class="NutritionGrid_cls">
                 <span v-for="entry in metadata">
                     <span class="NutritionGridEntry_cls" v-bind:class="{NutritionGridEntryEdit_cls: edit}" v-if="data[entry.key] != undefined">
-                        <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span v-if="!edit" class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
+                        <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span v-if="!edit && data[entry.key].source" class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
                         <div class="NutritionGridEntryText_cls">
                             <span v-if="!edit">{{ formatFloat(data[entry.key].value / entry.conversion) }}</span>
                             <span v-if="edit"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /></span>
