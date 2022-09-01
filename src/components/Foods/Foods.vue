@@ -24,6 +24,7 @@
         if (currentId.value == 0)
             return
 
+        // Delete entry from database.
         axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, config)
         .then((response) =>
         {
@@ -34,12 +35,26 @@
             }
         })
     }
+
+    function addNewFood()
+    {
+        // Add entry into database.
+        axios.post('https://api.mon-menu.app/createFood', '', config)
+        .then((response) =>
+        {
+            if (response.status == 200)
+            {
+                currentId.value    = response.data.id
+                listUpToDate.value = false
+            }
+        })
+    }
 </script>
 
 <template>
     <div>
         <FoodList @listItemClicked="(id) => { currentId = id }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
-        <FoodHeader :active="true" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()"/>
+        <FoodHeader :active="true" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
         <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
     </div>
 </template>
