@@ -15,11 +15,17 @@
         <p class="EnvironmentalImpactTitle_cls">Impact environnemental :</p>
         <div class="EnvironmentalImpact_CO2_cls">
             <span class="Spacer_cls"></span>
-            <span class="EnvironmentalImpactText_cls">• Empreinte carbone : {{ formatFloat(data.co2eq.kgco2e_kg) }} kg CO2eq/kg</span> <span class="EnvironmentalImpactSourceIcon_cls" :title=data.co2eq.source>❔</span>
+            <span class="EnvironmentalImpactText_cls">• Empreinte carbone : 
+                <span v-if="!edit">{{ formatFloat(data.co2eq.kgco2e_kg) }}</span>
+                <span v-if="edit"><input class="EnvironmentalImpactInputFloat_cls" type="number" step="0.01" :value="data.co2eq.kgco2e_kg" @change="$emit('changeCo2eq', $event.target.value)" /></span>
+                kg CO2eq/kg
+            </span>
+            <span v-if="!edit" class="EnvironmentalImpactSourceIcon_cls" :title=data.co2eq.source>❔</span>
+            <span v-if="edit">. Source : <input class="EnvironmentalImpactInputText_cls" type="text" :value="data.co2eq.source" @change="$emit('changeCo2eqSource', $event.target.value)" /></span>
         </div>
         
-        <span v-if="edit"><input type="number" step="0.01" :value="data.co2eq.kgco2e_kg" @change="$emit('changeCo2eq', $event.target.value)" /> kg CO2eq/kg</span>
-        <input v-if="edit" type="text" class="EnvironmentalImpactEditSource_cls" :value="data.co2eq.source" @change="$emit('changeCo2eqSource', $event.target.value)" />
+        <!--
+        -->
     </div>
 </template>
 
@@ -53,9 +59,21 @@
         user-select:    none;
     }
 
-    .EnvironmentalImpactEditSource_cls
+    input
     {
-        display: block;
-        width: 90%;
+        border: solid 1px #c8b273;
+        background-color: #9f5069;
+        outline:            none;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    .EnvironmentalImpactInputFloat_cls
+    {
+        width: 70px;
+    }
+
+    .EnvironmentalImpactInputText_cls
+    {
+        width: 200px;
     }
 </style>

@@ -25,9 +25,8 @@
     .FoodData_Subtitle_Edit_cls
     {
         background-color:   transparent;
-        border:             solid 1px #66b2ff;
+        border:             solid 2px #834655;
         outline:            none;
-        width:              80%;
         margin-top:         5px;
     }
 </style>

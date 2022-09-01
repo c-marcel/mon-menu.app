@@ -51,7 +51,7 @@
     .Months_Month_cls
     {
         display:            inline-block;
-        background-color: white;
+        background-color:   transparent;
         vertical-align:     bottom;
         font-size:          0.8em;
         text-align:         center;

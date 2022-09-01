@@ -11,15 +11,47 @@
     import SupplyArea          from './SupplyArea.vue'
     import Cost                from './Cost.vue'
 
-    let fooddata      = ref(null)
-    let errorMsg      = ref('')
+    let emit = defineEmits(['listOutdated'])
+
+    let fooddata     = ref(null)
+    let errorMsg     = ref('')
+    let loadedId     = ref(0)
+    let foodModified = ref(false)
 
     let props = defineProps(['currentFoodId', 'edit'])
 
     // Watch props changes to update food sheet.
     watch(props, (value) =>
     {
-        loadFoodData(value.currentFoodId)
+        if(loadedId != value.currentFoodId)
+        {
+            foodModified.value = false
+            loadFoodData(value.currentFoodId)
+        }
+
+        // If edit mode has been terminated: save item.
+        if (!value.edit && foodModified.value && loadedId.value != 0 && fooddata.value)
+        {
+            errorMsg.value = ''
+
+            // Send food data to Api.
+            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, config)
+            .then((response) =>
+            {
+                if (response.status != 200)
+                {
+                    errorMsg.value = 'Impossible d\'enregistrer les modifications effectuées dans la base de données.'
+                }
+                else
+                {
+                    emit('listOutdated');
+                }
+            }).catch(function(error)
+            {
+                console.log(error)
+                errorMsg.value = 'Erreur réseau : impossible d\'enregistrer les modifications effectuées dans la base de données. Contacter l\'administrateur du site.'
+            });
+        }
     }) 
 
     // TODO: remove to config panel.
@@ -42,6 +74,7 @@
             if (response.status == 200)
             {
                 fooddata.value = response.data
+                loadedId       = id
             }
 
             else
@@ -51,14 +84,99 @@
             errorMsg.value = 'Impossible de récupérer les données de l\'aliment sélectionné.'
         });
     }
+
+    function updateTitle(title)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.title = title
+        foodModified.value   = true
+    }
+
+    function updateSubtitle(subtitle)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.details = subtitle
+        foodModified.value     = true
+    }
+
+    function toogleMonth(month)
+    {
+        if (!props.edit)
+            return
+
+        if (fooddata.value.months == null)
+            fooddata.value.months = []
+
+        if (fooddata.value.months.includes(month))
+            fooddata.value.months = fooddata.value.months.filter(e => {return e != month})
+
+        else
+            fooddata.value.months.push(month)
+
+            foodModified.value = true
+    }
+
+    function updateSupplyArea(area)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.supplyArea = area
+        foodModified.value        = true
+    }
+
+    function updateCost(cost)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.cost = cost
+        foodModified.value  = true
+    }
+
+    function updateCo2eq(value)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.environmentalImpact.co2eq.kgco2e_kg = value
+        foodModified.value                                 = true
+    }
+
+    function changeCo2eqSource(value)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.environmentalImpact.co2eq.source = value
+        foodModified.value                              = true
+    }
+
+    function updateNutrition(field, value)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.nutrition[field].value = value
+        foodModified.value                    = true
+    }
+
+    function updateNutritionSource(field, value)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.nutrition[field].source = value
+        foodModified.value                     = true
+    }
 </script>
 
 <template>
     <div class="FoodSheet_cls">
-        <div v-if="errorMsg" class="ErrorMsgContainer_cls">
-            <ErrorDialog class="ErrorDialog_cls" :errorMsg="errorMsg" buttonTitle=""></ErrorDialog>
-        </div>
-
         <div v-if="fooddata" class="FoodData_cls">
             <Title :title="fooddata.title" :edit="edit" @changeTitle="(title) => updateTitle(title)"></Title>
             <Subtitle :subtitle="fooddata.details" :edit="edit" @changeSubtitle="(subtitle) => updateSubtitle(subtitle)"></Subtitle>
@@ -69,6 +187,10 @@
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" ></EnvironmentalImpact>
             <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)"></Nutrition>
+        </div>
+
+        <div v-if="errorMsg" class="ErrorMsgContainer_cls">
+            <ErrorDialog class="ErrorDialog_cls" :errorMsg="errorMsg" buttonTitle=""></ErrorDialog>
         </div>
     </div>
 </template>
@@ -102,12 +224,14 @@
 
     .FoodData_cls
     {
-        position:   absolute;
-        left:       5px;
-        top:        5px;
-        right:      5px;
-        bottom:     5px;
-        overflow:   auto;
+        display:        flex;
+        flex-direction: column;
+        position:       absolute;
+        left:           5px;
+        top:            5px;
+        right:          5px;
+        bottom:         5px;
+        overflow:       auto;
     }
 
     .FoodData_Entry_Title

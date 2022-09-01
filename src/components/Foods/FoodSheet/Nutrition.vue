@@ -47,16 +47,23 @@
             <span class="Spacer_cls"></span>
             <div class="NutritionGrid_cls">
                 <span v-for="entry in metadata">
-                    <span class="NutritionGridEntry_cls" v-if="!edit && data[entry.key] != undefined">
-                        <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
-                        <div class="NutritionGridEntryText_cls">{{ formatFloat(data[entry.key].value / entry.conversion) + ' ' + entry.units }}</div>
+                    <span class="NutritionGridEntry_cls" v-bind:class="{NutritionGridEntryEdit_cls: edit}" v-if="data[entry.key] != undefined">
+                        <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span v-if="!edit" class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
+                        <div class="NutritionGridEntryText_cls">
+                            <span v-if="!edit">{{ formatFloat(data[entry.key].value / entry.conversion) }}</span>
+                            <span v-if="edit"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /></span>
+                            <span class="NutritionUnit_cls">{{ ' ' + entry.units }}</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <input v-if="edit" class="NutritionSourceText_cls" type="text" :value="data[entry.key].source" @change="$emit('changeNutritionDataSource', entry.key, $event.target.value)" />
+                        </div>
                     </span>
                 </span>
             </div>
         </div>
         
-        <span v-if="edit && data[entry.key] != undefined"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /> {{ entry.units }}</span>
-        <input v-if="edit && data[entry.key] != undefined" type="text" class="NutritionField_cls" :value="data[entry.key].source" @change="$emit('changeNutritionDataSource', entry.key, $event.target.value)" />
+        <!--<span v-if="edit && data[entry.key] != undefined"> {{ entry.units }}</span>
+        -->
     </div>
 </template>
 
@@ -95,6 +102,12 @@
         background-color: #834655;
     }
 
+    .NutritionGridEntryEdit_cls
+    {
+        width:  160px;
+        height: 90px;
+    }
+
     .NutritionSourceIcon_cls
     {
         font-size:      0.8em;
@@ -122,7 +135,21 @@
         vertical-align: middle;
     }
 
-    .NutritionField_cls
+    input
+    {
+        border: solid 1px #c8b273;
+        background-color: #9f5069;
+        outline:            none;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        width:              70px;
+    }
+
+    .NutritionUnit_cls
+    {
+        font-size: 0.8em;
+    }
+
+    .NutritionSourceText_cls
     {
         width: 90%;
     }

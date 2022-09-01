@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
     import axios from 'axios'
 
     import ErrorDialog from '../../ErrorDialog.vue'
@@ -7,7 +7,8 @@
     let foods    = ref([])
     let errorMsg = ref('')
 
-    defineEmits(['listItemClicked'])
+    let emit = defineEmits(['listItemClicked', 'upToDateChanged'])
+    let props = defineProps(['upToDate'])
 
     // TODO: remove to config panel.
     let config =
@@ -20,6 +21,13 @@
 
     loadFoods()
 
+    // Watch props changes to update list.
+    watch(props, (value) =>
+    {
+        if (!value.upToDate)
+            loadFoods()
+    })
+
     function loadFoods()
     {
         errorMsg.value = ''
@@ -28,6 +36,7 @@
         .then((response) =>
         {
             foods.value = response.data.foods
+            emit('upToDateChanged')
         })
         .catch(function(error)
         {

@@ -15,7 +15,7 @@
     {
         font-weight:    bold;
         font-size:      1.3em;
-        color:        #c8b273;
+        color:          #c8b273;
         margin:         0px;
         height:         30px;
         line-height:    30px;
@@ -26,8 +26,7 @@
     .FoodData_Title_Edit_cls
     {
         background-color:   transparent;
-        border:             solid 1px #66b2ff;
+        border:             solid 2px #834655;
         outline:            none;
-        width:              80%;
     }
 </style>
