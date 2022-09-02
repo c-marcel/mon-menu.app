@@ -1,22 +1,27 @@
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref, watch, inject } from 'vue'
     import axios from 'axios'
 
     import ErrorDialog from '../../ErrorDialog.vue'
 
     let foods    = ref([])
     let errorMsg = ref('')
+    let userData = ref(inject('userData'))
 
     let emit = defineEmits(['listItemClicked', 'upToDateChanged'])
     let props = defineProps(['upToDate'])
 
-    // TODO: remove to config panel.
-    let config =
+    function createHttpConfig()
     {
-        headers:
+        let config =
         {
-            "auth-token": "1e91ccce-9a8d-45a8-8d72-0decd3549a12",
+            headers:
+            {
+                "auth-token": userData.value.authentication.token
+            }
         }
+
+        return config
     }
 
     loadFoods()
@@ -32,7 +37,7 @@
     {
         errorMsg.value = ''
 
-        axios.get('https://api.mon-menu.app/getFoods', config)
+        axios.get('https://api.mon-menu.app/getFoods', createHttpConfig())
         .then((response) =>
         {
             foods.value = response.data.foods

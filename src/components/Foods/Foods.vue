@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, inject } from 'vue'
     import axios from 'axios'
 
     import FoodHeader from './FoodHeader/FoodHeader.vue'
@@ -9,14 +9,19 @@
     let currentId    = ref(0)
     let edit         = ref(false)
     let listUpToDate = ref(false)
+    let userData     = ref(inject('userData'))
 
-    // TODO: remove to config panel.
-    let config =
+    function createHttpConfig()
     {
-        headers:
+        let config =
         {
-            "auth-token": "1e91ccce-9a8d-45a8-8d72-0decd3549a12",
+            headers:
+            {
+                "auth-token": userData.value.authentication.token
+            }
         }
+
+        return config
     }
 
     function deleteCurrentFood()
@@ -25,7 +30,7 @@
             return
 
         // Delete entry from database.
-        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, config)
+        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, createHttpConfig())
         .then((response) =>
         {
             if (response.status == 200)
@@ -39,7 +44,7 @@
     function addNewFood()
     {
         // Add entry into database.
-        axios.post('https://api.mon-menu.app/createFood', '', config)
+        axios.post('https://api.mon-menu.app/createFood', '', createHttpConfig())
         .then((response) =>
         {
             if (response.status == 200)
@@ -54,10 +59,24 @@
 <template>
     <div>
         <FoodList @listItemClicked="(id) => { currentId = id }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
-        <FoodHeader :active="true" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
-        <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
+        <div class="FoodsContainer_cls">
+            <FoodHeader v-if="userData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
+            <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
+        </div>
     </div>
 </template>
 
 <style scoped>
+    .FoodsContainer_cls
+    {
+        display:            flex;
+        position:           fixed;
+        flex-direction:     column;
+        gap:                10px;
+        top:                130px;
+        left:               25%;
+        bottom:             10px;
+        right:              34px;
+        transform:          translate(24px, 0%);
+    }
 </style>

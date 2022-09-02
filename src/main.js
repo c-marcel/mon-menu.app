@@ -21,5 +21,17 @@ const router = createRouter(
 })
 
 const app = createApp(App)
+
+// Install user data.
+var userData = new Object(
+{
+    level: "user",      //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+    authentication:
+    {
+        token:  ""      //< Authentication token (defined by user). Used only for 'admin' user level.
+    }
+});
+
+app.provide('userData', userData)
 app.use(router)
 app.mount("#app")

@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref, watch, inject } from 'vue'
     import axios from 'axios'
 
     import EnvironmentalImpact from './EnvironmentalImpact.vue'
@@ -17,6 +17,7 @@
     let errorMsg     = ref('')
     let loadedId     = ref(0)
     let foodModified = ref(false)
+    let userData     = ref(inject('userData'))
 
     let props = defineProps(['currentFoodId', 'edit'])
 
@@ -41,7 +42,7 @@
             errorMsg.value = ''
 
             // Send food data to Api.
-            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, config)
+            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, createHttpConfig())
             .then((response) =>
             {
                 if (response.status != 200)
@@ -58,15 +59,19 @@
                 errorMsg.value = 'Erreur réseau : impossible d\'enregistrer les modifications effectuées dans la base de données. Contacter l\'administrateur du site.'
             });
         }
-    }) 
+    })
 
-    // TODO: remove to config panel.
-    let config =
+    function createHttpConfig()
     {
-        headers:
+        let config =
         {
-            "auth-token": "1e91ccce-9a8d-45a8-8d72-0decd3549a12",
+            headers:
+            {
+                "auth-token": userData.value.authentication.token
+            }
         }
+
+        return config
     }
 
     function loadFoodData(id)
@@ -74,7 +79,7 @@
         errorMsg.value = ''
 
         // Load food data from Api.
-        axios.get('https://api.mon-menu.app/getFoodData/' + id, config)
+        axios.get('https://api.mon-menu.app/getFoodData/' + id, createHttpConfig())
         .then((response) =>
         {
             if (response.status == 200)
@@ -193,6 +198,7 @@
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" ></EnvironmentalImpact>
             <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)"></Nutrition>
+            <div class="FoodData_Spacer_cls"></div>
         </div>
 
         <div v-if="errorMsg" class="ErrorMsgContainer_cls">
@@ -204,13 +210,9 @@
 <style scoped>
     .FoodSheet_cls
     {
-        position:   fixed;
-        top:        180px;
-        left:       25%;
-        right:      34px;
-        bottom:     10px;
-        transform:  translate(24px, 0%);
+        flex-grow:  1;
         border:     dashed 1px #c8b273;
+        overflow:   auto;
     }
 
     .ErrorMsgContainer_cls
@@ -232,12 +234,6 @@
     {
         display:        flex;
         flex-direction: column;
-        position:       absolute;
-        left:           5px;
-        top:            5px;
-        right:          5px;
-        bottom:         5px;
-        overflow:       auto;
     }
 
     .FoodData_Entry_Title

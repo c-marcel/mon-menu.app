@@ -1,13 +1,13 @@
 <script setup>
     import { ref } from 'vue'
-
-    const props = defineProps(['active', 'isAddButtonActive', 'isRemoveButtonActive', 'isEditButtonActive'])
+   
+    const props = defineProps(['isAddButtonActive', 'isRemoveButtonActive', 'isEditButtonActive'])
 
     defineEmits(['addFoodRequested', 'removeFoodRequested', 'editFoodRequested'])
 </script>
 
 <template>
-    <div v-if="active" class="FoodsHeader_cls">
+    <div class="FoodsHeader_cls">
         <button :disabled="!isAddButtonActive" title="Ajouter un nouvel aliment" @click="$emit('addFoodRequested')">➕</button>
         <button :disabled="!isRemoveButtonActive" title="Supprimer l'aliment" @click="$emit('removeFoodRequested')">➖</button>
         <button :disabled="!isEditButtonActive" title="Editer/sauvegarder l'aliment actuel" @click="$emit('editFoodRequested')">🖊️</button>
@@ -17,11 +17,6 @@
 <style scoped>
     .FoodsHeader_cls
     {
-        position:           fixed;
-        top:                130px;
-        left:               25%;
-        transform:          translate(24px, 0%);
-        right:              34px;
         height:             40px;
         background-color: #834655;
         vertical-align:     middle;
