@@ -6,8 +6,8 @@
 
 <template>
     <div class="ErrorMsg_cls">
-        <div style="font-size: 1.5em;">⚠️</div>
-        <p>{{ errorMsg }}</p>
+        <div style="font-size: 1.5em; user-select: none;">⚠️</div>
+        <p class="ErrorMsgText_cls">{{ errorMsg }}</p>
         <p><a class="ErrorMsgButton_cls" @click="$emit('retryButtonClicked')">{{ buttonTitle }}</a></p>
     </div>
 </template>
@@ -29,5 +29,10 @@
         text-decoration:    underline;
         color:            #c8b273;
         user-select:        none;
+    }
+
+    .ErrorMsgText_cls
+    {
+        user-select: none;
     }
 </style>

@@ -19,7 +19,7 @@
 <template>
     <div class="Menu_cls">
         <span v-for="entry in entries">
-            <router-link :to="entry.page">{{ entry.title }}</router-link>
+            <router-link :to="entry.page" class="MenuEntry_cls">{{ entry.title }}</router-link>
         </span>
     </div>
 </template>
@@ -45,5 +45,10 @@
     a:hover
     {
         border-bottom: solid 3px #9f5069;
+    }
+
+    .MenuEntry_cls
+    {
+        user-select: none;
     }
 </style>

@@ -88,6 +88,7 @@
         margin:             0px;
         height:             60px;
         line-height:        60px;
+        user-select:        none;
     }
 
     .ErrorMsgContainer_cls
@@ -133,6 +134,7 @@
         line-height:    30px;
         padding-left:   5px;
         padding-right:  5px;
+        user-select:    none;
     }
 
     .FoodList_Entry_Subtitle_cls
@@ -145,5 +147,6 @@
         vertical-align:     middle;
         padding-left:       5px;
         padding-right:      5px;
+        user-select:        none;
     }
 </style>
