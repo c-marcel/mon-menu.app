@@ -3,6 +3,7 @@
     import axios from 'axios'
 
     import EnvironmentalImpact from './EnvironmentalImpact.vue'
+    import DisplayUnit         from './DisplayUnit.vue'
     import ErrorDialog         from '../../ErrorDialog.vue'
     import Nutrition           from './Nutrition.vue'
     import Months              from './Months.vue'
@@ -18,6 +19,7 @@
     let loadedId     = ref(0)
     let foodModified = ref(false)
     let userData     = ref(inject('userData'))
+    let conversion   = ref({enabled: false, label: "", factor: 0.0})
 
     let props = defineProps(['currentFoodId', 'edit'])
 
@@ -41,6 +43,19 @@
         {
             errorMsg.value = ''
 
+            // Add conversion object.
+            if (conversion.value.enabled == "true")
+            {
+                fooddata.value.units =
+                {
+                    label:      conversion.value.label,
+                    conversion: conversion.value.factor
+                }
+            }
+
+            else
+                fooddata.value.units = null
+
             // Send food data to Api.
             axios.put('https://api.mon-menu.app/updateFood', fooddata.value, createHttpConfig())
             .then((response) =>
@@ -55,7 +70,6 @@
                 }
             }).catch(function(error)
             {
-                console.log(error)
                 errorMsg.value = 'Erreur réseau : impossible d\'enregistrer les modifications effectuées dans la base de données. Contacter l\'administrateur du site.'
             });
         }
@@ -86,6 +100,21 @@
             {
                 fooddata.value = response.data
                 loadedId       = id
+
+                // Load conversion.
+                conversion.value.enabled = (response.data.units != null)
+
+                if(response.data.units)
+                {
+                    conversion.value.label  = response.data.units.label
+                    conversion.value.factor = response.data.units.conversion
+                }
+
+                else
+                {
+                    conversion.value.label  = ""
+                    conversion.value.factor = 0.0
+                }
             }
 
             else
@@ -184,6 +213,24 @@
         fooddata.value.nutrition[field].source = value
         foodModified.value                     = true
     }
+
+    function enableConversion(value)
+    {
+        conversion.value.enabled = value
+        foodModified.value       = true
+    }
+
+    function conversionLabelChanged(label)
+    {
+        conversion.value.label = label
+        foodModified.value     = true
+    }
+
+    function conversionFactorChanged(factor)
+    {
+        conversion.value.factor = factor
+        foodModified.value      = true
+    }
 </script>
 
 <template>
@@ -195,6 +242,7 @@
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Disponibilité : </span><Months :months="fooddata.months" :edit="edit" @toogleMonth="(month) => toogleMonth(month)"/></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span><SupplyArea :area="fooddata.supplyArea" :edit="edit" @changeSupplyArea="(area) => updateSupplyArea(area)"></SupplyArea></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><Cost :cost="fooddata.cost" :edit="edit" @changeCost="(cost) => updateCost(cost)"></Cost></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Unité d'affichage : </span><DisplayUnit :edit="edit" :conversionEnabled="conversion.enabled" :label="conversion.label" :conversionFactor="conversion.factor" @enableConversion="(value) => enableConversion(value)" @labelChanged="(value) => conversionLabelChanged(value)" @factorChanged="(value) => conversionFactorChanged(value)" /></p>
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" ></EnvironmentalImpact>
             <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)"></Nutrition>
@@ -234,6 +282,7 @@
     {
         display:        flex;
         flex-direction: column;
+        padding:        5px;
     }
 
     .FoodData_Entry_Title
