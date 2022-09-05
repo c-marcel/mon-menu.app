@@ -31,4 +31,23 @@
         border-radius:  5px;
         margin-left:    5px;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodsHeader_cls
+        {
+            height:             140px;
+            line-height:        140px;
+        }
+
+        button
+        {
+            height:         90px;
+            width:          90px;
+            border:         solid 5px #c8b273;
+            border-radius:  5px;
+            margin-left:    15px;
+            font-size:      2em;
+        }
+    }
 </style>

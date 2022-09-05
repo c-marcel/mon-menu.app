@@ -76,4 +76,39 @@
     {
         width: 200px;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .EnvironmentalImpactTitle_cls
+        {
+            font-size: 2em;
+        }
+
+        .EnvironmentalImpactText_cls
+        {
+            font-size: 2em;
+        }
+
+        .EnvironmentalImpactSourceIcon_cls
+        {
+            display: none;
+        }
+
+        input
+        {
+            border:     solid 2px #c8b273;
+            font-size:  1em;
+        }
+
+        .EnvironmentalImpactInputFloat_cls
+        {
+            width: 100px;
+        }
+
+        .EnvironmentalImpactInputText_cls
+        {
+            width: 200px;
+            font-size: 2em;
+        }
+    }
 </style>

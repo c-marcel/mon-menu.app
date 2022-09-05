@@ -29,4 +29,14 @@
         border:             solid 2px #834655;
         outline:            none;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodData_Title_cls
+        {
+            font-size:      4em;
+            height:         70px;
+            line-height:    70px;
+        }
+    }
 </style>

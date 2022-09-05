@@ -153,4 +153,56 @@
     {
         width: 90%;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .Nutrition_cls
+        {
+            font-size: 2em;
+        }
+
+        .Spacer_cls
+        {
+            width: 0px;
+        }
+
+        .NutritionGridEntry_cls
+        {
+            width:              250px;
+            height:             150px;
+            margin-left:        10px;
+            margin-top:         10px;
+        }
+
+        .NutritionGridEntryEdit_cls
+        {
+            width:  250px;
+            height: 200px;
+        }
+
+        .NutritionSourceIcon_cls
+        {
+            display: none;
+        }
+
+        .NutritionGridEntryTitle_cls
+        {
+            height:         80px;
+            line-height:    80px;
+            font-size:      2em;
+        }
+
+        .NutritionGridEntryText_cls
+        {
+            height:         60px;
+            line-height:    60px;
+            font-size:      1.8em;
+        }
+
+        input
+        {
+            border:             solid 2px #c8b273;
+            font-size:          1em;
+        }
+    }
 </style>

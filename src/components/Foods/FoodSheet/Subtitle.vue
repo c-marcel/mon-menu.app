@@ -29,4 +29,14 @@
         outline:            none;
         margin-top:         5px;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodData_Subtitle_cls
+        {
+            height:         40px;
+            line-height:    40px;
+            font-size:      3em;
+        }
+    }
 </style>

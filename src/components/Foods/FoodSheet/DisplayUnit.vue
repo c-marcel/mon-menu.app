@@ -11,16 +11,16 @@
 </script>
 
 <template>
-    <span v-if="!edit">{{ String(conversionEnabled) == "true" ? label + ' (facteur de conversion : ' + formatFloat(conversionFactor) + ')' : 'kg' }}</span>
+    <span v-if="!edit" class="DisplayUnitText_cls">{{ String(conversionEnabled) == "true" ? label + ' (facteur de conversion : ' + formatFloat(conversionFactor) + ')' : 'kg' }}</span>
     <span v-if="edit">
-        <label>
-            <input type="checkbox" class="ConversionCheckbox_cls" v-model="conversionEnabled" :value="conversionEnabled" @change="$emit('enableConversion', $event.target.value)" />
+        <label class="DisplayUnitText_cls">
+            <input type="checkbox" class="ConversionCheckbox_cls" :checked="conversionEnabled" :value="conversionEnabled" @change="$emit('enableConversion', $event.target.checked)" />
             unité d'affichage spécifique : 
         </label>
         <input type="text" class="ConversionSelect_cls" :enable="conversionEnabled" :value="label" @input="$emit('labelChanged', $event.target.value)"/>
-        <span> Facteur de conversion : </span>
+        <span class="DisplayUnitText_cls"> Facteur de conversion : </span>
         <input type="number" class="ConversionSelect_cls" step="0.001" :value="conversionFactor" @input="$emit('factorChanged', $event.target.value)" />
-        <span> unité(s) par kg.</span>
+        <span class="DisplayUnitText_cls"> unité(s) par kg.</span>
     </span>
 </template>
 
@@ -38,5 +38,28 @@
     {
         border:             solid 1px #c8b273;
         background-color: #9f5069;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .DisplayUnitText_cls
+        {
+            font-size: 2em;
+        }
+
+        .ConversionSelect_cls
+        {
+            border:             solid 2px #c8b273;
+            width:              120px;
+            font-size:          2em;
+        }
+
+        .ConversionCheckbox_cls
+        {
+            border:             solid 2px #c8b273;
+            background-color: #9f5069;
+            height:             30px;
+            width:              30px;
+        }
     }
 </style>

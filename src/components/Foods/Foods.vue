@@ -3,6 +3,7 @@
     import axios from 'axios'
 
     import FoodHeader from './FoodHeader/FoodHeader.vue'
+    import BackButton from '../BackButton.vue'
     import FoodSheet  from './FoodSheet/FoodSheet.vue'
     import FoodList   from './FoodList/FoodList.vue'
 
@@ -10,6 +11,8 @@
     let edit         = ref(false)
     let listUpToDate = ref(false)
     let userData     = ref(inject('userData'))
+
+    defineEmits(['hideCentralContainerRequested'])
 
     function createHttpConfig()
     {
@@ -54,14 +57,21 @@
             }
         })
     }
+
+    function hideCurrentFoodSheet()
+    {
+        currentId.value = 0
+    }
 </script>
 
 <template>
     <div>
         <FoodList @listItemClicked="(id) => { currentId = id }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
-        <div class="FoodsContainer_cls">
+        <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
+        <div class="FoodsContainer_cls" v-bind:class="{FoodsContainerHidden_cls: !currentId}">
             <FoodHeader v-if="userData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
             <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
+            <BackButton @backRequested="hideCurrentFoodSheet"></BackButton>
         </div>
     </div>
 </template>
@@ -78,5 +88,23 @@
         bottom:             10px;
         right:              34px;
         transform:          translate(24px, 0%);
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodsContainer_cls
+        {
+            background-color:   #9f5069;
+            top:                0px;
+            left:               0px;
+            bottom:             0px;
+            right:              0px;
+            transform:          translate(0, 0);
+        }
+
+        .FoodsContainerHidden_cls
+        {
+            display: none;
+        }
     }
 </style>

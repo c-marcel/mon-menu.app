@@ -6,7 +6,7 @@
 
 <template>
     <div class="ErrorMsg_cls">
-        <div style="font-size: 1.5em; user-select: none;">⚠️</div>
+        <div class="ErrorIcon_cls">⚠️</div>
         <p class="ErrorMsgText_cls">{{ errorMsg }}</p>
         <p><a class="ErrorMsgButton_cls" @click="$emit('retryButtonClicked')">{{ buttonTitle }}</a></p>
     </div>
@@ -23,6 +23,12 @@
         color:            black;
     }
 
+    .ErrorIcon_cls
+    {
+        font-size:      1.5em;
+        user-select:    none;
+    }
+
     .ErrorMsgButton_cls
     {
         cursor:             pointer;
@@ -34,5 +40,23 @@
     .ErrorMsgText_cls
     {
         user-select: none;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .ErrorIcon_cls
+        {
+            font-size:      4em;
+        }
+
+        .ErrorMsgText_cls
+        {
+            font-size:      1.5em;
+        }
+
+        .ErrorMsgButton_cls
+        {
+            font-size:      1.5em;
+        }
     }
 </style>

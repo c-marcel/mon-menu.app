@@ -14,7 +14,7 @@
     <span v-if="!edit" class="Food_Cost_Value_cls">
         {{ formatCost(cost) }} €/kg
     </span>
-    <span v-if="edit"><input type="number" step="0.01" :value="cost" class="Food_Cost_Edit_cls" @change="$emit('changeCost', $event.target.value)" /> €/kg</span>
+    <span v-if="edit" class="Food_Cost_Value_cls"><input type="number" step="0.01" :value="cost" class="Food_Cost_Edit_cls" @change="$emit('changeCost', $event.target.value)" /> €/kg</span>
 </template>
 
 <style scoped>
@@ -33,5 +33,18 @@
         border: solid 1px #c8b273;
         background-color: #9f5069;
         outline:            none;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .Food_Cost_Value_cls
+        {
+            font-size: 2em;
+        }
+
+        .Food_Cost_Edit_cls
+        {
+            font-size: 1em;
+        }
     }
 </style>

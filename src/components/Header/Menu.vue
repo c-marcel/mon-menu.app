@@ -14,12 +14,14 @@
         "page": "config",
         "title": "Configuration"
     }])
+
+    defineEmits(['itemClicked'])
 </script>
 
 <template>
     <div class="Menu_cls">
         <span v-for="entry in entries">
-            <router-link :to="entry.page" class="MenuEntry_cls">{{ entry.title }}</router-link>
+            <router-link :to="entry.page" class="MenuEntry_cls" @click="$emit('itemClicked')">{{ entry.title }}</router-link>
         </span>
     </div>
 </template>
@@ -50,5 +52,32 @@
     .MenuEntry_cls
     {
         user-select: none;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .Menu_cls
+        {
+            display:            flex;
+            flex-direction:     column;
+            background-color: #9f5069;
+            width:              100%;
+            margin-left:        0px;
+            gap:                20px;
+            flex-grow:          1;
+            text-align:         center;
+            padding-top:        50px;
+        }
+
+        a
+        {
+            display:            block;
+            width:              90%;
+            margin-left:        5%;
+            margin-top:         50px;
+            font-size:          6em;
+            text-decoration:    none;
+            background-color: #834655;
+        }
     }
 </style>

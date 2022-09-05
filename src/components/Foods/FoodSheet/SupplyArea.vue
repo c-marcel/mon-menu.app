@@ -6,7 +6,7 @@
 </script>
 
 <template>
-    <span v-if="!edit">
+    <span v-if="!edit" class="SupplyAreaText_cls">
         {{ area == 1 ? "local" : area == 2 ? "national" : area == 4 ? "continental" : area == 8 ? "mondial" : "non défini" }}
     </span>
     <select class="SupplyAreaSelect_cls" v-if="edit" :value="area" @change="$emit('changeSupplyArea', $event.target.value)">
@@ -25,5 +25,19 @@
         width:              120px;
         background-color: #9f5069;
         font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .SupplyAreaText_cls
+        {
+            font-size: 2em;
+        }
+        .SupplyAreaSelect_cls
+        {
+            border:             solid 2px #c8b273;
+            width:              200px;
+            font-size:          2em;
+        }
     }
 </style>

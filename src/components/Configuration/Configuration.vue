@@ -1,10 +1,14 @@
 <script setup>
+    import BackButton from './../BackButton.vue'
+
     import { ref, inject } from 'vue'
     import axios from 'axios'
 
     let userData = ref(inject('userData'))
     let username = ref('')
     let password = ref('')
+
+    defineEmits(['hideCentralContainerRequested'])
 
     function createHttpConfig()
     {
@@ -67,6 +71,7 @@
                 <button @click="disconnectAsAdmin()">Déconnexion</button>
             </p>
         </div>
+        <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
     </div>
 </template>
 
@@ -107,5 +112,48 @@
     {
         font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         font-size:      0.9em;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .Dialog_cls
+        {
+            padding:        15px;
+            width:          80%;
+        }
+        h1
+        {
+            color:        #c8b273;
+            font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size:      4em;
+            text-align:     center;
+        }
+
+        p
+        {
+            font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size:      3.5em;
+            text-align:     center;
+        }
+
+        table
+        {
+            width:      100%;
+            text-align: left;
+        }
+
+        input
+        {
+            height:     60px;
+            width:      320px;
+            font-size:  1em;
+        }
+
+        button
+        {
+            font-size:  1em;
+            margin-top: 20px;
+            padding:    5px;
+        }
     }
 </style>

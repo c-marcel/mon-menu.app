@@ -44,7 +44,7 @@
             errorMsg.value = ''
 
             // Add conversion object.
-            if (conversion.value.enabled == "true")
+            if (String(conversion.value.enabled) == "true")
             {
                 fooddata.value.units =
                 {
@@ -303,5 +303,29 @@
     .FoodData_Spacer_cls
     {
         height: 20px;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodData_cls
+        {
+            padding:        15px;
+        }
+
+        .FoodData_Entry_Title
+        {
+            min-width:      400px;
+            font-size:      2em;
+        }
+
+        .FoodData_Entry_cls
+        {
+            margin-top:     15px;
+        }
+
+        .FoodData_Spacer_cls
+        {
+            height: 50px;
+        }
     }
 </style>

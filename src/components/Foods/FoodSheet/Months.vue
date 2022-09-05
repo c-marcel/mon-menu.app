@@ -82,4 +82,21 @@
     {
         cursor: pointer;
     }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .Months_Month_cls
+        {
+            font-size:          1.5em;
+            border:             solid 4px #834655;
+            margin-right:       1px;
+        }
+
+        .Months_Month_Text_cls
+        {
+            height:         35px;
+            width:          35px;
+            line-height:    35px;
+        }
+    }
 </style>

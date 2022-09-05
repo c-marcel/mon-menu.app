@@ -101,9 +101,9 @@
         flex-grow:          4;
         position:           absolute;
         top:                50%;
-        transform:          translate(0%, -50%);
-        margin-left:        20px;
-        margin-right:       20px;
+        left:               50%;
+        transform:          translate(-50%, -50%);
+        width:              80%;
     }
 
     ul
@@ -153,5 +153,57 @@
         padding-left:       5px;
         padding-right:      5px;
         user-select:        none;
+    }
+
+    @media (max-width: 1280px) and (orientation: portrait)
+    {
+        .FoodList_cls
+        {
+            position:   fixed;
+            top:        0px;
+            bottom:     150px;
+            left:       0px;
+            right:      0px;
+            width:      auto;
+        }
+
+        .FoodList_Title_cls
+        {
+            font-size:          5em;
+            height:             150px;
+            line-height:        150px;
+        }
+
+        ul
+        {
+            margin:     10px;
+            padding:    0px;
+        }
+
+        li
+        {
+            height:     150px;
+            margin-top: 25px;
+        }
+
+        .FoodList_Entry_Title_cls
+        {
+            font-size:      4em;
+            height:         100px;
+            line-height:    100px;
+            padding-left:   15px;
+            padding-right:  15px;
+        }
+
+        .FoodList_Entry_Subtitle_cls
+        {
+            margin:             0px;
+            font-size:          2.5em;
+            height:             50px;
+            line-height:        50px;
+            padding-left:       15px;
+            padding-right:      15px;
+            user-select:        none;
+        }
     }
 </style>
