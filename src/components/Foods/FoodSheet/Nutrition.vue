@@ -61,9 +61,6 @@
                 </span>
             </div>
         </div>
-        
-        <!--<span v-if="edit && data[entry.key] != undefined"> {{ entry.units }}</span>
-        -->
     </div>
 </template>
 
