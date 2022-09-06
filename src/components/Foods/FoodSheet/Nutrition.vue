@@ -1,3 +1,8 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Widget for displaying and editing nutrition data.
 <script setup>
     import { ref } from 'vue'
     const props = defineProps(['data', 'edit'])
@@ -29,11 +34,13 @@
         { "key": "vitamin_d", "title": "Vitamine D", "units": "µg/100 g", "conversion": 0.00000001 },
     ])
 
+    // Use 2 digits after comma.
     function round(value)
     {
         return Math.round(value * 100.0) / 100.0;
     }
 
+    // Use comma as decimal separator.
     function formatFloat(value)
     {
         return String(round(value)).replaceAll('.', ',')

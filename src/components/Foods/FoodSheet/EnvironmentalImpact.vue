@@ -1,9 +1,16 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Widget for displaying and editing environnemental impact.
+// Available impacts: CO2 emissions.
 <script setup>
     import { ref } from 'vue'
     const props = defineProps(['data', 'edit'])
 
     defineEmits(['changeCo2eq', 'changeCo2eqSource'])
 
+    // Use comma as decimal separator.
     function formatFloat(cost)
     {
         return String(cost).replaceAll('.', ',')

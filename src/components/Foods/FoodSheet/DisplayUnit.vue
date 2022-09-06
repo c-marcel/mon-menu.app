@@ -1,9 +1,15 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Widget for displaying and editing unit used for food display.
 <script setup>
     import { ref } from 'vue'
     const props = defineProps(['edit', 'conversionEnabled', 'label', 'conversionFactor'])
 
     defineEmits(['enableConversion', 'labelChanged', 'factorChanged'])
 
+    // Use comma as decimal separator.
     function formatFloat(value)
     {
         return String(value).replaceAll('.', ',')

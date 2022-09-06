@@ -1,14 +1,19 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Main application view.
 <script setup>
     import { ref } from 'vue'
 
     import CentralContainer from './components/CentralContainer.vue'
     import Header           from './components/Header/Header.vue'
 
+    // For mobile versions.
     let displayCentralContainer = ref(false)
 
     function hideCentralContainer()
     {
-        console.log("Hide central container")
         displayCentralContainer.value = false
     }
 

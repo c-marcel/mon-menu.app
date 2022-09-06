@@ -1,3 +1,8 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Widget for displaying and editing supply area.
 <script setup>
     import { ref } from 'vue'
     const props = defineProps(['edit', 'area'])

@@ -1,3 +1,9 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Configuration view.
+// Under development. Only used for admin connection.
 <script setup>
     import BackButton from './../BackButton.vue'
 
@@ -71,6 +77,7 @@
                 <button @click="disconnectAsAdmin()">Déconnexion</button>
             </p>
         </div>
+        <!-- Mobile version only. -->
         <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
     </div>
 </template>

@@ -1,3 +1,9 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// Recipes view.
+// Under development.
 <script setup>
     import BackButton from './../BackButton.vue'
 
@@ -10,6 +16,7 @@
             <h1>Onglet Recettes</h1>
             <p>Cet onglet est en cours de développement.</p>
         </div>
+        <!-- Mobile version only. -->
         <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
     </div>
 </template>

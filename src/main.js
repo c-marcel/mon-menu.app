@@ -1,3 +1,9 @@
+// Copyright Clément MARCEL (NWANDA) 2022. All Rights Reserved.
+// This file is licensed under the GNU Affero GPL v3.
+// License text available at https://www.gnu.org/licenses/agpl-3.0.txt
+
+// This file is the entry point for the client side application.
+// It will install all the routes and the Vue.js application.
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -33,5 +39,7 @@ var userData = new Object(
 });
 
 app.provide('userData', userData)
+
+// Install routes and mount application.
 app.use(router)
 app.mount("#app")
