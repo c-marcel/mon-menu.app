@@ -4,7 +4,7 @@
 
 // List displaying all available foods into database.
 <script setup>
-    import { ref, watch, inject } from 'vue'
+    import { ref, watch, inject, computed } from 'vue'
     import axios from 'axios'
 
     import ErrorDialog from '../../ErrorDialog.vue'
@@ -15,6 +15,12 @@
 
     let emit = defineEmits(['listItemClicked', 'upToDateChanged'])
     let props = defineProps(['upToDate'])
+
+    // Sorted and filtered list.
+    const sf_foods = computed(() =>
+    {
+        return foods.value.sort((item1, item2) => { return (item1.title > item2.title)});
+    })
 
     function createHttpConfig()
     {
@@ -62,9 +68,9 @@
         <div v-if="errorMsg" class="ErrorMsgContainer_cls">
             <ErrorDialog :errorMsg="errorMsg" buttonTitle="Réessayer" @retryButtonClicked="loadFoods()"></ErrorDialog>
         </div>
-        
+
         <ul v-if="!errorMsg">
-            <li v-for="entry in foods" @click="$emit('listItemClicked', entry.id)">
+            <li v-for="entry in sf_foods" @click="$emit('listItemClicked', entry.id)">
                 <p class="FoodList_Entry_Title_cls">{{ entry.title }}</p>
                 <p class="FoodList_Entry_Subtitle_cls">{{ entry.details }}</p>
             </li>
