@@ -68,7 +68,7 @@
 
     input
     {
-        border: solid 1px #c8b273;
+        border:             solid 1px #c8b273;
         background-color: #9f5069;
         outline:            none;
         font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

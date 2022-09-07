@@ -12,6 +12,7 @@
     let foods    = ref([])
     let errorMsg = ref('')
     let userData = ref(inject('userData'))
+    let filter   = ref('')
 
     let emit = defineEmits(['listItemClicked', 'upToDateChanged'])
     let props = defineProps(['upToDate'])
@@ -19,7 +20,19 @@
     // Sorted and filtered list.
     const sf_foods = computed(() =>
     {
-        return foods.value.sort((item1, item2) => { return (item1.title > item2.title)});
+        let sorted = foods.value.sort((item1, item2) =>
+        {
+            return (item1.title > item2.title)
+        });
+
+        let filtered = sorted.filter(item =>
+        {
+            let title = item.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            let f     = filter.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return (title.includes(f))
+        });
+        
+        return filtered;
     })
 
     function createHttpConfig()
@@ -75,6 +88,10 @@
                 <p class="FoodList_Entry_Subtitle_cls">{{ entry.details }}</p>
             </li>
         </ul>
+        <div class="Filter_cls">
+            <span class="FilterTitle_cls">Filtre :</span>
+            <input class="FilterText_cls" type="text" v-model="filter" />
+        </div>
     </div>
 </template>
 
@@ -166,6 +183,35 @@
         user-select:        none;
     }
 
+    .Filter_cls
+    {
+        display:            flex;
+        background-color: #834655;
+        height:             40px;
+    }
+
+    .FilterTitle_cls
+    {
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:            #c8b273;
+        height:             40px;
+        line-height:        40px;
+        margin-left:        20px;
+        margin-right:       20px;
+    }
+
+    .FilterText_cls
+    {
+        flex-grow:          1;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        border:             solid 1px #c8b273;
+        background-color: #9f5069;
+        height:             20px;
+        margin-top:         9px;
+        margin-right:       10px;
+        outline:            none;
+    }
+
     @media (max-width: 1280px) and (orientation: portrait)
     {
         .FoodList_cls
@@ -215,6 +261,29 @@
             padding-left:       15px;
             padding-right:      15px;
             user-select:        none;
+        }
+
+        .Filter_cls
+        {
+            height:             100px;
+        }
+
+        .FilterTitle_cls
+        {
+            font-size:          3em;
+            height:             100px;
+            line-height:        100px;
+            margin-left:        40px;
+            margin-right:       40px;
+        }
+
+        .FilterText_cls
+        {
+            border:             solid 1px #c8b273;
+            height:             50px;
+            margin-top:         15px;
+            margin-right:       20px;
+            font-size:          2.5em;
         }
     }
 </style>
