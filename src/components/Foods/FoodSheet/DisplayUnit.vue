@@ -8,16 +8,10 @@
     const props = defineProps(['edit', 'conversionEnabled', 'label', 'conversionFactor'])
 
     defineEmits(['enableConversion', 'labelChanged', 'factorChanged'])
-
-    // Use comma as decimal separator.
-    function formatFloat(value)
-    {
-        return String(value).replaceAll('.', ',')
-    }
 </script>
 
 <template>
-    <span v-if="!edit" class="DisplayUnitText_cls">{{ String(conversionEnabled) == "true" ? label + ' (facteur de conversion : ' + formatFloat(conversionFactor) + ')' : 'kg' }}</span>
+    <span v-if="!edit" class="DisplayUnitText_cls">{{ String(conversionEnabled) == "true" ? label + ' (facteur de conversion : ' + $formatFloat(conversionFactor) + ')' : 'kg' }}</span>
     <span v-if="edit">
         <label class="DisplayUnitText_cls">
             <input type="checkbox" class="ConversionCheckbox_cls" :checked="conversionEnabled" :value="conversionEnabled" @change="$emit('enableConversion', $event.target.checked)" />

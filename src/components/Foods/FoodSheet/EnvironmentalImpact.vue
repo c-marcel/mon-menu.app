@@ -9,12 +9,6 @@
     const props = defineProps(['data', 'edit'])
 
     defineEmits(['changeCo2eq', 'changeCo2eqSource'])
-
-    // Use comma as decimal separator.
-    function formatFloat(cost)
-    {
-        return String(cost).replaceAll('.', ',')
-    }
 </script>
 
 <template>
@@ -23,7 +17,7 @@
         <div class="EnvironmentalImpact_CO2_cls">
             <span class="Spacer_cls"></span>
             <span class="EnvironmentalImpactText_cls">• Empreinte carbone : 
-                <span v-if="!edit">{{ formatFloat(data.co2eq.kgco2e_kg) }}</span>
+                <span v-if="!edit">{{ $formatFloat(data.co2eq.kgco2e_kg) }}</span>
                 <span v-if="edit"><input class="EnvironmentalImpactInputFloat_cls" type="number" step="0.01" :value="data.co2eq.kgco2e_kg" @change="$emit('changeCo2eq', $event.target.value)" /></span>
                 kg CO2eq/kg
             </span>

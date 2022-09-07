@@ -8,17 +8,11 @@
     const props = defineProps(['edit', 'cost'])
 
     defineEmits(['changeCost'])
-
-    // Use comma as decimal separator.
-    function formatCost(cost)
-    {
-        return String(cost).replaceAll('.', ',')
-    }
 </script>
 
 <template>
     <span v-if="!edit" class="Food_Cost_Value_cls">
-        {{ formatCost(cost) }} €/kg
+        {{ $formatFloat(cost) }} €/kg
     </span>
     <span v-if="edit" class="Food_Cost_Value_cls"><input type="number" step="0.01" :value="cost" class="Food_Cost_Edit_cls" @change="$emit('changeCost', $event.target.value)" /> €/kg</span>
 </template>

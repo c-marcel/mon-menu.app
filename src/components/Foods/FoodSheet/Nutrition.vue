@@ -33,18 +33,6 @@
         { "key": "vitamin_c", "title": "Vitamine C", "units": "mg/100 g", "conversion": 0.00001 },
         { "key": "vitamin_d", "title": "Vitamine D", "units": "µg/100 g", "conversion": 0.00000001 },
     ])
-
-    // Use 2 digits after comma.
-    function round(value)
-    {
-        return Math.round(value * 100.0) / 100.0;
-    }
-
-    // Use comma as decimal separator.
-    function formatFloat(value)
-    {
-        return String(round(value)).replaceAll('.', ',')
-    }
 </script>
 
 <template>
@@ -57,8 +45,8 @@
                     <span class="NutritionGridEntry_cls" v-bind:class="{NutritionGridEntryEdit_cls: edit}" v-if="data[entry.key] != undefined">
                         <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span v-if="!edit && data[entry.key].source" class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
                         <div class="NutritionGridEntryText_cls">
-                            <span v-if="!edit">{{ formatFloat(data[entry.key].value / entry.conversion) }}</span>
-                            <span v-if="edit"><input type="number" step="0.01" :value="round(data[entry.key].value / entry.conversion)" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /></span>
+                            <span v-if="!edit">{{ $formatFloat($roundFloat(data[entry.key].value / entry.conversion, 2)) }}</span>
+                            <span v-if="edit"><input type="number" step="0.01" :value="$formatFloat($roundFloat(data[entry.key].value / entry.conversion, 2))" @change="$emit('changeNutritionData', entry.key, $event.target.value * entry.conversion)" /></span>
                             <span class="NutritionUnit_cls">{{ ' ' + entry.units }}</span>
                         </div>
                         <div style="text-align: center;">
