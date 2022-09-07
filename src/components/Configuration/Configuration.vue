@@ -16,22 +16,9 @@
 
     defineEmits(['hideCentralContainerRequested'])
 
-    function createHttpConfig()
-    {
-        let config =
-        {
-            headers:
-            {
-                "auth-token": userData.value.authentication.token
-            }
-        }
-
-        return config
-    }
-
     function connectAsAdmin()
     {
-        axios.get('https://api.mon-menu.app/connect?username=' + username.value + '&password=' + password.value, createHttpConfig())
+        axios.get('https://api.mon-menu.app/connect?username=' + username.value + '&password=' + password.value)
         .then((response) =>
         {
             if (response.status == 200)

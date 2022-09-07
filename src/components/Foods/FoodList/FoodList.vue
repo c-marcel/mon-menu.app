@@ -35,19 +35,6 @@
         return filtered;
     })
 
-    function createHttpConfig()
-    {
-        let config =
-        {
-            headers:
-            {
-                "auth-token": userData.value.authentication.token
-            }
-        }
-
-        return config
-    }
-
     loadFoods()
 
     // Watch props changes to update list.
@@ -61,7 +48,7 @@
     {
         errorMsg.value = ''
 
-        axios.get('https://api.mon-menu.app/getFoods', createHttpConfig())
+        axios.get('https://api.mon-menu.app/getFoods')
         .then((response) =>
         {
             foods.value = response.data.foods

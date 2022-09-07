@@ -37,6 +37,18 @@ var userData = new Object(
     authentication:
     {
         token:  ""      //< Authentication token (defined by user). Used only for 'admin' user level.
+    },
+    getHttpHeader: () =>
+    {
+        let config =
+        {
+            headers:
+            {
+                "auth-token": userData.authentication.token
+            }
+        }
+
+        return config;
     }
 });
 

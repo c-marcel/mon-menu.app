@@ -20,19 +20,6 @@
 
     defineEmits(['hideCentralContainerRequested'])
 
-    function createHttpConfig()
-    {
-        let config =
-        {
-            headers:
-            {
-                "auth-token": userData.value.authentication.token
-            }
-        }
-
-        return config
-    }
-
     function deleteCurrentFood()
     {
         if (currentId.value == 0)
@@ -41,7 +28,7 @@
         edit.value = false
 
         // Delete entry from database.
-        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, createHttpConfig())
+        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, userData.value.getHttpHeader())
         .then((response) =>
         {
             if (response.status == 200)
@@ -55,7 +42,7 @@
     function addNewFood()
     {
         // Add entry into database.
-        axios.post('https://api.mon-menu.app/createFood', '', createHttpConfig())
+        axios.post('https://api.mon-menu.app/createFood', '', userData.value.getHttpHeader())
         .then((response) =>
         {
             if (response.status == 200)

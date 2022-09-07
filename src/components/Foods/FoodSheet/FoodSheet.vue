@@ -63,7 +63,7 @@
                 fooddata.value.units = null
 
             // Send food data to Api.
-            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, createHttpConfig())
+            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, userData.value.getHttpHeader())
             .then((response) =>
             {
                 if (response.status != 200)
@@ -81,25 +81,12 @@
         }
     })
 
-    function createHttpConfig()
-    {
-        let config =
-        {
-            headers:
-            {
-                "auth-token": userData.value.authentication.token
-            }
-        }
-
-        return config
-    }
-
     function loadFoodData(id)
     {
         errorMsg.value = ''
 
         // Load food data from Api.
-        axios.get('https://api.mon-menu.app/getFoodData/' + id, createHttpConfig())
+        axios.get('https://api.mon-menu.app/getFoodData/' + id)
         .then((response) =>
         {
             if (response.status == 200)
