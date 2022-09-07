@@ -38,6 +38,8 @@
         if (currentId.value == 0)
             return
 
+        edit.value = false
+
         // Delete entry from database.
         axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, createHttpConfig())
         .then((response) =>
@@ -73,7 +75,7 @@
 
 <template>
     <div>
-        <FoodList @listItemClicked="(id) => { currentId = id }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
+        <FoodList @listItemClicked="(id) => { currentId = id ; edit = false }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
         <!-- Mobile version only. -->
             <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
         <!-- -->
