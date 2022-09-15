@@ -41,7 +41,7 @@
         <div class="NutritionContent_cls">
             <span class="Spacer_cls"></span>
             <div class="NutritionGrid_cls">
-                <span v-for="entry in metadata">
+                <span v-for="(entry, key) in metadata" :key="key">
                     <span class="NutritionGridEntry_cls" v-bind:class="{NutritionGridEntryEdit_cls: edit}" v-if="data[entry.key] != undefined">
                         <div class="NutritionGridEntryTitle_cls">{{entry.title}}<span v-if="!edit && data[entry.key].source" class="NutritionSourceIcon_cls" :title=data[entry.key].source>❔</span></div>
                         <div class="NutritionGridEntryText_cls">

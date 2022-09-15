@@ -25,7 +25,7 @@
 
 <template>
     <div class="Menu_cls">
-        <span v-for="entry in entries">
+        <span v-for="(entry, key) in entries" :key="key">
             <router-link :to="entry.page" class="MenuEntry_cls" @click="$emit('itemClicked')">{{ entry.title }}</router-link>
         </span>
     </div>

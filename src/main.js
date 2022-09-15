@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // This file is the entry point for the client side application.
 // It will install all the routes and the Vue.js application.
 import { createRouter, createWebHashHistory } from 'vue-router'

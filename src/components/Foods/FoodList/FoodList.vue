@@ -72,7 +72,7 @@
         </div>
 
         <ul v-if="!errorMsg">
-            <li v-for="entry in sf_foods" @click="$emit('listItemClicked', entry.id)">
+            <li v-for="entry in sf_foods" :key="entry.id" @click="$emit('listItemClicked', entry.id)">
                 <p class="FoodList_Entry_Title_cls">{{ entry.title }}</p>
                 <p class="FoodList_Entry_Subtitle_cls">{{ entry.details }}</p>
             </li>
