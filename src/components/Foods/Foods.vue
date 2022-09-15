@@ -17,7 +17,7 @@
 
     let currentId    = ref(0)
     let edit         = ref(false)
-    let listUpToDate = ref(false)
+    let listUpToDate = ref(true)
     let userData     = ref(inject('userData'))
 
     defineEmits(['hideCentralContainerRequested'])

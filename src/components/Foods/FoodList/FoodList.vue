@@ -4,7 +4,7 @@
 
 // List displaying all available foods into database.
 <script setup>
-    import { ref, watch, inject, computed } from 'vue'
+    import { ref, watch, inject, computed, onMounted } from 'vue'
     import axios from 'axios'
 
     axios.defaults.withCredentials = true
@@ -13,7 +13,6 @@
 
     let foods    = ref([])
     let errorMsg = ref('')
-    let userData = ref(inject('userData'))
     let filter   = ref('')
 
     let emit = defineEmits(['listItemClicked', 'upToDateChanged'])
@@ -37,8 +36,6 @@
         return filtered;
     })
 
-    loadFoods()
-
     // Watch props changes to update list.
     watch(props, (value) =>
     {
@@ -54,13 +51,22 @@
         .then((response) =>
         {
             foods.value = response.data.foods
-            emit('upToDateChanged')
+            
+            // If list is already up-to-date: doesn't emit signal.
+            if (!props.upToDate)
+                emit('upToDateChanged')
         })
         .catch(function(error)
         {
             errorMsg.value = 'Impossible de récupérer la liste des aliments dans la base de données. Merci de contacter l\'administrateur du site.'
         });
     }
+
+    // Load data when component has been mounted.
+    onMounted(() =>
+    {
+        loadFoods()
+    })
 </script>
 
 <template>
