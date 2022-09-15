@@ -28,7 +28,7 @@
         edit.value = false
 
         // Delete entry from database.
-        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value, userData.value.getHttpHeader())
+        axios.delete('https://api.mon-menu.app/deleteFood/' + currentId.value)
         .then((response) =>
         {
             if (response.status == 200)
@@ -42,7 +42,7 @@
     function addNewFood()
     {
         // Add entry into database.
-        axios.post('https://api.mon-menu.app/createFood', '', userData.value.getHttpHeader())
+        axios.post('https://api.mon-menu.app/createFood', '')
         .then((response) =>
         {
             if (response.status == 200)

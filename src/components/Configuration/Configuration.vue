@@ -23,8 +23,7 @@
         {
             if (response.status == 200)
             {
-                userData.value.level                = response.data['level']
-                userData.value.authentication.token = response.data['token']
+                userData.value.level = response.data['level']
             }
         }).catch(function(error)
         {
@@ -33,8 +32,8 @@
 
     function disconnectAsAdmin()
     {
-        userData.value.level                = 'user'
-        userData.value.authentication.token = ""
+        axios.get('https://api.mon-menu.app/disconnect')
+        userData.value.level = 'user'
     }
 </script>
 

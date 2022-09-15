@@ -33,23 +33,7 @@ const app = createApp(App)
 // Install user data.
 var userData = new Object(
 {
-    level: "user",      //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
-    authentication:
-    {
-        token:  ""      //< Authentication token (defined by user). Used only for 'admin' user level.
-    },
-    getHttpHeader: () =>
-    {
-        let config =
-        {
-            headers:
-            {
-                "auth-token": userData.authentication.token
-            }
-        }
-
-        return config;
-    }
+    level: "user"   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
 });
 
 app.provide('userData', userData)

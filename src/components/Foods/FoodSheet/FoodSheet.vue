@@ -63,7 +63,7 @@
                 fooddata.value.units = null
 
             // Send food data to Api.
-            axios.put('https://api.mon-menu.app/updateFood', fooddata.value, userData.value.getHttpHeader())
+            axios.put('https://api.mon-menu.app/updateFood', fooddata.value)
             .then((response) =>
             {
                 if (response.status != 200)
