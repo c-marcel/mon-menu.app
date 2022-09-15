@@ -8,6 +8,8 @@
     import { ref, watch, inject } from 'vue'
     import axios from 'axios'
 
+    axios.defaults.withCredentials = true
+
     import EnvironmentalImpact from './EnvironmentalImpact.vue'
     import DisplayUnit         from './DisplayUnit.vue'
     import ErrorDialog         from '../../ErrorDialog.vue'

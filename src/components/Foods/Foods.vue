@@ -8,6 +8,8 @@
     import { ref, inject } from 'vue'
     import axios from 'axios'
 
+    axios.defaults.withCredentials = true
+
     import FoodHeader from './FoodHeader/FoodHeader.vue'
     import BackButton from '../BackButton.vue'
     import FoodSheet  from './FoodSheet/FoodSheet.vue'

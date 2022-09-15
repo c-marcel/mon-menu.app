@@ -10,6 +10,8 @@
     import { ref, inject } from 'vue'
     import axios from 'axios'
 
+    axios.defaults.withCredentials = true
+
     let userData = ref(inject('userData'))
     let username = ref('')
     let password = ref('')
