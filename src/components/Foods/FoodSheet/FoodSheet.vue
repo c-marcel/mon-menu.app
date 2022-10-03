@@ -5,7 +5,7 @@
 // Food sheet for displaying food data.
 // Edit mode available for admin access.
 <script setup>
-    import { ref, watch, inject } from 'vue'
+    import { ref, watch } from 'vue'
     import axios from 'axios'
 
     axios.defaults.withCredentials = true
@@ -26,7 +26,6 @@
     let errorMsg     = ref('')
     let loadedId     = ref(0)
     let foodModified = ref(false)
-    let userData     = ref(inject('userData'))
     let conversion   = ref({enabled: false, label: "", factor: 0.0})
 
     let props = defineProps(['currentFoodId', 'edit'])

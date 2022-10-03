@@ -18,6 +18,7 @@
     let edit         = ref(false)
     let listUpToDate = ref(true)
     let userData     = ref(inject('userData'))
+    let currentTitle = ref('')
 
     defineEmits(['hideCentralContainerRequested'])
 
@@ -63,11 +64,11 @@
 
 <template>
     <div>
-        <RecipeGroupList @listItemClicked="(id) => { currentId = id ; edit = false }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
+        <RecipeGroupList @listItemClicked="(id, title) => { currentId = id ; currentTitle = title ; edit = false }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
 
         <div class="RecipeGroupsContainer_cls" v-bind:class="{RecipeGroupsContainerHidden_cls: !currentId}">
             <RecipeGroupHeader v-if="userData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editRecipeGroupRequested="edit = !edit" @removeRecipeGroupRequested="deleteCurrentRecipeGroup()" @addRecipeGroupRequested="addNewRecipeGroup()" />
-            <RecipeGroupSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
+            <RecipeGroupSheet :currentGroupId="currentId" :title="currentTitle" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
             <!-- Mobile version only. -->
                 <BackButton @backRequested="hideCurrentRecipeGroupSheet"></BackButton>
             <!-- -->
