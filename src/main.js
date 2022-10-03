@@ -13,13 +13,13 @@ import App from './App.vue'
 import Plugin_Tools  from './plugins/Tools'
 
 import Configuration from './components/Configuration/Configuration.vue';
-import Recipes       from './components/Recipes/Recipes.vue';
+import RecipeGroups  from './components/RecipeGroups/RecipeGroups.vue';
 import Foods         from './components/Foods/Foods.vue';
 
 const routes =
 [
     { path: '/foods',   component: Foods         },
-    { path: '/recipes', component: Recipes       },
+    { path: '/recipes', component: RecipeGroups  },
     { path: '/config',  component: Configuration },
     { path: '/',        component: null          },
 ]
