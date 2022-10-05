@@ -7,36 +7,7 @@
 <script setup>
     import BackButton from './../BackButton.vue'
 
-    import { ref, inject } from 'vue'
-    import axios from 'axios'
-
-    axios.defaults.withCredentials = true
-
-    let userData = ref(inject('userData'))
-    let username = ref('')
-    let password = ref('')
-
     defineEmits(['hideCentralContainerRequested'])
-
-    function connectAsAdmin()
-    {
-        axios.get('https://api.mon-menu.app/connect?username=' + username.value + '&password=' + password.value)
-        .then((response) =>
-        {
-            if (response.status == 200)
-            {
-                userData.value.level = response.data['level']
-            }
-        }).catch(function(error)
-        {
-        });
-    }
-
-    function disconnectAsAdmin()
-    {
-        axios.get('https://api.mon-menu.app/disconnect')
-        userData.value.level = 'user'
-    }
 </script>
 
 <template>
@@ -44,26 +15,6 @@
         <div class="Dialog_cls">
             <h1>Onglet Configuration</h1>
             <p>Cet onglet est en cours de développement.</p>
-            <p class="AdminAccessTitle_cls">🛡️ Accès administrateur</p>
-            <p v-if="userData.level != 'admin'" style="text-align: center;">
-                <table>
-                    <tr>
-                        <td>Nom d'utilisateur :</td>
-                        <td><input v-model="username" type=text /></td>
-                    </tr>
-                    <tr>
-                        <td>Mot de passe :</td>
-                        <td><input v-model="password" type=password /></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><button @click="connectAsAdmin()">Connexion</button></td>
-                    </tr>
-                </table>
-            </p>
-            <p v-if="userData.level == 'admin'" style="text-align: center;">
-                <button @click="disconnectAsAdmin()">Déconnexion</button>
-            </p>
         </div>
         <!-- Mobile version only. -->
         <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
@@ -97,18 +48,6 @@
         font-size:      1em;
     }
 
-    .AdminAccessTitle_cls
-    {
-        text-align: center;
-        font-weight: bold;
-    }
-
-    table
-    {
-        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        font-size:      0.9em;
-    }
-
     @media (max-width: 1280px) and (orientation: portrait)
     {
         .Dialog_cls
@@ -116,6 +55,7 @@
             padding:        15px;
             width:          80%;
         }
+
         h1
         {
             color:        #c8b273;
@@ -129,26 +69,6 @@
             font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             font-size:      3.5em;
             text-align:     center;
-        }
-
-        table
-        {
-            width:      100%;
-            text-align: left;
-        }
-
-        input
-        {
-            height:     60px;
-            width:      320px;
-            font-size:  1em;
-        }
-
-        button
-        {
-            font-size:  1em;
-            margin-top: 20px;
-            padding:    5px;
         }
     }
 </style>

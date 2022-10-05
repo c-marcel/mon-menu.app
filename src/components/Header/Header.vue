@@ -4,6 +4,7 @@
 
 // Application header containing logo and main menu.
 <script setup>
+    import Connection from './Connection.vue'
     import Logo from './Logo.vue'
     import Menu from './Menu.vue'
 
@@ -14,6 +15,7 @@
     <div class="Header_cls">
         <Logo class="Logo_cls"></Logo>
         <Menu @itemClicked="$emit('menuItemClicked')"></Menu>
+        <Connection class="Connection_Cls"></Connection>
     </div>
 </template>
 
@@ -31,6 +33,17 @@
     .Logo_cls
     {
         margin-left:        30px;
+    }
+
+    .Connection_Cls
+    {
+        position:           fixed;
+        display:            flex;
+        flex-direction:     column;
+        
+        top:                0px;
+        bottom:             120px;
+        right:              10px;
     }
 
     @media (max-width: 1280px) and (orientation: portrait)
@@ -53,6 +66,11 @@
             margin-left:        0px;
             text-align:         center;
             padding-bottom:     20px;
+        }
+
+        .Connection_Cls
+        {
+            display:            none;
         }
     }
 </style>
