@@ -4,19 +4,21 @@
 
 // Widget for displaying recipes variants.
 <script setup>
-    let props = defineProps(['edit', 'recipeList'])
+    let props = defineProps(['edit', 'recipeList', 'sortKey'])
+
+    defineEmits(['sortRequested'])
 </script>
 
 <template>
     <div class="RecipeList_Cls">
         <div class="RecipeListEntry_Cls RecipeListHeaders_Cls">
             <span class="RecipeListTitle_Cls"></span>
-            <span class="RecipeListColumn_Cls" title="Indique les régimes alimentaires spéciaux : végétariens, végétaliens.">Régime</span>
-            <span class="RecipeListColumn_Cls" title="Indique si la recette est actuellement de saison.">Saison</span>
-            <span class="RecipeListColumn_Cls" title="Indique le coût financier par part pour les ingrédients et l'énergie nécessaires.">Coût</span>
-            <span class="RecipeListColumn_Cls" title="Indique la quantité d'énergie nécessaire par part.">Energie</span>
-            <span class="RecipeListColumn_Cls" title="Indique les émissions de CO2 par part, incluant les ingrédients et l'usage des énergies.">CO<sub>2</sub></span>
-            <span class="RecipeListColumn_Cls" title="Durée globale approximative de la recette (préparation, cuisson, repos).">Durée</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'diet'}" title="Indique les régimes alimentaires spéciaux : végétariens, végétaliens." @click="$emit('sortRequested', 'diet')">Régime</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'season'}" title="Indique si la recette est actuellement de saison." @click="$emit('sortRequested', 'season')">Saison</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'cost'}" title="Indique le coût financier par part pour les ingrédients et l'énergie nécessaires." @click="$emit('sortRequested', 'cost')">Coût</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'energy'}" title="Indique la quantité d'énergie nécessaire par part." @click="$emit('sortRequested', 'energy')">Energie</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'co2'}" title="Indique les émissions de CO2 par part, incluant les ingrédients et l'usage des énergies." @click="$emit('sortRequested', 'co2')">CO<sub>2</sub></span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'time'}" title="Durée globale approximative de la recette (préparation, cuisson, repos)." @click="$emit('sortRequested', 'time')">Durée</span>
         </div>
         <ul >
             <li v-for="entry in recipeList" :key="entry.id">
@@ -81,6 +83,12 @@
     {
         width:              70px;
         text-align:         center;
+        user-select:        none;
+    }
+
+    .RecipeListColumnUnderline_Cls
+    {
+        text-decoration: underline dashed;
     }
 
     ul

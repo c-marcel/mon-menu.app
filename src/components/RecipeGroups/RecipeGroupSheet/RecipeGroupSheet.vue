@@ -18,6 +18,8 @@
     let loadedId            = ref('')
     let errorMsg            = ref('')
     let variantsErrorMsg    = ref('')
+    let sortOrder           = ref('')
+    let sortKey             = ref('')
 
     let props = defineProps(['currentGroupId', 'edit', 'title'])
 
@@ -120,13 +122,186 @@
             }
         });
     }
+
+    function sortByTime()
+    {
+        sortKey.value = 'time'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.time > item2.time)
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.time < item2.time)
+            });
+        }
+    }
+
+    function sortByCo2()
+    {
+        sortKey.value = 'co2'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.co2 > item2.co2)
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.co2 < item2.co2)
+            });
+        }
+    }
+
+    function sortByEnergy()
+    {
+        sortKey.value = 'energy'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.energy > item2.energy)
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.energy < item2.energy)
+            });
+        }
+    }
+
+    function sortByCost()
+    {
+        sortKey.value = 'cost'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.cost > item2.cost)
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.cost < item2.cost)
+            });
+        }
+    }
+
+    function sortBySeason()
+    {
+        sortKey.value = 'season'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.available > item2.available)
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.available < item2.available)
+            });
+        }
+    }
+
+    function sortByDiet()
+    {
+        sortKey.value = 'diet'
+        
+        if (sortOrder == 'asc')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.diet.reduce((accumulator, value) =>
+                        {
+                            return accumulator + value;
+                        }, 0) > item2.diet.reduce((accumulator, value) =>
+                        {
+                            return accumulator + value;
+                        }, 0))
+            });
+        }
+
+        else if (sortOrder == 'des')
+        {
+            recipeList.value = recipeList.value.sort((item1, item2) =>
+            {
+                return (item1.diet.reduce((accumulator, value) =>
+                        {
+                            return accumulator + value;
+                        }, 0) < item2.diet.reduce((accumulator, value) =>
+                        {
+                            return accumulator + value;
+                        }, 0))
+            });
+        }
+    }
+
+    function sortList(key)
+    {
+        // If key is already used: switch order.
+        if (sortKey.value == key)
+        {
+            if (sortOrder == 'asc')
+                sortOrder = 'des'
+
+            else
+                sortOrder = 'asc'
+        }
+
+        // Else: use ascending for the first time.
+        else
+            sortOrder = 'asc'
+
+        if (key == 'time')
+            sortByTime()
+
+        else if (key == 'co2')
+            sortByCo2()
+
+        else if (key == 'energy')
+            sortByEnergy()
+
+        else if (key == 'cost')
+            sortByCost()
+
+        else if (key == 'season')
+            sortBySeason()
+
+        else if (key == 'diet')
+            sortByDiet()
+    }
 </script>
 
 <template>
     <div class="RecipeGroupSheet_cls">
         <div v-show="currentGroupId != '' && errorMsg == ''" class="RecipeGroup_cls">
             <RecipeGroupTitle :title="title" :edit="edit" />
-            <RecipeList :recipeList="recipeList" />
+            <RecipeList :recipeList="recipeList" :sortKey="sortKey" @sortRequested="(key) => { sortList(key) }" />
             <p v-if="variantsErrorMsg != ''" class="WarningBox_Cls">
                 ⚠️ <span class="WarningText_Cls">{{ variantsErrorMsg }}</span>
             </p>
