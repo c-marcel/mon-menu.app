@@ -70,7 +70,7 @@
             <RecipeGroupHeader v-if="userData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editRecipeGroupRequested="edit = !edit" @removeRecipeGroupRequested="deleteCurrentRecipeGroup()" @addRecipeGroupRequested="addNewRecipeGroup()" />
             <RecipeGroupSheet :currentGroupId="currentId" :title="currentTitle" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
             <!-- Mobile version only. -->
-                <BackButton @backRequested="hideCurrentRecipeGroupSheet"></BackButton>
+            <BackButton @backRequested="hideCurrentRecipeGroupSheet"></BackButton>
             <!-- -->
         </div>
     </div>
