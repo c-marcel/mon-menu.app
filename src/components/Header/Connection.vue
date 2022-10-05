@@ -9,12 +9,25 @@
 
     axios.defaults.withCredentials = true
 
-    let userData = ref(inject('userData'))
-    let username = ref('')
-    let password = ref('')
+    let userData        = ref(inject('userData'))
+    let username        = ref('')
+    let password        = ref('')
+    let errorMsg        = ref('')
+    let disabledButton  = ref(false)
 
     function connectUser()
     {
+        errorMsg.value = ''
+
+        // Skip if empty credentials.
+        if (username.value == '')
+            return
+
+        if (password.value == '')
+            return
+
+        disabledButton.value = true
+
         axios.get('https://api.mon-menu.app/connect?username=' + username.value + '&password=' + password.value)
         .then((response) =>
         {
@@ -22,8 +35,22 @@
             {
                 userData.value.level = response.data['level']
             }
+
+            username.value       = ''
+            password.value       = ''
+            disabledButton.value = false
+
         }).catch(function(error)
         {
+            username.value       = ''
+            password.value       = ''
+            disabledButton.value = false
+
+            errorMsg.value = 'Login/mot de passe invalides'
+            setTimeout(() =>
+            {
+                errorMsg.value = ''
+            }, 2000);
         });
     }
 
@@ -47,8 +74,11 @@
                     <td><input v-model="password" type=password /></td>
                 </tr>
                 <tr>
+                    <td v-show="errorMsg != ''" class="ErrorMsg_Cls" colspan="2">{{ errorMsg }}</td>
+                </tr>
+                <tr>
                     <td></td>
-                    <td><button @click="connectUser()">Connexion</button></td>
+                    <td><button :disabled="disabledButton" @click="connectUser()">Connexion</button></td>
                 </tr>
             </table>
         </p>
@@ -62,7 +92,13 @@
 <style scoped>
     .Connection_Cls
     {
-        background-color: transparent;
+        background-color:   transparent;
+    }
+
+    .ErrorMsg_Cls
+    {
+        font-size:          0.6em;
+        color:          #df9a3b;
     }
 
     table
