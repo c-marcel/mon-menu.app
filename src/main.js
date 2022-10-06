@@ -40,6 +40,14 @@ var userData = new Object(
 
 app.provide('userData', userData)
 
+// Install recipe data.
+var recipeData = new Object(
+{
+    currentRecipeId: ""     //< Current displayed recipe id. Empty string to hide recipe div.
+});
+
+app.provide('recipeData', recipeData)   
+
 // Install plugins.
 app.use(Plugin_Tools)
 

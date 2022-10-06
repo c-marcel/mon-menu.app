@@ -4,9 +4,17 @@
 
 // Widget for displaying recipes variants.
 <script setup>
-    let props = defineProps(['edit', 'recipeList', 'sortKey'])
+    import { ref, inject } from 'vue'
+
+    let props      = defineProps(['edit', 'recipeList', 'sortKey'])
+    let recipeData = ref(inject('recipeData'))
 
     defineEmits(['sortRequested'])
+
+    function openRecipe(id)
+    {
+        recipeData.value.currentRecipeId = id
+    }
 </script>
 
 <template>
@@ -21,7 +29,7 @@
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'time'}" title="Durée globale approximative de la recette (préparation, cuisson, repos)." @click="$emit('sortRequested', 'time')">Durée</span>
         </div>
         <ul >
-            <li v-for="entry in recipeList" :key="entry.id">
+            <li v-for="entry in recipeList" :key="entry.id" @click="openRecipe(entry.id)">
                 <div class="RecipeListEntry_Cls" style="overflow: hidden;">
                     <span class="RecipeListTitle_Cls" style="padding-left: 10px;">{{ entry.title }}</span>
                     <span class="RecipeListColumn_Cls RecipeListDietIcons_Cls">
@@ -32,7 +40,7 @@
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.cost == '-' ? '-' : $formatFloat($roundFloat(entry.cost, 2)) + ' €' }}</span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.energy == '-' ? '-' : $formatFloat($roundFloat(entry.energy, 2)) + ' kWh' }}</span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.co2 == '-' ? '-' : $formatFloat($roundFloat(entry.co2 * 1000, 0)) + ' g' }}</span>
-                    <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.time < 60 ? entry.time + '\'' : Math.floor(entry.time / 60) + 'h' + entry.time % 60 }}</span>
+                    <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ $formatTime(entry.time) }}</span>
                 </div>
             </li>
         </ul>

@@ -26,5 +26,26 @@ export default
             let f = Math.pow(10.0, n);
             return Math.round(value * f) / f;
         }
+
+        // Convert kg to human readable format.
+        app.config.globalProperties.$formatWeight = (value) =>
+        {
+            if (value >= 1.0)
+                return String(value) + ' kg'
+
+            if (value >= 0.001)
+                return String(value * 1000.0) + ' g'
+
+            return String(value * 1000000.0) + ' mg'
+        }
+
+        // Convert time in minuts to human readable format.
+        app.config.globalProperties.$formatTime = (value) =>
+        {
+            if (value < 60)
+                return String(value) + '\''
+
+            return String(Math.floor(value / 60)) + 'h' + String(value % 60)
+        }
     }
 }

@@ -4,10 +4,13 @@
 
 // Main application view.
 <script setup>
-    import { ref } from 'vue'
+    import { ref, inject } from 'vue'
 
     import CentralContainer from './components/CentralContainer.vue'
+    import RecipeSheet      from './components/Recipes/RecipeSheet.vue'
     import Header           from './components/Header/Header.vue'
+
+    let recipeData = ref(inject('recipeData'))
 
     // For mobile versions.
     let displayCentralContainer = ref(false)
@@ -26,6 +29,8 @@
 <template>
     <Header @menuItemClicked="showCentralContainer()" />
     <CentralContainer class="CentralContainer_cls" v-bind:class="{CentralContainerHidden_cls: !displayCentralContainer}" @hideCentralContainerRequested="hideCentralContainer()"/>
+    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId">
+    </RecipeSheet>
 </template>
 
 <style scoped>
@@ -37,6 +42,15 @@
         right:              0px;
         bottom:             0px;
         background-color: #9f5069;
+    }
+
+    .RecipeSheet_Cls
+    {
+        position:           fixed;
+        top:                0px;
+        bottom:             0px;
+        left:               0px;
+        right:              0px;
     }
 
     @media (max-width: 1280px) and (orientation: portrait)
