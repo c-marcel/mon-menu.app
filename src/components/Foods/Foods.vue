@@ -18,7 +18,7 @@
     let currentId    = ref(0)
     let edit         = ref(false)
     let listUpToDate = ref(true)
-    let userData     = ref(inject('userData'))
+    let sessionData  = ref(inject('sessionData'))
 
     defineEmits(['hideCentralContainerRequested'])
 
@@ -69,7 +69,7 @@
             <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
         <!-- -->
         <div class="FoodsContainer_cls" v-bind:class="{FoodsContainerHidden_cls: !currentId}">
-            <FoodHeader v-if="userData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
+            <FoodHeader v-if="sessionData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
             <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
             <!-- Mobile version only. -->
                 <BackButton @backRequested="hideCurrentFoodSheet"></BackButton>

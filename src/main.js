@@ -34,17 +34,17 @@ const router = createRouter(
 const app = createApp(App)
 
 // Install user data.
-var userData = new Object(
+var sessionData = new Object(
 {
-    level: ref(localStorage.userData_level || 'user')   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+    level: ref(localStorage.sessionData_level || 'user')   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
 });
 
-app.provide('userData', userData)
+app.provide('sessionData', sessionData)
 
 // Store user data.
-watch(userData.level, (n) =>
+watch(sessionData.level, (n) =>
 {
-    localStorage.userData_level = n
+    localStorage.sessionData_level = n
 })
 
 // Install recipe data.

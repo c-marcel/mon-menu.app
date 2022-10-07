@@ -9,7 +9,7 @@
 
     axios.defaults.withCredentials = true
 
-    let userData        = ref(inject('userData'))
+    let sessionData     = ref(inject('sessionData'))
     let username        = ref('')
     let password        = ref('')
     let errorMsg        = ref('')
@@ -33,7 +33,7 @@
         {
             if (response.status == 200)
             {
-                userData.value.level = response.data['level']
+                sessionData.value.level = response.data['level']
             }
 
             username.value       = ''
@@ -57,13 +57,13 @@
     function disconnectUser()
     {
         axios.get('https://api.mon-menu.app/disconnect')
-        userData.value.level = 'user'
+        sessionData.value.level = 'user'
     }
 </script>
 
 <template>
     <div class="Connection_Cls">
-        <p v-if="userData.level != 'admin'" style="text-align: center;">
+        <p v-if="sessionData.level != 'admin'" style="text-align: center;">
             <table>
                 <tr>
                     <td>Nom d'utilisateur :</td>
@@ -82,7 +82,7 @@
                 </tr>
             </table>
         </p>
-        <div v-if="userData.level == 'admin'" style="text-align: center;">
+        <div v-if="sessionData.level == 'admin'" style="text-align: center;">
             <p>Bonjour admin !</p>
             <button @click="disconnectUser()">Déconnexion</button>
         </div>
