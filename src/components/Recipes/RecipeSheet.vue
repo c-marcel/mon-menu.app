@@ -4,7 +4,7 @@
 
 // View for a recipe.
 <script setup>
-    import { ref, inject, watch } from 'vue'
+    import { ref, inject, watch, computed } from 'vue'
     import axios from 'axios'
 
     import Months from '../Foods/FoodSheet/Months.vue'
@@ -29,6 +29,18 @@
     let energy      = ref(0)
     let water       = ref(0)
     let co2         = ref(0)
+
+    // Recipe loading state.
+    let recipeLoaded = ref(false)
+    let ingrNb       = ref(0)
+
+    const loaded = computed(() =>
+    {
+        if (!recipeLoaded.value)
+            return false
+
+        return (ingrNb.value == ingredients.value.length)
+    })
 
     let props = defineProps(['currentRecipeId'])
 
@@ -92,6 +104,9 @@
 
     function loadRecipeData(id)
     {
+        recipeLoaded.value = false
+        ingrNb.value       = 0
+
         axios.get('https://api.mon-menu.app/getRecipeData/' + id)
         .then((response) =>
         {
@@ -115,6 +130,7 @@
 
                 // Store ingredients and data (from Api).
                 ingredients.value = []
+                ingrNb.value       = response.data.ingredients.length
                 for (let i = 0 ; i < response.data.ingredients.length ; i++)
                 {
                     loadIngredientData(response.data.ingredients[i])
@@ -145,8 +161,6 @@
                 else if (response.data.temperature == 2)
                     temperature.value = 'chaud'
 
-                console.log(temperature.value)
-
                 // Diet.
                 diet.value = []
                 if (response.data.exclusions.meat && response.data.exclusions.fish)
@@ -163,7 +177,9 @@
 
                 // Compute CO2.
                 // TODO: add energy emissions with config.
-                co2.value = response.data.environmentalImpact.ingredientsCo2eq 
+                co2.value = response.data.environmentalImpact.ingredientsCo2eq
+
+                recipeLoaded.value = true
             }
         })
         .catch(function(error)
@@ -185,10 +201,10 @@
     <div v-show="currentRecipeId != ''" class="RecipeSheet_Cls">
         <!-- Solid background -->
         <div class="RecipeSheetBg_Cls">
-
             <!-- Header -->
             <div class="RecipeSheetHeader_Cls">
-                <div class="RecipeSheetTitleMonths_Cls">
+                <!-- Title and months -->
+                <div v-show="loaded" class="RecipeSheetTitleMonths_Cls">
                     <div class="RecipeSheetTitle_Cls">
                         {{ title }}
                     </div>
@@ -197,11 +213,20 @@
                 </div>
 
                 <!-- Close button -->
+                <span style="flex-grow: 1;"></span>
                 <span class="RecipeSheetCloseButton_Cls" @click="closeRecipe()">Fermer</span>
             </div>
 
+            <!-- Loading page -->
+            <div class="RecipeSheetLoadingPage_Cls" v-show="!loaded">
+                <p>Chargement en cours ....</p>
+                <p>
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </p>
+            </div>
+
             <!-- Central container -->
-            <div class="RecipeSheetCentralContainer_Cls">
+            <div v-show="loaded" class="RecipeSheetCentralContainer_Cls">
 
                 <!-- Left part with picture and ingredients -->
                 <div class="RecipeSheetLeft_Cls">
@@ -505,5 +530,65 @@
     {
         text-align:         center;
         margin-top:         5px;
+    }
+
+    .RecipeSheetLoadingPage_Cls
+    {
+        display:            flex;
+        flex-direction:     column;
+        justify-content:    center;
+        text-align:         center;
+        flex-grow:          1;
+    }
+
+    /* From https://loading.io/css/ */
+    .lds-ring
+    {
+        display:            inline-block;
+        position:           relative;
+        width:              80px;
+        height:             80px;
+    }
+
+    .lds-ring div
+    {
+        box-sizing:         border-box;
+        display:            block;
+        position:           absolute;
+        width:              64px;
+        height:             64px;
+        margin:             8px;
+        border:             8px solid #c8b273;
+        border-radius:      50%;
+        animation:          lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color:       #c8b273 transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1)
+    {
+        animation-delay:    -0.45s;
+    }
+
+    .lds-ring div:nth-child(2)
+    {
+        animation-delay:    -0.3s;
+    }
+
+    .lds-ring div:nth-child(3)
+    {
+        animation-delay:    -0.15s;
+    }
+
+    @keyframes lds-ring
+    {
+        0%
+        {
+            transform: rotate(0deg);
+        }
+
+        100%
+        {
+            transform: rotate(360deg);
+        }
     }
 </style>
