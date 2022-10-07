@@ -60,55 +60,37 @@
 
     function loadIngredientData(ingredient)
     {
-        // TODO: merge
+        let url = ''
 
-        // Get food data.
         if (ingredient.hasOwnProperty('food'))
-        {
-            axios.get('https://api.mon-menu.app/getFoodData/' + ingredient.food)
-            .then((response) =>
-            {
-                if (response.status == 200)
-                {
-                    let id = response.data.id
+            url = 'https://api.mon-menu.app/getFoodData/' + ingredient.food
 
-                    let d =
-                    {
-                        ingredient: ingredient,
-                        data: response.data
-                    }
-
-                    ingredients.value.push(d)
-                }
-            }).catch(function(error)
-            {
-                // TODO
-            });
-        }
-
-        // Get recipe data.
         else if (ingredient.hasOwnProperty('recipe'))
+            url = 'https://api.mon-menu.app/getRecipeData/' + ingredient.recipe
+
+        else
+            return
+
+        // Get data.
+        axios.get(url)
+        .then((response) =>
         {
-            axios.get('https://api.mon-menu.app/getRecipeData/' + ingredient.recipe)
-            .then((response) =>
+            if (response.status == 200)
             {
-                if (response.status == 200)
+                let id = response.data.id
+
+                let d =
                 {
-                    let id = response.data.id
-
-                    let d =
-                    {
-                        ingredient: ingredient,
-                        data: response.data
-                    }
-
-                    ingredients.value.push(d)
+                    ingredient: ingredient,
+                    data:       response.data
                 }
-            }).catch(function(error)
-            {
-                // TODO
-            });
-        }
+
+                ingredients.value.push(d)
+            }
+        }).catch(function(error)
+        {
+            // TODO
+        });
     }
 
     function loadRecipeData(id)
@@ -212,6 +194,8 @@
         <div class="RecipeSheetBg_Cls">
             <!-- Header -->
             <div class="RecipeSheetHeader_Cls">
+                <span style="flex-grow: 1;"></span>
+
                 <!-- Title and months -->
                 <div v-show="loaded" class="RecipeSheetTitleMonths_Cls">
                     <div class="RecipeSheetTitle_Cls">
@@ -222,7 +206,6 @@
                 </div>
 
                 <!-- Close button -->
-                <span style="flex-grow: 1;"></span>
                 <span class="RecipeSheetCloseButton_Cls" @click="closeRecipe()">Fermer</span>
             </div>
 
