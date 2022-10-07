@@ -31,6 +31,7 @@
     let energy      = ref(0)
     let water       = ref(0)
     let co2         = ref(0)
+    let errorMsg    = ref('')
 
     // Sort ingredients list.
     const sortIngredients = computed(() =>
@@ -89,7 +90,7 @@
             }
         }).catch(function(error)
         {
-            // TODO
+            errorMsg.value = 'Impossible de charger tous les ingrédients de la recette.'
         });
     }
 
@@ -97,6 +98,7 @@
     {
         recipeLoaded.value = false
         ingrNb.value       = 0
+        errorMsg.value     = ''
 
         axios.get('https://api.mon-menu.app/getRecipeData/' + id)
         .then((response) =>
@@ -175,7 +177,7 @@
         })
         .catch(function(error)
         {
-            // TODO
+            errorMsg.value = 'Impossible de charger la recette.'
         });
     }
 
@@ -197,7 +199,7 @@
                 <span style="flex-grow: 1;"></span>
 
                 <!-- Title and months -->
-                <div v-show="loaded" class="RecipeSheetTitleMonths_Cls">
+                <div v-show="loaded && errorMsg == ''" class="RecipeSheetTitleMonths_Cls">
                     <div class="RecipeSheetTitle_Cls">
                         {{ title }}
                     </div>
@@ -210,15 +212,21 @@
             </div>
 
             <!-- Loading page -->
-            <div class="RecipeSheetLoadingPage_Cls" v-show="!loaded">
+            <div class="RecipeSheetLoadingPage_Cls" v-show="!loaded && errorMsg == ''">
                 <p>Chargement en cours ....</p>
                 <p>
                     <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
                 </p>
             </div>
 
+            <!-- Error page -->
+            <div class="RecipeSheetErrorPage_Cls" v-show="errorMsg != ''">
+                <p style="margin: 10px; font-size: 1.5em;">⚠️</p>
+                <p style="margin: 0px;">{{ errorMsg }}</p>
+            </div>
+
             <!-- Central container -->
-            <div v-show="loaded" class="RecipeSheetCentralContainer_Cls">
+            <div v-show="loaded && errorMsg == ''" class="RecipeSheetCentralContainer_Cls">
 
                 <!-- Left part with picture and ingredients -->
                 <div class="RecipeSheetLeft_Cls">
@@ -525,6 +533,15 @@
     }
 
     .RecipeSheetLoadingPage_Cls
+    {
+        display:            flex;
+        flex-direction:     column;
+        justify-content:    center;
+        text-align:         center;
+        flex-grow:          1;
+    }
+
+    .RecipeSheetErrorPage_Cls
     {
         display:            flex;
         flex-direction:     column;
