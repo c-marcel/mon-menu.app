@@ -11,6 +11,8 @@
 
     axios.defaults.withCredentials = true
 
+    let props = defineProps(['currentRecipeId'])
+
     let recipeData  = ref(inject('recipeData'))
     let title       = ref('')
     let months      = ref([])
@@ -30,6 +32,15 @@
     let water       = ref(0)
     let co2         = ref(0)
 
+    // Sort ingredients list.
+    const sortIngredients = computed(() =>
+    {
+        return ingredients.value.sort((item1, item2) =>
+        {
+            return (item1.ingredient.quantity < item2.ingredient.quantity)
+        });
+    })
+
     // Recipe loading state.
     let recipeLoaded = ref(false)
     let ingrNb       = ref(0)
@@ -41,8 +52,6 @@
 
         return (ingrNb.value == ingredients.value.length)
     })
-
-    let props = defineProps(['currentRecipeId'])
 
     function closeRecipe()
     {
@@ -238,7 +247,7 @@
                             Pour {{ nbOfParts }} parts :
                         </div>
                         <div class="RecipeSheetIngredientList_Cls">
-                            <div class="RecipeSheetIngredientEntry_Cls" v-for="ingredient in ingredients" v-bind:key="ingredient.data.id">
+                            <div class="RecipeSheetIngredientEntry_Cls" v-for="ingredient in sortIngredients" v-bind:key="ingredient.data.id">
                                 <!-- Food/recipe picture -->
                                 <div class="RecipeSheetIngredientPicture_Cls">🫒</div>
 
