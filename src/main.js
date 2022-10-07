@@ -7,6 +7,7 @@
 // This file is the entry point for the client side application.
 // It will install all the routes and the Vue.js application.
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { ref, watch } from 'vue'
 import { createApp } from 'vue'
 import App from './App.vue'
 
@@ -35,10 +36,16 @@ const app = createApp(App)
 // Install user data.
 var userData = new Object(
 {
-    level: "user"   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+    level: ref(localStorage.userData_level || 'user')   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
 });
 
 app.provide('userData', userData)
+
+// Store user data.
+watch(userData.level, (n) =>
+{
+    localStorage.userData_level = n
+})
 
 // Install recipe data.
 var recipeData = new Object(
