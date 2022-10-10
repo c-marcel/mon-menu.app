@@ -294,11 +294,11 @@
                                 </tr>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls RecipeSheetDataTitleAlignRight_Cls">ingrédients :</td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat(ingredCost) + ' €'}}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat($roundFloat(ingredCost, 2)) + ' €'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls RecipeSheetDataTitleAlignRight_Cls">énergies :</td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat(energyCost) + ' €' }}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat($roundFloat(energyCost, 2)) + ' €' }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -308,15 +308,15 @@
                             <table>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Energie : </td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat(energy) + ' kWh'}}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat($roundFloat(energy, 2)) + ' kWh'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Eau :</td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat(water) + ' litres'}}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatWater(water) }}</td>
                                 </tr>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Emissions CO<sub>2</sub> :</td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ $formatFloat(co2) + ' g' }}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatCo2(co2) }}</td>
                                 </tr>
                             </table>
                         </div>

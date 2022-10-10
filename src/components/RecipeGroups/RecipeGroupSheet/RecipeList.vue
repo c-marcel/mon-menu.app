@@ -19,13 +19,14 @@
 
 <template>
     <div class="RecipeList_Cls">
+        <div class="RecipeListNote_Cls">*par personne</div>
         <div class="RecipeListEntry_Cls RecipeListHeaders_Cls">
             <span class="RecipeListTitle_Cls"></span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'diet'}" title="Indique les régimes alimentaires spéciaux : végétariens, végétaliens." @click="$emit('sortRequested', 'diet')">Régime</span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'season'}" title="Indique si la recette est actuellement de saison." @click="$emit('sortRequested', 'season')">Saison</span>
-            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'cost'}" title="Indique le coût financier par part pour les ingrédients et l'énergie nécessaires." @click="$emit('sortRequested', 'cost')">Coût</span>
-            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'energy'}" title="Indique la quantité d'énergie nécessaire par part." @click="$emit('sortRequested', 'energy')">Energie</span>
-            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'co2'}" title="Indique les émissions de CO2 par part, incluant les ingrédients et l'usage des énergies." @click="$emit('sortRequested', 'co2')">CO<sub>2</sub></span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'cost'}" title="Indique le coût financier par part pour les ingrédients et l'énergie nécessaires." @click="$emit('sortRequested', 'cost')">Coût*</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'energy'}" title="Indique la quantité d'énergie nécessaire par part." @click="$emit('sortRequested', 'energy')">Energie*</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'co2'}" title="Indique les émissions de CO2 par part, incluant les ingrédients et l'usage des énergies." @click="$emit('sortRequested', 'co2')">CO<sub>2</sub>*</span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'time'}" title="Durée globale approximative de la recette (préparation, cuisson, repos)." @click="$emit('sortRequested', 'time')">Durée</span>
         </div>
         <ul >
@@ -93,6 +94,16 @@
         text-align:         center;
         user-select:        none;
         cursor:             pointer;
+    }
+
+    .RecipeListNote_Cls
+    {
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:              #c8b273;
+        font-size:          0.8em;
+        font-style:         italic;
+        text-align:         right;
+        margin-bottom:      5px;
     }
 
     .RecipeListColumnUnderline_Cls

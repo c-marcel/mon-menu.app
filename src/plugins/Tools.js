@@ -39,6 +39,25 @@ export default
             return String(value * 1000000.0) + ' mg'
         }
 
+        // Convert CO2 to human readable format.
+        app.config.globalProperties.$formatCo2 = (value) =>
+        {
+            if (value >= 1.0)
+                return app.config.globalProperties.$formatFloat(String(app.config.globalProperties.$roundFloat(value, 2))) + ' kg'
+
+            return app.config.globalProperties.$formatFloat(String(app.config.globalProperties.$roundFloat(value * 1000.0, 0))) + ' g'
+        }
+
+        // Convert water liters to human readable format.
+        app.config.globalProperties.$formatWater = (value) =>
+        {
+            let unit = 'litre'
+            if (value >= 2.0)
+                unit = 'litres'
+
+            return app.config.globalProperties.$formatFloat(String(app.config.globalProperties.$roundFloat(value, 2))) + ' ' + unit
+        }
+
         // Convert time in minuts to human readable format.
         app.config.globalProperties.$formatTime = (value) =>
         {
@@ -52,8 +71,6 @@ export default
         app.config.globalProperties.$recipeTypeToString = (type) =>
         {
             let out = ''
-
-            console.log(type)
 
             if (type & 0x01)
             {
