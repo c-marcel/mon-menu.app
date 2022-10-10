@@ -22,7 +22,7 @@
                 kg CO2eq/kg
             </span>
             <span v-if="!edit && data.co2eq.source" class="EnvironmentalImpactSourceIcon_cls" :title=data.co2eq.source>❔</span>
-            <span v-if="edit">. Source : <input class="EnvironmentalImpactInputText_cls" type="text" :value="data.co2eq.source" @change="$emit('changeCo2eqSource', $event.target.value)" /></span>
+            <span class="EnvironmentalImpactText_cls" v-if="edit">. Source : <input class="EnvironmentalImpactInputText_cls" type="text" :value="data.co2eq.source" @change="$emit('changeCo2eqSource', $event.target.value)" /></span>
         </div>
         
         <!--

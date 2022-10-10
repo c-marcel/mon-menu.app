@@ -92,6 +92,7 @@
         width:              70px;
         text-align:         center;
         user-select:        none;
+        cursor:             pointer;
     }
 
     .RecipeListColumnUnderline_Cls

@@ -47,5 +47,43 @@ export default
 
             return String(Math.floor(value / 60)) + 'h' + String(value % 60)
         }
+
+        // Recipe type to string.
+        app.config.globalProperties.$recipeTypeToString = (type) =>
+        {
+            let out = ''
+
+            console.log(type)
+
+            if (type & 0x01)
+            {
+                if (out != '')
+                    out += ', '
+                out += 'apéritif'
+            }
+
+            if (type & 0x02)
+            {
+                if (out != '')
+                    out += ', '
+                out += 'entrée'
+            }
+
+            if (type & 0x04)
+            {
+                if (out != '')
+                    out += ', '
+                out += 'plat'
+            }
+
+            if (type & 0x08)
+            {
+                if (out != '')
+                    out += ', '
+                out += 'dessert'
+            }
+
+            return out
+        }
     }
 }

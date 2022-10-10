@@ -130,18 +130,7 @@
                 }
 
                 // Recipe type.
-                type.value = 'non défini'
-                if (response.data.type == 1)
-                    type.value = 'apéritif'
-
-                else if (response.data.type == 2)
-                    type.value = 'entrée'
-
-                else if (response.data.type == 4)
-                    type.value = 'plat'
-
-                else if (response.data.type == 8)
-                    type.value = 'dessert'
+                type.value = response.data.type
 
                 // Recipe temperature.
                 temperature.value = 'non définie'
@@ -262,7 +251,7 @@
                             <table>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Type : </td>
-                                    <td class="RecipeSheetDataValue_Cls">{{ type }}</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $recipeTypeToString(type) }}</td>
                                 </tr>
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Température :</td>
