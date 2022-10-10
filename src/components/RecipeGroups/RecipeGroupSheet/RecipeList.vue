@@ -33,8 +33,8 @@
                 <div class="RecipeListEntry_Cls" style="overflow: hidden;">
                     <span class="RecipeListTitle_Cls" style="padding-left: 10px;">{{ entry.title }}</span>
                     <span class="RecipeListColumn_Cls RecipeListDietIcons_Cls">
-                        <img v-if="entry.diet.includes('vegan')" style="height: 20px;" src="images/vegan.png" title="Végétalien" />
-                        <img v-if="entry.diet.includes('vegetarian')" style="height: 20px;" src="images/vegetarian.png" title="Végétarien" />
+                        <img v-if="entry.diet.includes('vegan')" class="RecipeListImageVegan_Cls" title="Végétalien" />
+                        <img v-if="entry.diet.includes('vegetarian')" class="RecipeListImageVegetarian_Cls" title="Végétarien" />
                     </span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.available ? '✔️' : '' }}</span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.cost == '-' ? '-' : $formatFloat($roundFloat(entry.cost, 2)) + ' €' }}</span>
@@ -118,5 +118,17 @@
     li:hover
     {
         background-color: #834655;
+    }
+
+    .RecipeListImageVegan_Cls
+    {
+        height:             20px;
+        content:            url(/images/vegan.png);
+    }
+
+    .RecipeListImageVegetarian_Cls
+    {
+        height:             20px;
+        content:            url(/images/vegetarian.png);
     }
 </style>

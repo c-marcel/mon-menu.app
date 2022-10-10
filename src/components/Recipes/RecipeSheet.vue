@@ -271,8 +271,8 @@
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Régime :</td>
                                     <td class="RecipeSheetDataValue_Cls">
-                                        <img v-if="diet.includes('vegan')" style="height: 20px;" src="images/vegan.png" title="Végétalien" />
-                                        <img v-if="diet.includes('vegetarian')" style="height: 20px; margin-left: 5px;" src="images/vegetarian.png" title="Végétarien" />
+                                        <img v-if="diet.includes('vegan')" class="RecipeSheetImageVegan_Cls" title="Végétalien" />
+                                        <img v-if="diet.includes('vegetarian')" class="RecipeSheetImageVegetarian_Cls" title="Végétarien" />
                                     </td>
                                 </tr>
                             </table>
@@ -599,5 +599,18 @@
         {
             transform: rotate(360deg);
         }
+    }
+
+    .RecipeSheetImageVegan_Cls
+    {
+        height:             20px;
+        content:            url(/images/vegan.png);
+    }
+
+    .RecipeSheetImageVegetarian_Cls
+    {
+        height:             20px;
+        margin-left:        5px;
+        content:            url(/images/vegetarian.png);
     }
 </style>
