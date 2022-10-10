@@ -134,5 +134,17 @@ export default
 
             return String(v) + ' ' + u
         }
+
+        // Convert ingredient remaining quantity and unit option to human readable.
+        app.config.globalProperties.$formatRemainingQuantity = (quantity, units) =>
+        {
+            if (quantity ==  null)
+                return ''
+
+            if (quantity <= 0.0)
+                return ''
+
+            return ' (' + app.config.globalProperties.$formatIngredientQuantity(quantity, units) + ' après usage)'
+        }
     }
 }

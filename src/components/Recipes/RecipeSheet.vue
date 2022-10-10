@@ -235,7 +235,7 @@
                                 <div class="RecipeSheetIngredientTitleAndQuantity_Cls">
                                     <div class="RecipeSheetIngredientTitle_Cls">{{ ingredient.data.title }}</div>
                                     <div class="RecipeSheetIngredientQuantity_Cls">
-                                        {{ $formatIngredientQuantity(ingredient.ingredient.quantity, ingredient.data.units) }}
+                                        {{ $formatIngredientQuantity(ingredient.ingredient.quantity, ingredient.data.units) + $formatRemainingQuantity(ingredient.ingredient.remainingQuantity, ingredient.data.units)}}
                                     </div>
                                 </div>
                             </div>
