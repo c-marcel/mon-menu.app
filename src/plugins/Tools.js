@@ -102,5 +102,37 @@ export default
 
             return out
         }
+
+        // Convert ingredient quantity and unit option to human readable.
+        app.config.globalProperties.$formatIngredientQuantity = (quantity, units) =>
+        {
+            // No units: use kg as default.
+            if (units == null)
+                return app.config.globalProperties.$formatFloat(app.config.globalProperties.$formatWeight(quantity))
+
+            // Bad units.
+            if (!units.hasOwnProperty('conversion')
+                  || typeof units.conversion != "string"
+                  || !units.hasOwnProperty('label')
+                  || !Array.isArray(units.label)
+                  || units.label.length < 1)
+                return app.config.globalProperties.$formatFloat(app.config.globalProperties.$formatWeight(quantity))
+
+            console.log("ok")
+            
+            let v = quantity * units.conversion
+            let u = units.label[0]
+
+            // Lesser than 2: singular.
+            if (v < 2.0)
+                return String(v) + ' ' + u
+
+            // Else: use plural.
+            u = units.label[0] + 's'
+            if (units.label.length == 2)
+                u = units.label[1]
+
+            return String(v) + ' ' + u
+        }
     }
 }

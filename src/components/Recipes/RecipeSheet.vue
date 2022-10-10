@@ -235,7 +235,7 @@
                                 <div class="RecipeSheetIngredientTitleAndQuantity_Cls">
                                     <div class="RecipeSheetIngredientTitle_Cls">{{ ingredient.data.title }}</div>
                                     <div class="RecipeSheetIngredientQuantity_Cls">
-                                        {{ ingredient.data.units != null ? $formatFloat(ingredient.ingredient.quantity * ingredient.data.units.conversion) + ' ' + ingredient.data.units.label : $formatFloat($formatWeight(ingredient.ingredient.quantity))}}
+                                        {{ $formatIngredientQuantity(ingredient.ingredient.quantity, ingredient.data.units) }}
                                     </div>
                                 </div>
                             </div>
