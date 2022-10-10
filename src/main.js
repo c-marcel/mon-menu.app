@@ -36,7 +36,8 @@ const app = createApp(App)
 // Install user data.
 var sessionData = new Object(
 {
-    level: ref(localStorage.sessionData_level || 'user')   //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+    level:      ref(localStorage.sessionData_level || 'user'),          //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+    username:   ref(localStorage.sessionData_username || 'Anonyme')     //< User name.
 });
 
 app.provide('sessionData', sessionData)
@@ -45,6 +46,11 @@ app.provide('sessionData', sessionData)
 watch(sessionData.level, (n) =>
 {
     localStorage.sessionData_level = n
+})
+
+watch(sessionData.username, (n) =>
+{
+    localStorage.sessionData_username = n
 })
 
 // Install recipe data.

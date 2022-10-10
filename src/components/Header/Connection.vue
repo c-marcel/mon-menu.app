@@ -33,7 +33,8 @@
         {
             if (response.status == 200)
             {
-                sessionData.value.level = response.data['level']
+                sessionData.value.level    = response.data['level']
+                sessionData.value.username = response.data['username']
             }
 
             username.value       = ''
@@ -83,7 +84,7 @@
             </table>
         </p>
         <div v-if="sessionData.level == 'admin'" style="text-align: center;">
-            <p>Bonjour admin !</p>
+            <p>Bonjour {{ sessionData.username }} !</p>
             <button @click="disconnectUser()">Déconnexion</button>
         </div>
     </div>
