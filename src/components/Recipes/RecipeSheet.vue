@@ -179,8 +179,28 @@
                     energyCost.value += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
 
                 // Compute CO2.
-                // TODO: add energy emissions with config.
                 co2.value = response.data.environmentalImpact.ingredientsCo2eq
+
+                // Hob energy cost.
+                if (sessionData.value.hobEnergy == 'electricity')
+                    co2.value += response.data.resources.energy.hob * sessionData.value.co2Electricity
+
+                else if (sessionData.value.hobEnergy == 'gas')
+                    co2.value += response.data.resources.energy.hob * sessionData.value.co2Gas
+
+                // Oven energy cost.
+                if (sessionData.value.ovenEnergy == 'electricity')
+                    co2.value += response.data.resources.energy.oven * sessionData.value.co2Electricity
+
+                else if (sessionData.value.ovenEnergy == 'gas')
+                    co2.value += response.data.resources.energy.oven * sessionData.value.co2Gas
+
+                // Kettle energy cost.
+                if (sessionData.value.kittleEnergy == 'electricity')
+                    co2.value += response.data.resources.energy.kettle * sessionData.value.co2Electricity
+
+                else if (sessionData.value.kittleEnergy == 'gas')
+                    co2.value += response.data.resources.energy.kettle * sessionData.value.co2Gas
 
                 recipeLoaded.value = true
             }

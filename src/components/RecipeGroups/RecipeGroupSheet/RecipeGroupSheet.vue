@@ -78,7 +78,6 @@
                         recipe.available = (response.data.months.includes(currentMonth))
 
                         // Cost.
-                        // TODO: add energy cost.
                         if (response.data.nbOfParts > 0 )
                         {
                             let energyCost = response.data.ingredientsCost
@@ -116,9 +115,33 @@
                             recipe.energy = '-'
 
                         // CO2.
-                        // TODO: add energy CO2.
                         if (response.data.nbOfParts > 0 )
-                            recipe.co2 = response.data.environmentalImpact.ingredientsCo2eq / response.data.nbOfParts
+                        {
+                            let co2 = response.data.environmentalImpact.ingredientsCo2eq
+
+                            // Hob energy cost.
+                            if (sessionData.value.hobEnergy == 'electricity')
+                                co2 += response.data.resources.energy.hob * sessionData.value.co2Electricity
+
+                            else if (sessionData.value.hobEnergy == 'gas')
+                                co2 += response.data.resources.energy.hob * sessionData.value.co2Gas
+
+                            // Oven energy cost.
+                            if (sessionData.value.ovenEnergy == 'electricity')
+                                co2 += response.data.resources.energy.oven * sessionData.value.co2Electricity
+
+                            else if (sessionData.value.ovenEnergy == 'gas')
+                                co2 += response.data.resources.energy.oven * sessionData.value.co2Gas
+
+                            // Kettle energy cost.
+                            if (sessionData.value.kittleEnergy == 'electricity')
+                                co2 += response.data.resources.energy.kettle * sessionData.value.co2Electricity
+
+                            else if (sessionData.value.kittleEnergy == 'gas')
+                                co2 += response.data.resources.energy.kettle * sessionData.value.co2Gas
+
+                            recipe.co2 = co2 / response.data.nbOfParts
+                        }
                         else
                             recipe.co2 = '-'
 

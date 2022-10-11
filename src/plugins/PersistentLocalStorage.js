@@ -24,7 +24,11 @@ export default
 
             // Energy data.
             electricityCost:    ref(localStorage.sessionData_electricityCost || 17.4),          //< Electricity cost in c€ per kWh.
-            gasCost:            ref(localStorage.sessionData_gasCost || 11.2)                   //< Gas cost in c€ per kWh.
+            gasCost:            ref(localStorage.sessionData_gasCost || 11.2),                  //< Gas cost in c€ per kWh.
+
+            // Environmental impact data.
+            co2Electricity:     ref(localStorage.sessionData_co2Electricity || 0.074),          //< CO2 emissions for electricity (in kg per kWh).
+            co2Gas:             ref(localStorage.sessionData_co2Gas || 0.443)                   //< CO2 emissions for gas (in kg per kWh).
         });
         
         app.provide('sessionData', sessionData)
@@ -63,6 +67,21 @@ export default
         watch(sessionData.gasCost, (n) =>
         {
             localStorage.sessionData_gasCost = n
+        })
+
+        watch(sessionData.gasCost, (n) =>
+        {
+            localStorage.sessionData_gasCost = n
+        })
+
+        watch(sessionData.co2Electricity, (n) =>
+        {
+            localStorage.sessionData_co2Electricity = n
+        })
+
+        watch(sessionData.co2Gas, (n) =>
+        {
+            localStorage.sessionData_co2Gas = n
         })
     }
 }
