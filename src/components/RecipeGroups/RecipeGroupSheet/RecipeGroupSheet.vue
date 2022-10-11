@@ -71,11 +71,111 @@
         }
     })
 
+    function addRecipeIntoList(response)
+    {
+        // Add recipe into list.
+        let recipe = new Object();
+                        
+        // Diet.
+        recipe.diet = []
+        if (response.data.exclusions.meat && response.data.exclusions.fish)
+            recipe.diet.push('vegetarian')
+
+        if (response.data.exclusions.meat && response.data.exclusions.fish
+            && response.data.exclusions.dairy && response.data.exclusions.eggs
+            && response.data.exclusions.oap)
+            recipe.diet.push('vegan')
+
+        // Id.
+        recipe.id = response.data.id
+
+        // Title.
+        recipe.title = response.data.details
+
+        // Available.
+        let currentMonth = new Date().getMonth() + 1;
+        recipe.available = (response.data.months.includes(currentMonth))
+
+        // Cost.
+        if (response.data.nbOfParts > 0 )
+        {
+            let energyCost = response.data.ingredientsCost
+
+            // Hob energy cost.
+            if (sessionData.value.hobEnergy == 'electricity')
+                energyCost += response.data.resources.energy.hob * sessionData.value.electricityCost / 100.0
+
+            else if (sessionData.value.hobEnergy == 'gas')
+                energyCost += response.data.resources.energy.hob * sessionData.value.gasCost / 100.0
+
+            // Oven energy cost.
+            if (sessionData.value.ovenEnergy == 'electricity')
+                energyCost += response.data.resources.energy.oven * sessionData.value.electricityCost / 100.0
+
+            else if (sessionData.value.ovenEnergy == 'gas')
+                energyCost += response.data.resources.energy.oven * sessionData.value.gasCost / 100.0
+
+            // Kettle energy cost.
+            if (sessionData.value.kittleEnergy == 'electricity')
+                energyCost += response.data.resources.energy.kettle * sessionData.value.electricityCost / 100.0
+
+            else if (sessionData.value.kittleEnergy == 'gas')
+                energyCost += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
+
+            recipe.cost = energyCost / response.data.nbOfParts
+        }
+        else
+            recipe.cost = '-'
+
+        // Energy.
+        if (response.data.nbOfParts > 0 )
+            recipe.energy = (response.data.resources.energy.oven + response.data.resources.energy.hob) / response.data.nbOfParts
+        else
+            recipe.energy = '-'
+
+        // CO2.
+        if (response.data.nbOfParts > 0 )
+        {
+            let co2 = response.data.environmentalImpact.ingredientsCo2eq
+
+            // Hob energy cost.
+            if (sessionData.value.hobEnergy == 'electricity')
+                co2 += response.data.resources.energy.hob * sessionData.value.co2Electricity
+
+            else if (sessionData.value.hobEnergy == 'gas')
+                co2 += response.data.resources.energy.hob * sessionData.value.co2Gas
+
+            // Oven energy cost.
+            if (sessionData.value.ovenEnergy == 'electricity')
+                co2 += response.data.resources.energy.oven * sessionData.value.co2Electricity
+
+            else if (sessionData.value.ovenEnergy == 'gas')
+                co2 += response.data.resources.energy.oven * sessionData.value.co2Gas
+
+            // Kettle energy cost.
+            if (sessionData.value.kittleEnergy == 'electricity')
+                co2 += response.data.resources.energy.kettle * sessionData.value.co2Electricity
+
+            else if (sessionData.value.kittleEnergy == 'gas')
+                co2 += response.data.resources.energy.kettle * sessionData.value.co2Gas
+
+            recipe.co2 = co2 / response.data.nbOfParts
+        }
+        else
+            recipe.co2 = '-'
+
+        // Time.
+        recipe.time = response.data.times.preparation + response.data.times.cooking + response.data.times.rest
+
+        recipeList.value.push(recipe)
+    }
+
     function loadGroupData(id)
     {
         errorMsg.value         = ''
         variantsErrorMsg.value = ''
         titleModified.value    = false
+        recipeList.value       = []
 
         axios.get('https://api.mon-menu.app/getRecipes?group=' + id)
         .then((response) =>
@@ -92,101 +192,7 @@
                     axios.get('https://api.mon-menu.app/getRecipeMetadata/' + recipeId)
                     .then((response) =>
                     {
-                        // Add recipe into list.
-                        let recipe = new Object();
-                        
-                        // Diet.
-                        recipe.diet = []
-                        if (response.data.exclusions.meat && response.data.exclusions.fish)
-                            recipe.diet.push('vegetarian')
-
-                        if (response.data.exclusions.meat && response.data.exclusions.fish
-                            && response.data.exclusions.dairy && response.data.exclusions.eggs
-                            && response.data.exclusions.oap)
-                            recipe.diet.push('vegan')
-
-                        // Id.
-                        recipe.id = response.data.id
-
-                        // Title.
-                        recipe.title = response.data.details
-
-                        // Available.
-                        let currentMonth = new Date().getMonth() + 1;
-                        recipe.available = (response.data.months.includes(currentMonth))
-
-                        // Cost.
-                        if (response.data.nbOfParts > 0 )
-                        {
-                            let energyCost = response.data.ingredientsCost
-
-                            // Hob energy cost.
-                            if (sessionData.value.hobEnergy == 'electricity')
-                                energyCost += response.data.resources.energy.hob * sessionData.value.electricityCost / 100.0
-
-                            else if (sessionData.value.hobEnergy == 'gas')
-                                energyCost += response.data.resources.energy.hob * sessionData.value.gasCost / 100.0
-
-                            // Oven energy cost.
-                            if (sessionData.value.ovenEnergy == 'electricity')
-                                energyCost += response.data.resources.energy.oven * sessionData.value.electricityCost / 100.0
-
-                            else if (sessionData.value.ovenEnergy == 'gas')
-                                energyCost += response.data.resources.energy.oven * sessionData.value.gasCost / 100.0
-
-                            // Kettle energy cost.
-                            if (sessionData.value.kittleEnergy == 'electricity')
-                                energyCost += response.data.resources.energy.kettle * sessionData.value.electricityCost / 100.0
-
-                            else if (sessionData.value.kittleEnergy == 'gas')
-                                energyCost += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
-
-                            recipe.cost = energyCost / response.data.nbOfParts
-                        }
-                        else
-                            recipe.cost = '-'
-
-                        // Energy.
-                        if (response.data.nbOfParts > 0 )
-                            recipe.energy = (response.data.resources.energy.oven + response.data.resources.energy.hob) / response.data.nbOfParts
-                        else
-                            recipe.energy = '-'
-
-                        // CO2.
-                        if (response.data.nbOfParts > 0 )
-                        {
-                            let co2 = response.data.environmentalImpact.ingredientsCo2eq
-
-                            // Hob energy cost.
-                            if (sessionData.value.hobEnergy == 'electricity')
-                                co2 += response.data.resources.energy.hob * sessionData.value.co2Electricity
-
-                            else if (sessionData.value.hobEnergy == 'gas')
-                                co2 += response.data.resources.energy.hob * sessionData.value.co2Gas
-
-                            // Oven energy cost.
-                            if (sessionData.value.ovenEnergy == 'electricity')
-                                co2 += response.data.resources.energy.oven * sessionData.value.co2Electricity
-
-                            else if (sessionData.value.ovenEnergy == 'gas')
-                                co2 += response.data.resources.energy.oven * sessionData.value.co2Gas
-
-                            // Kettle energy cost.
-                            if (sessionData.value.kittleEnergy == 'electricity')
-                                co2 += response.data.resources.energy.kettle * sessionData.value.co2Electricity
-
-                            else if (sessionData.value.kittleEnergy == 'gas')
-                                co2 += response.data.resources.energy.kettle * sessionData.value.co2Gas
-
-                            recipe.co2 = co2 / response.data.nbOfParts
-                        }
-                        else
-                            recipe.co2 = '-'
-
-                        // Time.
-                        recipe.time = response.data.times.preparation + response.data.times.cooking + response.data.times.rest
-
-                        recipeList.value.push(recipe)
+                        addRecipeIntoList(response)
                     }).catch(function(error)
                     {
                         variantsErrorMsg.value = 'Toutes les variantes de la recette n\'ont pas pu être récupérées.'
@@ -388,13 +394,40 @@
         titleModified.value = true
         currentTitle.value  = title
     }
+
+    function removeRecipeFromList(id)
+    {
+        recipeList.value = recipeList.value.filter(item =>
+        {
+            return (item.id != id)
+        });
+
+        if (recipeList.value.length == 0)
+        {
+            variantsErrorMsg.value = 'Cette recette ne contient pas de variantes.'
+        }
+    }
+
+    function loadRecipeIntoList(id)
+    {
+        variantsErrorMsg.value = ''
+
+        axios.get('https://api.mon-menu.app/getRecipeMetadata/' + id)
+        .then((response) =>
+        {
+            addRecipeIntoList(response)
+        }).catch(function(error)
+        {
+            variantsErrorMsg.value = 'Impossible de charger la variante ajoutée.'
+        });
+    }
 </script>
 
 <template>
     <div class="RecipeGroupSheet_cls">
         <div v-show="currentGroupId != '' && errorMsg == ''" class="RecipeGroup_cls">
             <RecipeGroupTitle :title="title" :edit="edit" @changeTitle="(title) => { updateTitle(title) }" />
-            <RecipeList :recipeList="recipeList" :sortKey="sortKey" @sortRequested="(key) => { sortList(key) }" />
+            <RecipeList :currentGroupId="currentGroupId" :recipeList="recipeList" :sortKey="sortKey" @sortRequested="(key) => { sortList(key) }" @removeRecipeRequested="(id) => { removeRecipeFromList(id) }" @addRecipeRequested="(id) => {loadRecipeIntoList(id)} "/>
             <p v-if="variantsErrorMsg != ''" class="WarningBox_Cls">
                 ⚠️ <span class="WarningText_Cls">{{ variantsErrorMsg }}</span>
             </p>
