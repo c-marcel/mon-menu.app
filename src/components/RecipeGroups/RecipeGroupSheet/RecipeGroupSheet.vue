@@ -14,6 +14,8 @@
 
     axios.defaults.withCredentials = true
 
+    let emit = defineEmits(['listOutdated'])
+
     let sessionData         = ref(inject('sessionData'))
     let recipeList          = ref([])
     let loadedId            = ref('')
@@ -21,6 +23,8 @@
     let variantsErrorMsg    = ref('')
     let sortOrder           = ref('')
     let sortKey             = ref('')
+    let titleModified       = ref(false)
+    let currentTitle        = ref('')
 
     let props = defineProps(['currentGroupId', 'edit', 'title'])
 
@@ -32,12 +36,46 @@
             recipeList.value = []
             loadGroupData(value.currentGroupId)
         }
+
+        // If edit mode has been terminated: save item.
+        if (!value.edit && titleModified.value && loadedId.value != '')
+        {
+            errorMsg.value = ''
+
+            let recipeGroup =
+            {
+                id:     loadedId.value,
+                title:  currentTitle.value
+            }
+
+            // Send food data to Api.
+            axios.put('https://api.mon-menu.app/updateRecipeGroup', recipeGroup)
+            .then((response) =>
+            {
+                if (response.status != 200)
+                {
+                    errorMsg.value = 'Impossible d\'enregistrer les modifications effectuées dans la base de données.'
+                }
+                else
+                {
+                    titleModified.value = false
+
+                    emit('listOutdated', currentTitle.value);
+                    loadGroupData(value.currentGroupId)
+                }
+            }).catch(function(error)
+            {
+                console.log(error)
+                errorMsg.value = 'Erreur réseau : impossible d\'enregistrer les modifications effectuées dans la base de données. Contacter l\'administrateur du site.'
+            });
+        }
     })
 
     function loadGroupData(id)
     {
         errorMsg.value         = ''
         variantsErrorMsg.value = ''
+        titleModified.value    = false
 
         axios.get('https://api.mon-menu.app/getRecipes?group=' + id)
         .then((response) =>
@@ -344,12 +382,18 @@
         else if (key == 'diet')
             sortByDiet()
     }
+
+    function updateTitle(title)
+    {
+        titleModified.value = true
+        currentTitle.value  = title
+    }
 </script>
 
 <template>
     <div class="RecipeGroupSheet_cls">
         <div v-show="currentGroupId != '' && errorMsg == ''" class="RecipeGroup_cls">
-            <RecipeGroupTitle :title="title" :edit="edit" />
+            <RecipeGroupTitle :title="title" :edit="edit" @changeTitle="(title) => { updateTitle(title) }" />
             <RecipeList :recipeList="recipeList" :sortKey="sortKey" @sortRequested="(key) => { sortList(key) }" />
             <p v-if="variantsErrorMsg != ''" class="WarningBox_Cls">
                 ⚠️ <span class="WarningText_Cls">{{ variantsErrorMsg }}</span>

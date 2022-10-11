@@ -46,7 +46,7 @@
         }
 
         // If edit mode has been terminated: save item.
-        if (!value.edit && foodModified.value && loadedId.value != 0 && fooddata.value)
+        if (!value.edit && foodModified.value && loadedId.value != '' && fooddata.value)
         {
             errorMsg.value = ''
 
