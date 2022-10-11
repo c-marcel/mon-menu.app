@@ -72,7 +72,7 @@
 <template>
     <div class="RecipeList_Cls">
         <div style="display: flex;">
-            <button @click="newRecipeRequested()">➕</button>
+            <button v-if="sessionData.level == 'admin'" @click="newRecipeRequested()">➕</button>
             <span class="RecipeListNote_Cls">*par personne</span>
         </div>
         <div class="RecipeListEntry_Cls RecipeListHeaders_Cls">

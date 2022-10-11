@@ -63,7 +63,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>énergie des plaques de la bouilloire :</td>
+                    <td>énergie de la bouilloire :</td>
                     <td>
                         <select v-model="sessionData.kettleEnergy" @change="changeKettleEnergy($event.target.value)">
                             <option value="electricity">électrique</option>
