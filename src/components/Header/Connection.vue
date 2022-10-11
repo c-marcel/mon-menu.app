@@ -33,8 +33,21 @@
         {
             if (response.status == 200)
             {
-                sessionData.value.level    = response.data['level']
-                sessionData.value.username = response.data['username']
+                sessionData.value.level                 = response.data['level']
+                sessionData.value.username              = response.data['username']
+
+                // User data.
+                sessionData.value.userData_name         = response.data.userData['name']
+                sessionData.value.userData_firstname    = response.data.userData['firstname']
+
+                // Kitchen data.
+                sessionData.value.ovenEnergy            = response.data.kitchenData['ovenEnergy']
+                sessionData.value.hobEnergy             = response.data.kitchenData['hobEnergy']
+                sessionData.value.kettleEnergy          = response.data.kitchenData['kettleEnergy']
+
+                // Energy data.
+                sessionData.value.electricityCost       = response.data.energyData['electricityCost']
+                sessionData.value.gasCost               = response.data.energyData['gasCost']
             }
 
             username.value       = ''
@@ -58,7 +71,7 @@
     function disconnectUser()
     {
         axios.get('https://api.mon-menu.app/disconnect')
-        sessionData.value.level = 'user'
+        sessionData.value.level = ''
     }
 </script>
 
@@ -84,7 +97,7 @@
             </table>
         </p>
         <div v-if="sessionData.level == 'admin'" style="text-align: center;">
-            <p>Bonjour {{ sessionData.username }} !</p>
+            <p>Bonjour {{ sessionData.userData_firstname }} !</p>
             <button @click="disconnectUser()">Déconnexion</button>
         </div>
     </div>
