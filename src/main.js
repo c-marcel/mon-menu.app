@@ -7,6 +7,7 @@
 // This file is the entry point for the client side application.
 // It will install all the routes and the Vue.js application.
 import { createRouter, createWebHashHistory } from 'vue-router'
+import VueDOMPurifyHTML from 'vue-dompurify-html';
 import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
@@ -45,6 +46,9 @@ app.provide('recipeData', recipeData)
 // Install plugins.
 app.use(Plugin_Tools)
 app.use(Plugin_PLS)
+
+// Security options.
+app.use(VueDOMPurifyHTML);
 
 // Install routes and mount application.
 app.use(router)

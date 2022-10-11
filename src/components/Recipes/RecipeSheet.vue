@@ -5,7 +5,8 @@
 // View for a recipe.
 <script setup>
     import { ref, inject, watch, computed } from 'vue'
-    import axios from 'axios'
+    import { marked } from 'marked'
+    import axios  from 'axios'
 
     import Months from '../Foods/FoodSheet/Months.vue'
 
@@ -53,6 +54,11 @@
             return false
 
         return (ingrNb.value == ingredients.value.length)
+    })
+
+    const markedContent = computed(() =>
+    {
+        return marked(content.value);
     })
 
     function closeRecipe()
@@ -362,8 +368,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="RecipeSheetContent_Cls">
-                        {{ content }}
+                    <div class="RecipeSheetContent_Cls" v-dompurify-html="markedContent">
                     </div>
                 </div>
             </div>
