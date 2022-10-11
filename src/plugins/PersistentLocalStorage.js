@@ -32,7 +32,14 @@ export default
         });
         
         app.provide('sessionData', sessionData)
-        
+
+        // Set CO2 emissions.
+        app.config.globalProperties.$setCo2Emissions = (electricity, gas) =>
+        {
+            sessionData.co2Electricity = electricity
+            sessionData.co2Gas         = gas
+        }
+
         // Persist user data.
         watch(sessionData.level, (n) =>
         {
@@ -76,6 +83,7 @@ export default
 
         watch(sessionData.co2Electricity, (n) =>
         {
+            console.log(n)
             localStorage.sessionData_co2Electricity = n
         })
 

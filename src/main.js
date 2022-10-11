@@ -9,6 +9,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createApp } from 'vue'
 import App from './App.vue'
+import axios from 'axios'
 
 import Plugin_Tools  from './plugins/Tools'
 import Plugin_PLS    from './plugins/PersistentLocalStorage'
@@ -48,3 +49,13 @@ app.use(Plugin_PLS)
 // Install routes and mount application.
 app.use(router)
 app.mount("#app")
+
+// Load Api configuration.
+axios.get('https://api.mon-menu.app/getConfiguration')
+.then((response) =>
+{
+    if (response.status == 200)
+    {
+        app.config.globalProperties.$setCo2Emissions(response.data.data_co2.co2eq_kwh_electricity, response.data.data_co2.co2eq_kwh_gas)
+    }
+})
