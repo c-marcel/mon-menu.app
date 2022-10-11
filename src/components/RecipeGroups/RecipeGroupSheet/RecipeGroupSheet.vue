@@ -5,7 +5,7 @@
 // Recipe group sheet for displaying recipe group data.
 // Edit mode available for admin access.
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref, watch, inject } from 'vue'
     import axios from 'axios'
 
     import RecipeGroupTitle from './RecipeGroupTitle.vue'
@@ -14,6 +14,7 @@
 
     axios.defaults.withCredentials = true
 
+    let sessionData         = ref(inject('sessionData'))
     let recipeList          = ref([])
     let loadedId            = ref('')
     let errorMsg            = ref('')
@@ -79,7 +80,32 @@
                         // Cost.
                         // TODO: add energy cost.
                         if (response.data.nbOfParts > 0 )
-                            recipe.cost = response.data.ingredientsCost / response.data.nbOfParts
+                        {
+                            let energyCost = response.data.ingredientsCost
+
+                            // Hob energy cost.
+                            if (sessionData.value.hobEnergy == 'electricity')
+                                energyCost += response.data.resources.energy.hob * sessionData.value.electricityCost / 100.0
+
+                            else if (sessionData.value.hobEnergy == 'gas')
+                                energyCost += response.data.resources.energy.hob * sessionData.value.gasCost / 100.0
+
+                            // Oven energy cost.
+                            if (sessionData.value.ovenEnergy == 'electricity')
+                                energyCost += response.data.resources.energy.oven * sessionData.value.electricityCost / 100.0
+
+                            else if (sessionData.value.ovenEnergy == 'gas')
+                                energyCost += response.data.resources.energy.oven * sessionData.value.gasCost / 100.0
+
+                            // Kettle energy cost.
+                            if (sessionData.value.kittleEnergy == 'electricity')
+                                energyCost += response.data.resources.energy.kettle * sessionData.value.electricityCost / 100.0
+
+                            else if (sessionData.value.kittleEnergy == 'gas')
+                                energyCost += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
+
+                            recipe.cost = energyCost / response.data.nbOfParts
+                        }
                         else
                             recipe.cost = '-'
 

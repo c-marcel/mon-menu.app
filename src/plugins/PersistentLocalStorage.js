@@ -20,7 +20,7 @@ export default
             // Kitchen data.
             ovenEnergy:         ref(localStorage.sessionData_ovenEnergy || 'electricity'),      //< Oven energy ('electricity' or 'gas').
             hobEnergy:          ref(localStorage.sessionData_hobEnergy || 'electricity'),       //< Hob energy.
-            kittleEnergy:       ref(localStorage.sessionData_kittleEnergy || 'electricity'),    //< Kittle energy.
+            kettleEnergy:       ref(localStorage.sessionData_kettleEnergy || 'electricity'),    //< Kettle energy.
 
             // Energy data.
             electricityCost:    ref(localStorage.sessionData_electricityCost || 17.4),          //< Electricity cost in c€ per kWh.
@@ -50,9 +50,9 @@ export default
             localStorage.sessionData_hobEnergy = n
         })
 
-        watch(sessionData.kittleEnergy, (n) =>
+        watch(sessionData.kettleEnergy, (n) =>
         {
-            localStorage.sessionData_kittleEnergy = n
+            localStorage.sessionData_kettleEnergy = n
         })
 
         watch(sessionData.electricityCost, (n) =>

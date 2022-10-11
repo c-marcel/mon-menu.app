@@ -14,6 +14,7 @@
     let props = defineProps(['currentRecipeId'])
 
     let recipeData  = ref(inject('recipeData'))
+    let sessionData = ref(inject('sessionData'))
     let title       = ref('')
     let months      = ref([])
     let picture     = ref('')
@@ -154,8 +155,28 @@
                     diet.value.push('vegan')
 
                 // Compute energy cost.
-                // TODO: energy * costs from configuration
                 energyCost.value = 0
+
+                // Hob energy cost.
+                if (sessionData.value.hobEnergy == 'electricity')
+                    energyCost.value += response.data.resources.energy.hob * sessionData.value.electricityCost / 100.0
+
+                else if (sessionData.value.hobEnergy == 'gas')
+                    energyCost.value += response.data.resources.energy.hob * sessionData.value.gasCost / 100.0
+
+                // Oven energy cost.
+                if (sessionData.value.ovenEnergy == 'electricity')
+                    energyCost.value += response.data.resources.energy.oven * sessionData.value.electricityCost / 100.0
+
+                else if (sessionData.value.ovenEnergy == 'gas')
+                    energyCost.value += response.data.resources.energy.oven * sessionData.value.gasCost / 100.0
+
+                // Kettle energy cost.
+                if (sessionData.value.kittleEnergy == 'electricity')
+                    energyCost.value += response.data.resources.energy.kettle * sessionData.value.electricityCost / 100.0
+
+                else if (sessionData.value.kittleEnergy == 'gas')
+                    energyCost.value += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
 
                 // Compute CO2.
                 // TODO: add energy emissions with config.

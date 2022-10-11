@@ -33,9 +33,9 @@
         sessionData.value.hobEnergy = value
     }
 
-    function changeKittleEnergy(value)
+    function changeKettleEnergy(value)
     {
-        sessionData.value.kittleEnergy = value
+        sessionData.value.kettleEnergy = value
     }
 </script>
 
@@ -65,7 +65,7 @@
                 <tr>
                     <td>énergie des plaques de la bouilloire :</td>
                     <td>
-                        <select v-model="sessionData.kittleEnergy" @change="changeKittleEnergy($event.target.value)">
+                        <select v-model="sessionData.kettleEnergy" @change="changeKettleEnergy($event.target.value)">
                             <option value="electricity">électrique</option>
                             <option value="gas">gaz</option>
                         </select>
