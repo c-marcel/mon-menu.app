@@ -30,8 +30,8 @@
 
     input
     {
-        border: solid 1px #c8b273;
-        background-color: #9f5069;
+        border:             solid 1px #c8b273;
+        background-color:   #9f5069;
         outline:            none;
     }
 

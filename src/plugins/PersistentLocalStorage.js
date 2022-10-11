@@ -13,8 +13,18 @@ export default
     {
         var sessionData = new Object(
         {
-            level:      ref(localStorage.sessionData_level || 'user'),          //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
-            username:   ref(localStorage.sessionData_username || 'Anonyme')     //< User name.
+            // User connection data.
+            level:              ref(localStorage.sessionData_level || 'user'),                  //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
+            username:           ref(localStorage.sessionData_username || 'Anonyme'),            //< User name.
+
+            // Kitchen data.
+            ovenEnergy:         ref(localStorage.sessionData_ovenEnergy || 'electricity'),      //< Oven energy ('electricity' or 'gas').
+            hobEnergy:          ref(localStorage.sessionData_hobEnergy || 'electricity'),       //< Hob energy.
+            kittleEnergy:       ref(localStorage.sessionData_kittleEnergy || 'electricity'),    //< Kittle energy.
+
+            // Energy data.
+            electricityCost:    ref(localStorage.sessionData_electricityCost || 17.4),          //< Electricity cost in c€ per kWh.
+            gasCost:            ref(localStorage.sessionData_gasCost || 11.2)                   //< Gas cost in c€ per kWh.
         });
         
         app.provide('sessionData', sessionData)
@@ -28,6 +38,31 @@ export default
         watch(sessionData.username, (n) =>
         {
             localStorage.sessionData_username = n
+        })
+
+        watch(sessionData.ovenEnergy, (n) =>
+        {
+            localStorage.sessionData_ovenEnergy = n
+        })
+
+        watch(sessionData.hobEnergy, (n) =>
+        {
+            localStorage.sessionData_hobEnergy = n
+        })
+
+        watch(sessionData.kittleEnergy, (n) =>
+        {
+            localStorage.sessionData_kittleEnergy = n
+        })
+
+        watch(sessionData.electricityCost, (n) =>
+        {
+            localStorage.sessionData_electricityCost = n
+        })
+
+        watch(sessionData.gasCost, (n) =>
+        {
+            localStorage.sessionData_gasCost = n
         })
     }
 }
