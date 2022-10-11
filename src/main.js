@@ -7,11 +7,11 @@
 // This file is the entry point for the client side application.
 // It will install all the routes and the Vue.js application.
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { ref, watch } from 'vue'
 import { createApp } from 'vue'
 import App from './App.vue'
 
 import Plugin_Tools  from './plugins/Tools'
+import Plugin_PLS    from './plugins/PersistentLocalStorage'
 
 import Configuration from './components/Configuration/Configuration.vue';
 import RecipeGroups  from './components/RecipeGroups/RecipeGroups.vue';
@@ -33,26 +33,6 @@ const router = createRouter(
 
 const app = createApp(App)
 
-// Install user data.
-var sessionData = new Object(
-{
-    level:      ref(localStorage.sessionData_level || 'user'),          //< User level. Can be: 'user' (standard user) or 'admin' (administrator user).
-    username:   ref(localStorage.sessionData_username || 'Anonyme')     //< User name.
-});
-
-app.provide('sessionData', sessionData)
-
-// Store user data.
-watch(sessionData.level, (n) =>
-{
-    localStorage.sessionData_level = n
-})
-
-watch(sessionData.username, (n) =>
-{
-    localStorage.sessionData_username = n
-})
-
 // Install recipe data.
 var recipeData = new Object(
 {
@@ -63,6 +43,7 @@ app.provide('recipeData', recipeData)
 
 // Install plugins.
 app.use(Plugin_Tools)
+app.use(Plugin_PLS)
 
 // Install routes and mount application.
 app.use(router)
