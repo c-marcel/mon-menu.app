@@ -64,7 +64,14 @@ export default
             if (value < 60)
                 return String(value) + '\''
 
-            return String(Math.floor(value / 60)) + 'h' + String(value % 60)
+            let minuts = String(value % 60)
+            if (minuts.length == 1)
+                minuts = '0' + minuts
+
+            if (minuts == '00')
+                minuts = ''
+
+            return String(Math.floor(value / 60)) + 'h' + minuts
         }
 
         // Recipe type to string.
