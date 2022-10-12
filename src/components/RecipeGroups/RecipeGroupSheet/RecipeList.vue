@@ -17,7 +17,7 @@
 
     function openRecipe(id)
     {
-        sessionData.value.currentMode    = ''
+        recipeData.value.currentMode    = ''
         recipeData.value.currentRecipeId = id
     }
 

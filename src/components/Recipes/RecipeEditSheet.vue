@@ -498,7 +498,7 @@
                         </div>
                         <div class="RecipeEditSheetContentMarked_Cls">
                             <span class="RecipeEditSheetEntryTitle_Cls">Rendu :</span>
-                            <span v-dompurify-html="markedContent"></span>
+                            <span class="RecipeEditSheetRendered_Cls" v-dompurify-html="markedContent"></span>
                         </div>
                     </div>
                 </div>
@@ -641,6 +641,7 @@
         display:            flex;
         flex-direction:     column;
         flex-grow:          1;
+        margin-bottom:      40px;
     }
 
     .RecipeEditSheetEntry_Cls
@@ -712,6 +713,7 @@
         flex-direction:     column;
         min-height:         50%;
         flex-grow:          1;
+        margin-top:         20px;
     }
 
     .RecipeEditSheetAlimentsList_Cls
@@ -780,5 +782,11 @@
     .RecipeEditSheetTrashLink_Cls:hover
     {
         cursor:             pointer;
+    }
+
+    .RecipeEditSheetRendered_Cls
+    {
+        overflow:           auto;
+        margin-top:         10px;
     }
 </style>
