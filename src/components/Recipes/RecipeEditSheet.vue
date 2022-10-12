@@ -8,8 +8,6 @@
     import { marked } from 'marked'
     import axios  from 'axios'
 
-    import Months from '../Foods/FoodSheet/Months.vue'
-
     axios.defaults.withCredentials = true
 
     let props = defineProps(['currentRecipeId', 'edit'])
@@ -34,7 +32,7 @@
     let energy      = ref(0)
     let water       = ref(0)
     let co2         = ref(0)
-    let errorMsg    = ref('')
+    let errorMsg    = ref('')               //< TODO
     let weight      = ref(0)
 
     // Recipe loading state.
@@ -56,6 +54,7 @@
     let e_oven       = ref(0)
     let e_hob        = ref(0)
     let e_kettle     = ref(0)
+    let groupId      = ref('')
 
     const loaded = computed(() =>
     {
@@ -112,7 +111,6 @@
 
     function loadRecipeData(id)
     {
-        console.log("Load recipe for edition " + id)
         recipeLoaded.value = false
         ingrNb.value       = 0
         errorMsg.value     = ''
@@ -144,6 +142,7 @@
                 e_oven.value        = response.data.resources.energy.oven
                 e_hob.value         = response.data.resources.energy.hob
                 e_kettle.value      = response.data.resources.energy.kettle
+                groupId.value       = response.data.group
 
                 // Set default picture if any.
                 picture.value = response.data.picture
@@ -257,10 +256,239 @@
         content.value = c
     }
 
+    function updateTitle(t)
+    {
+        title.value = t
+    }
+
+    function updateImage(p)
+    {
+        picture.value = p
+    }
+
+    function updateNbOfParts(v)
+    {
+        nbOfParts.value = v
+    }
+
+    function updateWeight(v)
+    {
+        weight.value = v
+    }
+
+    function updateExclusionMeat(v)
+    {
+        excl_meat.value = v
+    }
+
+    function updateExclusionFish(v)
+    {
+        excl_fish.value = v
+    }
+
+    function updateExclusionDiary(v)
+    {
+        excl_diary.value = v
+    }
+
+    function updateExclusionEggs(v)
+    {
+        excl_eggs.value = v
+    }
+
+    function updateExclusionOap(v)
+    {
+        excl_oap.value = v
+    }
+
+    function updateTimePreparation(v)
+    {
+        prepTime.value = v
+    }
+
+    function updateTimeCooking(v)
+    {
+        cookTime.value = v
+    }
+
+    function updateTimeRest(v)
+    {
+        restTime.value = v
+    }
+
+    function updateResourceWater(v)
+    {
+        water.value = v
+    }
+
+    function updateResourceEnergyOven(v)
+    {
+        e_oven.value = v
+    }
+
+    function updateResourceEnergyHob(v)
+    {
+        e_hob.value = v
+    }
+
+    function updateResourceEnergyKettle(v)
+    {
+        e_kettle.value = v
+    }
+
+    function updateWasteWater(v)
+    {
+        w_water.value = v
+    }
+
+    function updateWasteNonRecyclable(v)
+    {
+        w_nonrecycl.value = v
+    }
+
+    function updateWasteBiodegradable(v)
+    {
+        w_biodeg.value = v
+    }
+
+    function updateWastePlastics(v)
+    {
+        w_plastics.value = v
+    }
+
+    function updateWasteBricks(v)
+    {
+        w_bricks.value = v
+    }
+
+    function updateWastePapers(v)
+    {
+        w_papers.value = v
+    }
+
+    function updateWasteGlasses(v)
+    {
+        w_glasses.value = v
+    }
+
+    function updateWasteOthers(v)
+    {
+        w_others.value = v
+    }
+
+    function setTemperature1(t)
+    {
+        temperature.value = 'froid'
+    }
+
+    function setTemperature2(t)
+    {
+        temperature.value = 'chaud'
+    }
+
+    function updateType(t, ref)
+    {
+        if (t)
+        {
+            type.value = type.value | ref
+        }
+
+        else
+        {
+            type.value = type.value & (0xf - ref)
+        }
+    }
+
     function saveRecipe()
     {
-        // TODO
-        console.log("TODO")
+        let l_temperature = 0
+        if (temperature.value == 'chaud')
+            l_temperature = 2
+
+        else if (temperature.value == 'froid')
+            l_temperature = 1
+
+        // Create recipe.
+        var recipe =
+        {
+            id:                 props.currentRecipeId,
+            group:              groupId.value,
+            details:            title.value,
+            type:               type.value,
+            temperature:        l_temperature,
+            exclusions:
+            {
+                meat:           excl_meat.value,
+                fish:           excl_fish.value,
+                dairy:          excl_diary.value,
+                eggs:           excl_eggs.value,
+                oap:            excl_oap.value
+            },
+            months:             [],                 //< Computed by the server.
+            tags:               [],                 //< Not used yet.
+            nbOfParts:          nbOfParts.value,
+            weight:             weight.value,
+            picture:            picture.value,
+            recipe:             content.value,
+            ingredients:        [],                 //< TODO
+            times:
+            {
+                preparation:    prepTime.value,
+                cooking:        cookTime.value,
+                rest:           restTime.value
+            },
+            resources:
+            {
+                water:          water.value,
+                energy:
+                {
+                    oven:       e_oven.value,
+                    hob:        e_hob.value,
+                    kettle:     e_kettle.value
+                }
+            },
+            ingredientsCost:    0.0,                //< Computed by the server.
+            environmentalImpact:
+            {
+                ingredientsCo2eq:   0.0             //< Computed by the server.
+            },
+            waste:
+            {
+                water:          w_water.value,
+                nonRecyclable:  w_nonrecycl.value,
+                recyclable:
+                {
+                    ingredients:    [],             //< TODO
+                    biodegradable:  w_biodeg.value,
+                    plastics:       w_plastics.value,
+                    bricks:         w_bricks.value,
+                    papers:         w_papers.value,
+                    glasses:        w_glasses.value,
+                    others:         w_others.value
+                }
+            }
+        }
+
+        recipeData.value.outdatedRecipe = ''
+
+        // Send recipe data to Api.
+        axios.put('https://api.mon-menu.app/updateRecipe', recipe)
+        .then((response) =>
+        {
+            if (response.status != 200)
+            {
+                alert('Erreur lors de l\'enregistrement de la recette. Code de retour : ' + String(response.status) + '.')
+            }
+            else
+            {
+                recipeData.value.outdatedRecipe  = props.currentRecipeId
+                recipeData.value.currentRecipeId = ''
+            }
+        }).catch(function(error)
+        {
+            alert('Erreur lors de l\'enregistrement de la recette. Consultez la console pour plus de détails.')
+            console.log(error)
+        });
     }
 </script>
 
@@ -303,7 +531,7 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Titre :</span>
                         <span class="RecipeEditSheetEntryContent_Cls">
-                            <input type="text" :value="title" style="width: 100%;"/>
+                            <input type="text" :value="title" style="width: 100%;" @input="updateTitle($event.target.value)"/>
                         </span>
                     </div>
 
@@ -311,7 +539,7 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Image :</span>
                         <span class="RecipeEditSheetEntryContent_Cls">
-                            <input type="text" :value="picture" style="width: 100%;"/>
+                            <input type="text" :value="picture" style="width: 100%;" @input="updateImage($event.target.value)"/>
                         </span>
                     </div>
 
@@ -319,7 +547,7 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Nombre de parts :</span>
                         <span class="RecipeEditSheetEntryContent_Cls">
-                            <input type="number" min="0" max="100" step="1" :value="nbOfParts" style="width: 80px;"/>
+                            <input type="number" min="0" max="100" step="1" :value="nbOfParts" style="width: 80px;" @input="updateNbOfParts($event.target.value)"/>
                         </span>
                     </div>
 
@@ -327,7 +555,7 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Poids final :</span>
                         <span class="RecipeEditSheetEntryContent_Cls">
-                            <input type="number" min="0" max="100" step="0.01" :value="weight" style="width: 80px; margin-right: 10px;"/>
+                            <input type="number" min="0" max="100" step="0.01" :value="weight" style="width: 80px; margin-right: 10px;" @input="updateWeight($event.target.value)"/>
                             <span class="RecipeEditSheetUnit_Cls">kg</span>
                         </span>
                     </div>
@@ -336,10 +564,10 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Type :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
-                            <input type="checkbox" id="type1" :checked="type & 0x01"><label for="type1">apéritif</label>
-                            <input type="checkbox" id="type2" :checked="type & 0x02"><label for="type2">entrée</label>
-                            <input type="checkbox" id="type4" :checked="type & 0x04"><label for="type4">plat</label>
-                            <input type="checkbox" id="type8" :checked="type & 0x08"><label for="type8">dessert</label>
+                            <input type="checkbox" id="type1" :checked="type & 0x01" @input="updateType($event.target.checked, 0x01)"><label for="type1">apéritif</label>
+                            <input type="checkbox" id="type2" :checked="type & 0x02" @input="updateType($event.target.checked, 0x02)"><label for="type2">entrée</label>
+                            <input type="checkbox" id="type4" :checked="type & 0x04" @input="updateType($event.target.checked, 0x04)"><label for="type4">plat</label>
+                            <input type="checkbox" id="type8" :checked="type & 0x08" @input="updateType($event.target.checked, 0x08)"><label for="type8">dessert</label>
                         </span>
                     </div>
 
@@ -348,8 +576,8 @@
                         <span class="RecipeEditSheetEntryTitle_Cls">Température :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <fieldset id="temperatureGroup" style="border: none; height: 10px; padding: 0px;">
-                                <input type="radio" id="temperature1" :checked="temperature == 'froid'" name="temperatureGroup"><label for="temperature1">froid</label>
-                                <input type="radio" id="temperature2" :checked="temperature == 'chaud'" name="temperatureGroup"><label for="temperature2">chaud</label>
+                                <input type="radio" id="temperature1" :checked="temperature == 'froid'" name="temperatureGroup" @input="setTemperature1($event.target.value)"><label for="temperature1">froid</label>
+                                <input type="radio" id="temperature2" :checked="temperature == 'chaud'" name="temperatureGroup" @input="setTemperature2($event.target.value)"><label for="temperature2">chaud</label>
                             </fieldset>
                         </span>
                     </div>
@@ -358,11 +586,11 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Exclusions :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
-                            <input type="checkbox" id="excl_meat" :checked="excl_meat"><label for="type1">viande</label>
-                            <input type="checkbox" id="excl_fish" :checked="excl_fish"><label for="type2">poisson</label>
-                            <input type="checkbox" id="excl_diary" :checked="excl_diary"><label for="type4">produits laitiers</label>
-                            <input type="checkbox" id="excl_eggs" :checked="excl_eggs"><label for="type8">oeufs</label>
-                            <input type="checkbox" id="excl_oap" :checked="excl_oap"><label for="type8">autres produits animaux</label>
+                            <input type="checkbox" id="excl_meat" :checked="excl_meat" @input="updateExclusionMeat($event.target.value)"><label for="excl_meat">viande</label>
+                            <input type="checkbox" id="excl_fish" :checked="excl_fish" @input="updateExclusionFish($event.target.value)"><label for="excl_fish">poisson</label>
+                            <input type="checkbox" id="excl_diary" :checked="excl_diary" @input="updateExclusionDiary($event.target.value)"><label for="excl_diary">produits laitiers</label>
+                            <input type="checkbox" id="excl_eggs" :checked="excl_eggs" @input="updateExclusionEggs($event.target.value)"><label for="excl_eggs">oeufs</label>
+                            <input type="checkbox" id="excl_oap" :checked="excl_oap" @input="updateExclusionOap($event.target.value)"><label for="excl_oap">autres produits animaux</label>
                         </span>
                     </div>
 
@@ -371,11 +599,11 @@
                         <span class="RecipeEditSheetEntryTitle_Cls">Temps :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Préparation :</span>
-                            <input type="number" min="0" max="999" step="1" :value="prepTime" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">'</span>
+                            <input type="number" min="0" max="999" step="1" :value="prepTime" style="width: 60px;" @input="updateTimePreparation($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
                             <span class="RecipeEditSheetLabel_Cls">Cuisson :</span>
-                            <input type="number" min="0" max="999" step="1" :value="cookTime" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">'</span>
+                            <input type="number" min="0" max="999" step="1" :value="cookTime" style="width: 60px;" @input="updateTimeCooking($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
                             <span class="RecipeEditSheetLabel_Cls">Repos :</span>
-                            <input type="number" min="0" max="999" step="1" :value="restTime" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">'</span>
+                            <input type="number" min="0" max="999" step="1" :value="restTime" style="width: 60px;" @input="updateTimeRest($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
                         </span>
                     </div>
 
@@ -384,7 +612,7 @@
                         <span class="RecipeEditSheetEntryTitle_Cls">Ressources :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Eau :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="water" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">litres</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="water" style="width: 60px;" @input="updateResourceWater($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">litres</span>
                         </span>
                     </div>
 
@@ -393,11 +621,11 @@
                         <span class="RecipeEditSheetEntryTitle_Cls"></span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Four :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="e_oven" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="e_oven" style="width: 60px;" @input="updateResourceEnergyOven($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
                             <span class="RecipeEditSheetLabel_Cls">Plaques :</span>
-                            <input type="number" min="0" max="99" step="0.01" :value="e_hob" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="e_hob" style="width: 60px;" @input="updateResourceEnergyHob($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
                             <span class="RecipeEditSheetLabel_Cls">Bouilloire :</span>
-                            <input type="number" min="0" max="99" step="0.01" :value="e_kettle" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="e_kettle" style="width: 60px;" @input="updateResourceEnergyKettle($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kWh</span>
                         </span>
                     </div>
 
@@ -406,9 +634,9 @@
                         <span class="RecipeEditSheetEntryTitle_Cls">Déchets :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Eau :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_water" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">litres</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_water" style="width: 60px;" @input="updateWasteWater($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">litres</span>
                             <span class="RecipeEditSheetLabel_Cls">Non recycl. :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_nonrecycl" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_nonrecycl" style="width: 60px;" @input="updateWasteNonRecyclable($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                         </span>
                     </div>
 
@@ -417,11 +645,11 @@
                         <span class="RecipeEditSheetEntryTitle_Cls"></span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Verts :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_biodeg" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_biodeg" style="width: 60px;" @input="updateWasteBiodegradable($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                             <span class="RecipeEditSheetLabel_Cls">Plastiques :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_plastics" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_plastics" style="width: 60px;" @input="updateWastePlastics($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                             <span class="RecipeEditSheetLabel_Cls">Briques :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_bricks" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_bricks" style="width: 60px;" @input="updateWasteBricks($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                         </span>
                     </div>
 
@@ -430,11 +658,11 @@
                         <span class="RecipeEditSheetEntryTitle_Cls"></span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
                             <span class="RecipeEditSheetLabel_Cls">Papiers :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_papers" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_papers" style="width: 60px;" @input="updateWastePapers($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                             <span class="RecipeEditSheetLabel_Cls">Verres :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_glasses" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_glasses" style="width: 60px;" @input="updateWasteGlasses($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                             <span class="RecipeEditSheetLabel_Cls">Divers :</span> 
-                            <input type="number" min="0" max="99" step="0.01" :value="w_others" style="width: 60px;"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
+                            <input type="number" min="0" max="99" step="0.01" :value="w_others" style="width: 60px;" @input="updateWasteOthers($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">kg</span>
                         </span>
                     </div>
 

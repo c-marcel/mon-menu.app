@@ -39,7 +39,8 @@ const app = createApp(App)
 var recipeData = new Object(
 {
     currentRecipeId:    "",     //< Current displayed recipe id. Empty string to hide recipe div.
-    currentMode:        ""      //< Current mode: '' for normal mode or 'edit' for edit mode.
+    currentMode:        "",     //< Current mode: '' for normal mode or 'edit' for edit mode.
+    outdatedRecipe:     ""      //< Current edited recipe (when saved).
 });
 
 app.provide('recipeData', recipeData)   

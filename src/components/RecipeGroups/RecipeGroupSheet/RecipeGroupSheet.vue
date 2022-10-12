@@ -17,6 +17,7 @@
     let emit = defineEmits(['listOutdated'])
 
     let sessionData         = ref(inject('sessionData'))
+    let recipeData          = ref(inject('recipeData'))
     let recipeList          = ref([])
     let loadedId            = ref('')
     let errorMsg            = ref('')
@@ -27,6 +28,22 @@
     let currentTitle        = ref('')
 
     let props = defineProps(['currentGroupId', 'edit', 'title'])
+
+    // Watch modified recipes.
+    watch(recipeData.value, (n) =>
+    {
+        if (recipeData.value.outdatedRecipe != '')
+        {
+            axios.get('https://api.mon-menu.app/getRecipeMetadata/' + recipeData.value.outdatedRecipe)
+            .then((response) =>
+            {
+                updateRecipeIntoList(response, recipeData.value.outdatedRecipe)
+            }).catch(function(error)
+            {
+                variantsErrorMsg.value = 'Toutes les variantes de la recette n\'ont pas pu être récupérées.'
+            });
+        }
+    })
 
     // Watch props changes to update food sheet.
     watch(props, (value) =>
@@ -71,11 +88,8 @@
         }
     })
 
-    function addRecipeIntoList(response)
+    function setRecipeData(recipe, response)
     {
-        // Add recipe into list.
-        let recipe = new Object();
-                        
         // Diet.
         recipe.diet = []
         if (response.data.exclusions.meat && response.data.exclusions.fish)
@@ -103,24 +117,24 @@
 
             // Hob energy cost.
             if (sessionData.value.hobEnergy == 'electricity')
-                energyCost += response.data.resources.energy.hob * sessionData.value.electricityCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.hob) * parseFloat(sessionData.value.electricityCost) / 100.0
 
             else if (sessionData.value.hobEnergy == 'gas')
-                energyCost += response.data.resources.energy.hob * sessionData.value.gasCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.hob) * parseFloat(sessionData.value.gasCost) / 100.0
 
             // Oven energy cost.
             if (sessionData.value.ovenEnergy == 'electricity')
-                energyCost += response.data.resources.energy.oven * sessionData.value.electricityCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.oven) * parseFloat(sessionData.value.electricityCost) / 100.0
 
             else if (sessionData.value.ovenEnergy == 'gas')
-                energyCost += response.data.resources.energy.oven * sessionData.value.gasCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.oven) * parseFloat(sessionData.value.gasCost) / 100.0
 
             // Kettle energy cost.
             if (sessionData.value.kittleEnergy == 'electricity')
-                energyCost += response.data.resources.energy.kettle * sessionData.value.electricityCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.kettle) * parseFloat(sessionData.value.electricityCost) / 100.0
 
             else if (sessionData.value.kittleEnergy == 'gas')
-                energyCost += response.data.resources.energy.kettle * sessionData.value.gasCost / 100.0
+                energyCost += parseFloat(response.data.resources.energy.kettle) * parseFloat(sessionData.value.gasCost) / 100.0
 
             recipe.cost = energyCost / response.data.nbOfParts
         }
@@ -129,7 +143,9 @@
 
         // Energy.
         if (response.data.nbOfParts > 0 )
-            recipe.energy = (response.data.resources.energy.oven + response.data.resources.energy.hob) / response.data.nbOfParts
+            recipe.energy = (parseFloat(response.data.resources.energy.oven)
+                             + parseFloat(response.data.resources.energy.hob)
+                             + parseFloat(response.data.resources.energy.kettle)) / response.data.nbOfParts
         else
             recipe.energy = '-'
 
@@ -140,24 +156,24 @@
 
             // Hob energy cost.
             if (sessionData.value.hobEnergy == 'electricity')
-                co2 += response.data.resources.energy.hob * sessionData.value.co2Electricity
+                co2 += parseFloat(response.data.resources.energy.hob) * parseFloat(sessionData.value.co2Electricity)
 
             else if (sessionData.value.hobEnergy == 'gas')
-                co2 += response.data.resources.energy.hob * sessionData.value.co2Gas
+                co2 += parseFloat(response.data.resources.energy.hob) * parseFloat(sessionData.value.co2Gas)
 
             // Oven energy cost.
             if (sessionData.value.ovenEnergy == 'electricity')
-                co2 += response.data.resources.energy.oven * sessionData.value.co2Electricity
+                co2 += parseFloat(response.data.resources.energy.oven) * parseFloat(sessionData.value.co2Electricity)
 
             else if (sessionData.value.ovenEnergy == 'gas')
-                co2 += response.data.resources.energy.oven * sessionData.value.co2Gas
+                co2 += parseFloat(response.data.resources.energy.oven) * parseFloat(sessionData.value.co2Gas)
 
             // Kettle energy cost.
             if (sessionData.value.kittleEnergy == 'electricity')
-                co2 += response.data.resources.energy.kettle * sessionData.value.co2Electricity
+                co2 += parseFloat(response.data.resources.energy.kettle) * parseFloat(sessionData.value.co2Electricity)
 
             else if (sessionData.value.kittleEnergy == 'gas')
-                co2 += response.data.resources.energy.kettle * sessionData.value.co2Gas
+                co2 += parseFloat(response.data.resources.energy.kettle) * parseFloat(sessionData.value.co2Gas)
 
             recipe.co2 = co2 / response.data.nbOfParts
         }
@@ -165,7 +181,28 @@
             recipe.co2 = '-'
 
         // Time.
-        recipe.time = response.data.times.preparation + response.data.times.cooking + response.data.times.rest
+        recipe.time = parseFloat(response.data.times.preparation) + parseFloat(response.data.times.cooking) + parseFloat(response.data.times.rest)
+    }
+
+    function updateRecipeIntoList(response, id)
+    {
+        for (let i = 0 ; i < recipeList.value.length ; i++)
+        {
+            var recipe = recipeList.value[i]
+            if (recipe.id == id)
+            {
+                setRecipeData(recipe, response)
+                break
+            }
+        }
+    }
+
+    function addRecipeIntoList(response)
+    {
+        // Add recipe into list.
+        let recipe = new Object();
+                        
+        setRecipeData(recipe, response)
 
         recipeList.value.push(recipe)
     }

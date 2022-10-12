@@ -121,7 +121,9 @@
                 restTime.value   = response.data.times.rest
                 ingredCost.value = response.data.ingredientsCost
                 water.value      = response.data.resources.water
-                energy.value     = response.data.resources.energy.oven + response.data.resources.energy.hob
+                energy.value     = parseFloat(response.data.resources.energy.oven)
+                                 + parseFloat(response.data.resources.energy.hob)
+                                 + parseFloat(response.data.resources.energy.kettle)
 
                 // Set default picture if any.
                 picture.value = response.data.picture
