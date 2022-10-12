@@ -65,7 +65,8 @@
 
     function editRecipeEntry(id)
     {
-        recipeData.value.currentMode    = 'edit'
+        recipeData.value.outdatedRecipe  = ''
+        recipeData.value.currentMode     = 'edit'
         recipeData.value.currentRecipeId = id
     }
 </script>

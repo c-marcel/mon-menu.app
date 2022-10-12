@@ -82,7 +82,6 @@
                 }
             }).catch(function(error)
             {
-                console.log(error)
                 errorMsg.value = 'Erreur réseau : impossible d\'enregistrer les modifications effectuées dans la base de données. Contacter l\'administrateur du site.'
             });
         }
@@ -225,7 +224,7 @@
                 for (let i = 0 ; i < response.data.recipes.length ; i++)
                 {
                     let recipeId = response.data.recipes[i]
-
+                    
                     axios.get('https://api.mon-menu.app/getRecipeMetadata/' + recipeId)
                     .then((response) =>
                     {
