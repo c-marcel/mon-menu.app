@@ -38,7 +38,8 @@ const app = createApp(App)
 // Install recipe data.
 var recipeData = new Object(
 {
-    currentRecipeId: ""     //< Current displayed recipe id. Empty string to hide recipe div.
+    currentRecipeId:    "",     //< Current displayed recipe id. Empty string to hide recipe div.
+    currentMode:        ""      //< Current mode: '' for normal mode or 'edit' for edit mode.
 });
 
 app.provide('recipeData', recipeData)   

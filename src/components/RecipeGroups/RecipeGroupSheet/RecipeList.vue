@@ -17,6 +17,7 @@
 
     function openRecipe(id)
     {
+        sessionData.value.currentMode    = ''
         recipeData.value.currentRecipeId = id
     }
 
@@ -64,8 +65,8 @@
 
     function editRecipeEntry(id)
     {
-        // TODO
-        console.log("Edit entry: " + id + ". Not yet implemented.")
+        recipeData.value.currentMode    = 'edit'
+        recipeData.value.currentRecipeId = id
     }
 </script>
 

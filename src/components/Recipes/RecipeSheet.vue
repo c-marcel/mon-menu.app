@@ -12,7 +12,7 @@
 
     axios.defaults.withCredentials = true
 
-    let props = defineProps(['currentRecipeId'])
+    let props = defineProps(['currentRecipeId', 'edit'])
 
     let recipeData  = ref(inject('recipeData'))
     let sessionData = ref(inject('sessionData'))
@@ -220,14 +220,14 @@
     // Watch props changes to update list.
     watch(props, (value) =>
     {
-        if (value.currentRecipeId != '')
+        if (value.currentRecipeId != '' && value.edit != 'edit')
             loadRecipeData(value.currentRecipeId)
     })
 </script>
 
 <template>
     <!-- Blur background for the entire window -->
-    <div v-show="currentRecipeId != ''" class="RecipeSheet_Cls">
+    <div v-show="currentRecipeId != '' && edit != 'edit'" class="RecipeSheet_Cls">
         <!-- Solid background -->
         <div class="RecipeSheetBg_Cls">
             <!-- Header -->

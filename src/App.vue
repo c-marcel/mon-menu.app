@@ -7,6 +7,7 @@
     import { ref, inject } from 'vue'
 
     import CentralContainer from './components/CentralContainer.vue'
+    import RecipeEditSheet  from './components/Recipes/RecipeEditSheet.vue'
     import RecipeSheet      from './components/Recipes/RecipeSheet.vue'
     import Header           from './components/Header/Header.vue'
 
@@ -29,8 +30,8 @@
 <template>
     <Header @menuItemClicked="showCentralContainer()" />
     <CentralContainer class="CentralContainer_cls" v-bind:class="{CentralContainerHidden_cls: !displayCentralContainer}" @hideCentralContainerRequested="hideCentralContainer()"/>
-    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId">
-    </RecipeSheet>
+    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId" :edit="recipeData.currentMode"></RecipeSheet>
+    <RecipeEditSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId" :edit="recipeData.currentMode"></RecipeEditSheet>
 </template>
 
 <style scoped>
