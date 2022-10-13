@@ -8,6 +8,8 @@
     import { marked } from 'marked'
     import axios  from 'axios'
 
+    import FoodList from '../Foods/FoodList/FoodList.vue'
+
     axios.defaults.withCredentials = true
 
     let props = defineProps(['currentRecipeId', 'edit'])
@@ -55,6 +57,10 @@
     let e_hob        = ref(0)
     let e_kettle     = ref(0)
     let groupId      = ref('')
+    let selectFood   = ref(false)
+    
+    let foodSelectionType = ref('')
+    let foodSelectionIndex = ref(-1)
 
     const loaded = computed(() =>
     {
@@ -408,6 +414,13 @@
         else if (temperature.value == 'froid')
             l_temperature = 1
 
+        let l_ingredients = []
+
+        for (let i = 0 ; i < ingredients.value.length; i++)
+        {
+            l_ingredients.push(ingredients.value[i].ingredient)
+        }
+
         // Create recipe.
         var recipe =
         {
@@ -430,7 +443,7 @@
             weight:             weight.value,
             picture:            picture.value,
             recipe:             content.value,
-            ingredients:        [],                 //< TODO
+            ingredients:        l_ingredients,
             times:
             {
                 preparation:    prepTime.value,
@@ -490,6 +503,129 @@
             console.log(error)
         });
     }
+
+    function addNewIngredient()
+    {
+        let ingredient =
+        {
+            ingredient:
+            {
+                food:               '',
+                quantity:           0.0,
+                remainingQuantity:  0.0,
+                raw:                false
+            },
+            data:
+            {
+                title:              'Non défini'
+            }
+        }
+
+        ingrNb.value += 1
+        ingredients.value.push(ingredient)
+    }
+
+    function removeIngredient(index)
+    {
+        if (index < 0)
+            return
+
+        if (index >= ingredients.value.length)
+            return
+
+        ingredients.value.splice(index, 1)
+        ingrNb.value += -1
+    }
+
+    function updateIngredientQuantity(index, quantity)
+    {
+        if (index < 0)
+            return
+
+        if (index >= ingredients.value.length)
+            return
+
+        let item = ingredients.value[index]
+        item.ingredient.quantity = quantity
+        ingredients.value[index] = item
+    }
+
+    function updateIngredientRemainingQuantity(index, remainingQuantity)
+    {
+        if (index < 0)
+            return
+
+        if (index >= ingredients.value.length)
+            return
+
+        let item = ingredients.value[index]
+        item.ingredient.remainingQuantity = remainingQuantity
+        ingredients.value[index] = item
+    }
+
+    function updateIngredientIsRaw(index, raw)
+    {
+        if (index < 0)
+            return
+
+        if (index >= ingredients.value.length)
+            return
+            
+        let item = ingredients.value[index]
+        item.ingredient.raw = raw
+        ingredients.value[index] = item
+    }
+
+    function addNewWasteIngredient()
+    {
+        // TODO
+        console.log("TODO")
+    }
+
+    function removeWasteIngredient(index)
+    {
+        // TODO
+        console.log("TODO")
+    }
+
+    function updateWasteIngredientQuantity(index, quantity)
+    {
+        // TODO
+        console.log("TODO")
+    }
+
+    function openFoodSelector(type, index)
+    {
+        foodSelectionType.value  = type
+        foodSelectionIndex.value = index
+        selectFood.value         = true
+    }
+
+    function foodSelected(foodId, title)
+    {
+        if (foodSelectionIndex.value < 0)
+            return
+
+        // Food.
+        if (foodSelectionType.value == 'food')
+        {
+            let item = ingredients.value[foodSelectionIndex.value]
+            item.ingredient.food = foodId
+            item.data.title = title
+            ingredients.value[foodSelectionIndex.value] = item
+        }
+
+        // Waste food.
+        else if (foodSelectionType.value == 'waste')
+        {
+            // TODO
+            console.log("TODO")
+        }
+
+        selectFood.value         = false
+        foodSelectionType.value  = ''
+        foodSelectionIndex.value = -1
+    }
 </script>
 
 <template>
@@ -523,7 +659,7 @@
             </div>
 
             <!-- Central container -->
-            <div v-show="loaded && errorMsg == ''" class="RecipeEditSheetCentralContainer_Cls">
+            <div v-show="loaded && errorMsg == '' && !selectFood" class="RecipeEditSheetCentralContainer_Cls">
                 <!-- Left part: recipe metadata and ingredients -->
                 <div class="RecipeEditSheetLeft_Cls">
 
@@ -586,11 +722,11 @@
                     <div class="RecipeEditSheetEntry_Cls">
                         <span class="RecipeEditSheetEntryTitle_Cls">Exclusions :</span>
                         <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
-                            <input type="checkbox" id="excl_meat" :checked="excl_meat" @input="updateExclusionMeat($event.target.value)"><label for="excl_meat">viande</label>
-                            <input type="checkbox" id="excl_fish" :checked="excl_fish" @input="updateExclusionFish($event.target.value)"><label for="excl_fish">poisson</label>
-                            <input type="checkbox" id="excl_diary" :checked="excl_diary" @input="updateExclusionDiary($event.target.value)"><label for="excl_diary">produits laitiers</label>
-                            <input type="checkbox" id="excl_eggs" :checked="excl_eggs" @input="updateExclusionEggs($event.target.value)"><label for="excl_eggs">oeufs</label>
-                            <input type="checkbox" id="excl_oap" :checked="excl_oap" @input="updateExclusionOap($event.target.value)"><label for="excl_oap">autres produits animaux</label>
+                            <input type="checkbox" id="excl_meat" :checked="excl_meat" @input="updateExclusionMeat($event.target.checked)"><label for="excl_meat">viande</label>
+                            <input type="checkbox" id="excl_fish" :checked="excl_fish" @input="updateExclusionFish($event.target.checked)"><label for="excl_fish">poisson</label>
+                            <input type="checkbox" id="excl_diary" :checked="excl_diary" @input="updateExclusionDiary($event.target.checked)"><label for="excl_diary">produits laitiers</label>
+                            <input type="checkbox" id="excl_eggs" :checked="excl_eggs" @input="updateExclusionEggs($event.target.checked)"><label for="excl_eggs">oeufs</label>
+                            <input type="checkbox" id="excl_oap" :checked="excl_oap" @input="updateExclusionOap($event.target.checked)"><label for="excl_oap">autres produits animaux</label>
                         </span>
                     </div>
 
@@ -669,7 +805,7 @@
                     <!-- Ingredients and waste (as ingredients) -->
                     <div class="RecipeEditSheetAlimentsList_Cls">
                         <div class="RecipeEditSheetAliments_Cls">
-                            <div class="RecipeEditSheetTitleText_Cls" style="line-height: 50px;">Aliments <button>➕</button></div>
+                            <div class="RecipeEditSheetTitleText_Cls" style="line-height: 50px;">Aliments <button @click="addNewIngredient()">➕</button></div>
                             <div class="RecipeEditSheetTableLine_Cls">
                                 <span class="RecipeEditSheetTitleText_Cls" style="flex-grow: 1;">Aliment</span>
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 100px;">Qté (kg)</span>
@@ -677,39 +813,39 @@
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 30px;">Cru</span>
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 30px;"></span>
                             </div>
-                            <div v-for="ingredient in ingredients" class="RecipeEditSheetTableLine_Cls" v-bind:key="ingredient.data.id">
-                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetIngredientLink_Cls" style="flex-grow: 1;">
+                            <div v-for="(ingredient, index) in ingredients" class="RecipeEditSheetTableLine_Cls" v-bind:key="index">
+                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetIngredientLink_Cls" style="flex-grow: 1;" @click="openFoodSelector('food', index)">
                                     {{ ingredient.data.title }}
                                 </span>
                                 <span class="RecipeEditSheetValueText_Cls" style="min-width: 100px;">
-                                    <input type="number" min="0" max="99" step="0.01" :value="ingredient.ingredient.quantity" style="width: 60px;"/>
+                                    <input type="number" min="0" max="99" step="0.01" :value="ingredient.ingredient.quantity" style="width: 60px;" @input="updateIngredientQuantity(index, $event.target.value)"/>
                                 </span>
                                 <span class="RecipeEditSheetValueText_Cls" style="min-width: 100px;">
-                                    <input type="number" min="0" max="99" step="0.01" :value="ingredient.ingredient.remainingQuantity" style="width: 60px;"/>
+                                    <input type="number" min="0" max="99" step="0.01" :value="ingredient.ingredient.remainingQuantity" style="width: 60px;" @input="updateIngredientRemainingQuantity(index, $event.target.value)"/>
                                 </span>
                                 <span class="RecipeEditSheetValueText_Cls" style="min-width: 30px;">
-                                    <input type="checkbox" :checked="ingredient.ingredient.raw">
+                                    <input type="checkbox" :checked="ingredient.ingredient.raw" @input="updateIngredientIsRaw(index, $event.target.checked)">
                                 </span>
-                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetTrashLink_Cls" style="min-width: 30px;">
+                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetTrashLink_Cls" style="min-width: 30px;" @click="removeIngredient(index)">
                                     🗑️
                                 </span>
                             </div>
                         </div>
                         <div class="RecipeEditSheetWasteAliments_Cls">
-                            <div class="RecipeEditSheetTitleText_Cls" style="line-height: 50px;">Déchets <button>➕</button></div>
+                            <div class="RecipeEditSheetTitleText_Cls" style="line-height: 50px;">Déchets <button @click="addNewWasteIngredient()">➕</button></div>
                             <div class="RecipeEditSheetTableLine_Cls">
                                 <span class="RecipeEditSheetTitleText_Cls" style="flex-grow: 1;">Aliment</span>
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 100px;">Qté (kg)</span>
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 30px;"></span>
                             </div>
-                            <div v-for="waste in wastes" class="RecipeEditSheetTableLine_Cls" v-bind:key="waste.data.id">
+                            <div v-for="(waste, index) in wastes" class="RecipeEditSheetTableLine_Cls" v-bind:key="index">
                                 <span class="RecipeEditSheetValueText_Cls RecipeEditSheetIngredientLink_Cls" style="flex-grow: 1;">
                                     {{ waste.data.title }}
                                 </span>
                                 <span class="RecipeEditSheetValueText_Cls" style="min-width: 100px;">
-                                    <input type="number" min="0" max="99" step="0.01" :value="waste.ingredient.quantity" style="width: 60px;"/>
+                                    <input type="number" min="0" max="99" step="0.01" :value="waste.ingredient.quantity" style="width: 60px;" @input="updateWasteIngredientQuantity(index, $event.target.value)"/>
                                 </span>
-                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetTrashLink_Cls" style="min-width: 30px;">
+                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetTrashLink_Cls" style="min-width: 30px;" @click="removeWasteIngredient(index)">
                                     🗑️
                                 </span>
                             </div>
@@ -721,15 +857,20 @@
                 <div class="RecipeEditSheetRight_Cls">
                     <div class="RecipeEditSheetContent_Cls">
                         <div class="RecipeEditSheetContentRaw_Cls">
-                            <span class="RecipeEditSheetEntryTitle_Cls">Contenu brut :</span>
+                            <span class="RecipeEditSheetEntryTitle_Cls">Recette :</span>
                             <textarea style="flex-grow: 1; margin: 5px;" :value="content" @input="updateContent($event.target.value)"></textarea>
                         </div>
                         <div class="RecipeEditSheetContentMarked_Cls">
-                            <span class="RecipeEditSheetEntryTitle_Cls">Rendu :</span>
+                            <span class="RecipeEditSheetEntryTitle_Cls">Aperçu :</span>
                             <span class="RecipeEditSheetRendered_Cls" v-dompurify-html="markedContent"></span>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Foods list container -->
+            <div v-show="selectFood" class="RecipeEditSheetFoodListContainer_Cls">
+                <FoodList class="FoodList_cls" @listItemClicked="(id, title) => { foodSelected(id, title) }"></FoodList>
             </div>
         </div>
     </div>
@@ -739,6 +880,7 @@
     .RecipeEditSheet_Cls
     {
         backdrop-filter:    blur(5px);
+        user-select:        none;
     }
 
     .RecipeEditSheetBg_Cls
@@ -1016,5 +1158,19 @@
     {
         overflow:           auto;
         margin-top:         10px;
+    }
+
+    .RecipeEditSheetFoodListContainer_Cls
+    {
+        background-color: #9f5069;
+        overflow:           hidden;
+    }
+
+    .FoodList_cls
+    {
+        position:           relative;
+        height:             80%;
+        width:              50%;
+        transform:          translate(50%, 10%);
     }
 </style>

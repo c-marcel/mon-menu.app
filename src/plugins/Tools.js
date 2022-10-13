@@ -125,8 +125,6 @@ export default
                   || units.label.length < 1)
                 return app.config.globalProperties.$formatFloat(app.config.globalProperties.$formatWeight(quantity))
 
-            console.log("ok")
-            
             let v = quantity * units.conversion
             let u = units.label[0]
 
