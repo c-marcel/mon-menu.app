@@ -40,6 +40,7 @@
     // Recipe loading state.
     let recipeLoaded = ref(false)
     let ingrNb       = ref(0)
+    let wasteNb      = ref(0)
     let excl_meat    = ref(false)
     let excl_fish    = ref(false)
     let excl_eggs    = ref(false)
@@ -67,7 +68,7 @@
         if (!recipeLoaded.value)
             return false
 
-        return (ingrNb.value == ingredients.value.length)
+        return (ingrNb.value + wasteNb.value == ingredients.value.length + wastes.value.length)
     })
 
     const markedContent = computed(() =>
@@ -78,6 +79,34 @@
     function closeRecipe()
     {
         recipeData.value.currentRecipeId = ''
+    }
+
+    function loadWasteIngredientData(id, quantity)
+    {
+        let url = 'https://api.mon-menu.app/getFoodData/' + id
+
+        // Get data.
+        axios.get(url)
+        .then((response) =>
+        {
+            if (response.status == 200)
+            {
+                let d =
+                {
+                    ingredient:
+                    {
+                        id:         id,
+                        quantity:   quantity
+                    },
+                    data:           response.data
+                }
+
+                wastes.value.push(d)
+            }
+        }).catch(function(error)
+        {
+            errorMsg.value = 'Impossible de charger tous les ingrédients de la recette.'
+        });
     }
 
     function loadIngredientData(ingredient)
@@ -99,8 +128,6 @@
         {
             if (response.status == 200)
             {
-                let id = response.data.id
-
                 let d =
                 {
                     ingredient: ingredient,
@@ -161,6 +188,15 @@
                 for (let i = 0 ; i < response.data.ingredients.length ; i++)
                 {
                     loadIngredientData(response.data.ingredients[i])
+                }
+
+                // Store waste ingredients and data (from Api).
+                wastes.value    = []
+                wasteNb.value   = Object.keys(response.data.waste.recyclable.ingredients).length
+                for (let i = 0 ; i < Object.keys(response.data.waste.recyclable.ingredients).length ; i++)
+                {
+                    let key = Object.keys(response.data.waste.recyclable.ingredients)[i]
+                    loadWasteIngredientData(key, response.data.waste.recyclable.ingredients[key])
                 }
 
                 // Recipe type.
@@ -422,6 +458,14 @@
                 l_ingredients.push(ingredients.value[i].ingredient)
         }
 
+        let l_wastes = {}
+
+        for (let i = 0 ; i < wastes.value.length; i++)
+        {
+            if(wastes.value[i].ingredient.id != '')
+                l_wastes[wastes.value[i].ingredient.id] = wastes.value[i].ingredient.quantity
+        }
+
         // Create recipe.
         var recipe =
         {
@@ -472,7 +516,7 @@
                 nonRecyclable:  w_nonrecycl.value,
                 recyclable:
                 {
-                    ingredients:    [],             //< TODO
+                    ingredients:    l_wastes,
                     biodegradable:  w_biodeg.value,
                     plastics:       w_plastics.value,
                     bricks:         w_bricks.value,
@@ -579,20 +623,46 @@
 
     function addNewWasteIngredient()
     {
-        // TODO
-        console.log("TODO")
+        let ingredient =
+        {
+            ingredient:
+            {
+                id:         '',
+                quantity:   0.0
+            },
+            data:
+            {
+                title:      'Non défini'
+            }
+        }
+
+        wasteNb.value += 1
+        wastes.value.push(ingredient)
     }
 
     function removeWasteIngredient(index)
     {
-        // TODO
-        console.log("TODO")
+        if (index < 0)
+            return
+
+        if (index >= wastes.value.length)
+            return
+
+        wastes.value.splice(index, 1)
+        wasteNb.value += -1
     }
 
     function updateWasteIngredientQuantity(index, quantity)
     {
-        // TODO
-        console.log("TODO")
+        if (index < 0)
+            return
+
+        if (index >= wastes.value.length)
+            return
+
+        let item = wastes.value[index]
+        item.ingredient.quantity = quantity
+        wastes.value[index] = item
     }
 
     function openFoodSelector(type, index)
@@ -619,8 +689,10 @@
         // Waste food.
         else if (foodSelectionType.value == 'waste')
         {
-            // TODO
-            console.log("TODO")
+            let item = wastes.value[foodSelectionIndex.value]
+            item.ingredient.id = foodId
+            item.data.title = title
+            wastes.value[foodSelectionIndex.value] = item
         }
 
         selectFood.value         = false
@@ -840,7 +912,7 @@
                                 <span class="RecipeEditSheetTitleText_Cls" style="min-width: 30px;"></span>
                             </div>
                             <div v-for="(waste, index) in wastes" class="RecipeEditSheetTableLine_Cls" v-bind:key="index">
-                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetIngredientLink_Cls" style="flex-grow: 1;">
+                                <span class="RecipeEditSheetValueText_Cls RecipeEditSheetIngredientLink_Cls" style="flex-grow: 1;" @click="openFoodSelector('waste', index)">
                                     {{ waste.data.title }}
                                 </span>
                                 <span class="RecipeEditSheetValueText_Cls" style="min-width: 100px;">
