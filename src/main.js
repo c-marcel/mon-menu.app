@@ -24,7 +24,7 @@ const routes =
     { path: '/foods',   component: Foods         },
     { path: '/recipes', component: RecipeGroups  },
     { path: '/config',  component: Configuration },
-    { path: '/',        component: null          },
+    { path: '/',        component: RecipeGroups  },
 ]
 
 const router = createRouter(
