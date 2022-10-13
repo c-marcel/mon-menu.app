@@ -418,7 +418,8 @@
 
         for (let i = 0 ; i < ingredients.value.length; i++)
         {
-            l_ingredients.push(ingredients.value[i].ingredient)
+            if(ingredients.value[i].ingredient.food != '')
+                l_ingredients.push(ingredients.value[i].ingredient)
         }
 
         // Create recipe.
@@ -570,7 +571,7 @@
 
         if (index >= ingredients.value.length)
             return
-            
+
         let item = ingredients.value[index]
         item.ingredient.raw = raw
         ingredients.value[index] = item
