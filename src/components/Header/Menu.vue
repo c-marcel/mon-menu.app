@@ -4,21 +4,26 @@
 
 // Application main menu containing router links for navigation.
 <script setup>
-    import { ref } from 'vue'
+    import { ref, inject } from 'vue'
 
     const entries = ref([
     {
-        "page": "foods",
-        "title": "Aliments"
+        "page":     "foods",
+        "title":    "Aliments",
+        "paths":    ["/foods"]
     },
     {
         "page": "recipes",
-        "title": "Recettes"
+        "title": "Recettes",
+        "paths":    ["/recipes", "/"]
     },
     {
         "page": "config",
-        "title": "Configuration"
+        "title": "Configuration",
+        "paths":    ["/config"]
     }])
+
+    let currentRoute = ref(inject('currentRoute'))
 
     defineEmits(['itemClicked'])
 </script>
@@ -26,7 +31,7 @@
 <template>
     <div class="Menu_cls">
         <span v-for="(entry, key) in entries" :key="key">
-            <router-link :to="entry.page" class="MenuEntry_cls" @click="$emit('itemClicked')">{{ entry.title }}</router-link>
+            <router-link :to="entry.page" class="MenuEntry_cls" :class="{MenuSelected_Cls: entry.paths.includes(currentRoute.path)}" @click="$emit('itemClicked')">{{ entry.title }}</router-link>
         </span>
     </div>
 </template>
@@ -47,6 +52,11 @@
         font-size:          1.3em;
         text-decoration:    none;
         padding:            3px;
+    }
+
+    .MenuSelected_Cls
+    {
+        border-bottom: solid 3px #9f5069;
     }
 
     a:hover

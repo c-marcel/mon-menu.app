@@ -19,6 +19,9 @@ import Configuration from './components/Configuration/Configuration.vue';
 import RecipeGroups  from './components/RecipeGroups/RecipeGroups.vue';
 import Foods         from './components/Foods/Foods.vue';
 
+const app = createApp(App)
+
+// Define routes.
 const routes =
 [
     { path: '/foods',   component: Foods         },
@@ -27,13 +30,14 @@ const routes =
     { path: '/',        component: RecipeGroups  },
 ]
 
+// Create router and register current route.
 const router = createRouter(
 {
     history: createWebHashHistory(),
     routes,
 })
 
-const app = createApp(App)
+app.provide('currentRoute', router.currentRoute)
 
 // Install recipe data.
 var recipeData = new Object(
