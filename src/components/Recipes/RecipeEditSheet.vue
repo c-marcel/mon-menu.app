@@ -58,10 +58,10 @@
     let e_hob        = ref(0)
     let e_kettle     = ref(0)
     let groupId      = ref('')
-    let selectFood   = ref(false)
-    
-    let foodSelectionType = ref('')
-    let foodSelectionIndex = ref(-1)
+
+    let selectFood          = ref(false)
+    let foodSelectionType   = ref('')
+    let foodSelectionIndex  = ref(-1)
 
     const loaded = computed(() =>
     {
@@ -78,7 +78,10 @@
 
     function closeRecipe()
     {
-        recipeData.value.currentRecipeId = ''
+        recipeData.value.currentRecipeId    = ''
+        selectFood.value                    = false
+        foodSelectionType.value             = ''
+        foodSelectionIndex.value            = -1
     }
 
     function loadWasteIngredientData(id, quantity)
@@ -1235,7 +1238,8 @@
 
     .RecipeEditSheetFoodListContainer_Cls
     {
-        background-color: #9f5069;
+        background-color:   #9f5069;
+        flex-grow:          1;
         overflow:           hidden;
     }
 
