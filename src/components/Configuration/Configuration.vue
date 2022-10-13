@@ -6,10 +6,15 @@
 // Under development. Only used for admin connection.
 <script setup>
     import { ref, inject } from 'vue'
-
+    import axios from 'axios'
+    
     import BackButton from './../BackButton.vue'
 
-    let sessionData = ref(inject('sessionData'))
+    axios.defaults.withCredentials = true
+
+    let sessionData                 = ref(inject('sessionData'))
+    let recipeComputationInProgress = ref(false)
+    let recipeComputationReport     = ref('')
 
     defineEmits(['hideCentralContainerRequested'])
 
@@ -36,6 +41,28 @@
     function changeKettleEnergy(value)
     {
         sessionData.value.kettleEnergy = value
+    }
+
+    function computeRecipeData()
+    {
+        recipeComputationInProgress.value = true
+        recipeComputationReport.value     = ''
+
+        axios.post('https://api.mon-menu.app/computeRecipeLinkedFields', '')
+        .then((response) =>
+        {
+            recipeComputationInProgress.value = false
+
+            if (response.status == 200)
+            {
+                recipeComputationReport.value = String(response.data.updatedRecipes.length) + ' recette(s) mises à jour en ' + String(response.data.timeOfProcessing) + ' ms.'
+                setTimeout(() => { recipeComputationReport.value = '' }, 2000)
+            }
+        })
+        .catch(function(error)
+        {
+            recipeComputationInProgress.value = false
+        });
     }
 </script>
 
@@ -90,6 +117,12 @@
                 </tr>
             </table>
         </span>
+        <span v-if="sessionData.level == 'admin'" class="ConfigurationTitle_Cls">Outils d'administration</span>
+        <span v-if="sessionData.level == 'admin'" class="ConfigurationEntry_Cls">
+            <span>Recalculer les recettes :</span>
+            <button @click="computeRecipeData()">{{ !recipeComputationInProgress ? 'Démarrer' : 'Calcul en cours ...' }}</button>
+            <span style="margin-left: 10px; font-size: 0.8em; font-style: italic; color: #c8b273">{{ recipeComputationReport }}</span>
+        </span>
         <!-- Mobile version only. -->
         <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
     </div>
@@ -125,5 +158,13 @@
         border:             solid 1px #c8b273;
         background-color:   #9f5069;
         outline:            none;
+    }
+
+    button
+    {
+        height:         30px;
+        border:         solid 1px #c8b273;
+        border-radius:  5px;
+        margin-left:    5px;
     }
 </style>
