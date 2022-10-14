@@ -15,7 +15,7 @@
     let props = defineProps(['currentRecipeId', 'edit'])
 
     let recipeData  = ref(inject('recipeData'))
-    let sessionData = ref(inject('sessionData'))
+    let sessionData = ref(inject('PersistentLocalStorage_sessionData'))
     let title       = ref('')
     let months      = ref([])
     let picture     = ref('')

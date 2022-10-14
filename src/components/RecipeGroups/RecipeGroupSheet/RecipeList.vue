@@ -11,7 +11,7 @@
 
     let props       = defineProps(['edit', 'recipeList', 'sortKey', 'currentGroupId'])
     let recipeData  = ref(inject('recipeData'))
-    let sessionData = ref(inject('sessionData'))
+    let sessionData = ref(inject('PersistentLocalStorage_sessionData'))
 
     const emit = defineEmits(['sortRequested', 'removeRecipeRequested', 'addRecipeRequested'])
 

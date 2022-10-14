@@ -12,7 +12,7 @@
 
     axios.defaults.withCredentials = true
 
-    let sessionData                 = ref(inject('sessionData'))
+    let sessionData                 = ref(inject('PersistentLocalStorage_sessionData'))
     let recipeComputationInProgress = ref(false)
     let recipeComputationReport     = ref('')
 

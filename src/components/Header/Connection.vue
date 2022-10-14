@@ -9,7 +9,7 @@
 
     axios.defaults.withCredentials = true
 
-    let sessionData     = ref(inject('sessionData'))
+    let sessionData     = ref(inject('PersistentLocalStorage_sessionData'))
     let username        = ref('')
     let password        = ref('')
     let errorMsg        = ref('')

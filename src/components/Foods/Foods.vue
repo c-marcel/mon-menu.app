@@ -18,7 +18,7 @@
     let currentId    = ref(0)
     let edit         = ref(false)
     let listUpToDate = ref(true)
-    let sessionData  = ref(inject('sessionData'))
+    let sessionData  = ref(inject('PersistentLocalStorage_sessionData'))
 
     defineEmits(['hideCentralContainerRequested'])
 

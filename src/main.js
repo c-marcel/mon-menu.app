@@ -66,6 +66,6 @@ axios.get('https://api.mon-menu.app/getConfiguration')
 {
     if (response.status == 200)
     {
-        app.config.globalProperties.$setCo2Emissions(response.data.data_co2.co2eq_kwh_electricity, response.data.data_co2.co2eq_kwh_gas)
+        app.config.globalProperties.$_PersistentLocalStorage_setCo2Emissions(response.data.data_co2.co2eq_kwh_electricity, response.data.data_co2.co2eq_kwh_gas)
     }
 })

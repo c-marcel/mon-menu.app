@@ -16,7 +16,7 @@
 
     let emit = defineEmits(['listOutdated'])
 
-    let sessionData         = ref(inject('sessionData'))
+    let sessionData         = ref(inject('PersistentLocalStorage_sessionData'))
     let recipeData          = ref(inject('recipeData'))
     let recipeList          = ref([])
     let loadedId            = ref('')

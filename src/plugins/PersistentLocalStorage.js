@@ -39,22 +39,21 @@ export default
             co2Gas:             ref(localStorage.sessionData_co2Gas || default_co2Gas)                      //< CO2 emissions for gas (in kg per kWh).
         });
         
-        app.provide('sessionData', sessionData)
+        app.provide('PersistentLocalStorage_sessionData', sessionData)
 
         // Set CO2 emissions.
-        app.config.globalProperties.$setCo2Emissions = (electricity, gas) =>
+        app.config.globalProperties.$_PersistentLocalStorage_setCo2Emissions = (electricity, gas) =>
         {
             sessionData.co2Electricity.value = electricity
             sessionData.co2Gas.value         = gas
         }
 
         // Reset kitchen and energy data.
-        app.config.globalProperties.$resetKitchenAndEnergyData = () =>
+        app.config.globalProperties.$_PersistentLocalStorage_resetKitchenAndEnergyData = () =>
         {
-            sessionData.ovenEnergy.value    = default_ovenEnergy
-            sessionData.hobEnergy.value     = default_hobEnergy
-            sessionData.kettleEnergy.value  = default_kettleEnergy
-
+            sessionData.ovenEnergy.value      = default_ovenEnergy
+            sessionData.hobEnergy.value       = default_hobEnergy
+            sessionData.kettleEnergy.value    = default_kettleEnergy
             sessionData.electricityCost.value = default_electricityCost
             sessionData.gasCost.value         = default_gasCost
         }
@@ -66,7 +65,7 @@ export default
 
             // If user is disconnected: reset data.
             if (n == '')
-                app.config.globalProperties.$resetKitchenAndEnergyData()
+                app.config.globalProperties.$_PersistentLocalStorage_resetKitchenAndEnergyData()
         })
         
         watch(sessionData.username, (n) =>
