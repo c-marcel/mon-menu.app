@@ -78,23 +78,25 @@
 <template>
     <div class="Connection_Cls">
         <p v-if="sessionData.level != 'admin'" style="text-align: center;">
-            <table>
-                <tr>
-                    <td>Nom d'utilisateur :</td>
-                    <td><input v-model="username" type=text /></td>
-                </tr>
-                <tr>
-                    <td>Mot de passe :</td>
-                    <td><input v-model="password" type=password /></td>
-                </tr>
-                <tr>
-                    <td v-show="errorMsg != ''" class="ErrorMsg_Cls" colspan="2">{{ errorMsg }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button :disabled="disabledButton" @click="connectUser()">Connexion</button></td>
-                </tr>
-            </table>
+            <form autocomplete="off">
+                <table>
+                    <tr>
+                        <td>Nom d'utilisateur :</td>
+                        <td><input v-model="username" type=text /></td>
+                    </tr>
+                    <tr>
+                        <td>Mot de passe :</td>
+                        <td><input v-model="password" type=password /></td>
+                    </tr>
+                    <tr>
+                        <td v-show="errorMsg != ''" class="ErrorMsg_Cls" colspan="2">{{ errorMsg }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button :disabled="disabledButton" @click="connectUser()">Connexion</button></td>
+                    </tr>
+                </table>
+            </form>
         </p>
         <div v-if="sessionData.level == 'admin'" style="text-align: center;">
             <p>Bonjour {{ sessionData.userData_firstname }} !</p>
