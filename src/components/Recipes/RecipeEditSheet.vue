@@ -14,54 +14,54 @@
 
     let props = defineProps(['currentRecipeId', 'edit'])
 
-    let recipeData  = ref(inject('recipeData'))
-    let sessionData = ref(inject('PersistentLocalStorage_sessionData'))
-    let title       = ref('')
-    let months      = ref([])
-    let picture     = ref('')
-    let content     = ref('')
-    let nbOfParts   = ref(0)
-    let ingredients = ref([])
-    let wastes      = ref([])
-    let type        = ref('')
-    let temperature = ref('')
-    let diet        = ref([])
-    let prepTime    = ref(0)
-    let cookTime    = ref(0)
-    let restTime    = ref(0)
-    let ingredCost  = ref(0)
-    let energyCost  = ref(0)
-    let energy      = ref(0)
-    let water       = ref(0)
-    let co2         = ref(0)
-    let errorMsg    = ref('')               //< TODO
-    let weight      = ref(0)
+    let currentStates = ref(inject('currentStates'))
+    let sessionData   = ref(inject('PersistentLocalStorage_sessionData'))
+    let title         = ref('')
+    let months        = ref([])
+    let picture       = ref('')
+    let content       = ref('')
+    let nbOfParts     = ref(0)
+    let ingredients   = ref([])
+    let wastes        = ref([])
+    let type          = ref('')
+    let temperature   = ref('')
+    let diet          = ref([])
+    let prepTime      = ref(0)
+    let cookTime      = ref(0)
+    let restTime      = ref(0)
+    let ingredCost    = ref(0)
+    let energyCost    = ref(0)
+    let energy        = ref(0)
+    let water         = ref(0)
+    let co2           = ref(0)
+    let errorMsg      = ref('')               //< TODO
+    let weight        = ref(0)
 
     // Recipe loading state.
-    let recipeLoaded = ref(false)
-    let ingrNb       = ref(0)
-    let wasteNb      = ref(0)
-    let excl_meat    = ref(false)
-    let excl_fish    = ref(false)
-    let excl_eggs    = ref(false)
-    let excl_diary   = ref(false)
-    let excl_oap     = ref(false)
-    let w_water      = ref(0)
-    let w_nonrecycl  = ref(0)
-    let w_biodeg     = ref(0)
-    let w_plastics   = ref(0)
-    let w_bricks     = ref(0)
-    let w_papers     = ref(0)
-    let w_glasses    = ref(0)
-    let w_others     = ref(0)
-    let e_oven       = ref(0)
-    let e_hob        = ref(0)
-    let e_kettle     = ref(0)
-    let groupId      = ref('')
+    let recipeLoaded  = ref(false)
+    let ingrNb        = ref(0)
+    let wasteNb       = ref(0)
+    let excl_meat     = ref(false)
+    let excl_fish     = ref(false)
+    let excl_eggs     = ref(false)
+    let excl_diary    = ref(false)
+    let excl_oap      = ref(false)
+    let w_water       = ref(0)
+    let w_nonrecycl   = ref(0)
+    let w_biodeg      = ref(0)
+    let w_plastics    = ref(0)
+    let w_bricks      = ref(0)
+    let w_papers      = ref(0)
+    let w_glasses     = ref(0)
+    let w_others      = ref(0)
+    let e_oven        = ref(0)
+    let e_hob         = ref(0)
+    let e_kettle      = ref(0)
+    let groupId       = ref('')
 
-    let selectFood          = ref(false)
-    let foodSelectionType   = ref('')
-    let foodSelectionIndex  = ref(-1)
+    let selectFood         = ref(false)
+    let foodSelectionType  = ref('')
+    let foodSelectionIndex = ref(-1)
 
     const loaded = computed(() =>
     {
@@ -78,7 +78,7 @@
 
     function closeRecipe()
     {
-        recipeData.value.currentRecipeId    = ''
+        currentStates.value.currentRecipeId = ''
         selectFood.value                    = false
         foodSelectionType.value             = ''
         foodSelectionIndex.value            = -1
@@ -530,7 +530,7 @@
             }
         }
 
-        recipeData.value.outdatedRecipe = ''
+        currentStates.value.outdatedRecipe = ''
 
         // Send recipe data to Api.
         axios.put('https://api.mon-menu.app/updateRecipe', recipe)
@@ -542,8 +542,8 @@
             }
             else
             {
-                recipeData.value.outdatedRecipe  = props.currentRecipeId
-                recipeData.value.currentRecipeId = ''
+                currentStates.value.outdatedRecipe  = props.currentRecipeId
+                currentStates.value.currentRecipeId = ''
             }
         }).catch(function(error)
         {

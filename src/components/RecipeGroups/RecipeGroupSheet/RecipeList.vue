@@ -9,16 +9,16 @@
 
     axios.defaults.withCredentials = true
 
-    let props       = defineProps(['edit', 'recipeList', 'sortKey', 'currentGroupId'])
-    let recipeData  = ref(inject('recipeData'))
-    let sessionData = ref(inject('PersistentLocalStorage_sessionData'))
+    let props         = defineProps(['edit', 'recipeList', 'sortKey', 'currentGroupId'])
+    let currentStates = ref(inject('currentStates'))
+    let sessionData   = ref(inject('PersistentLocalStorage_sessionData'))
 
     const emit = defineEmits(['sortRequested', 'removeRecipeRequested', 'addRecipeRequested'])
 
     function openRecipe(id)
     {
-        recipeData.value.currentMode    = ''
-        recipeData.value.currentRecipeId = id
+        currentStates.value.currentMode     = ''
+        currentStates.value.currentRecipeId = id
     }
 
     function deleteRecipeEntry(id)
@@ -65,9 +65,9 @@
 
     function editRecipeEntry(id)
     {
-        recipeData.value.outdatedRecipe  = ''
-        recipeData.value.currentMode     = 'edit'
-        recipeData.value.currentRecipeId = id
+        currentStates.value.outdatedRecipe  = ''
+        currentStates.value.currentMode     = 'edit'
+        currentStates.value.currentRecipeId = id
     }
 </script>
 

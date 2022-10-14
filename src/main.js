@@ -12,6 +12,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 
+import Plugin_States from './plugins/CurrentStates'
 import Plugin_Tools  from './plugins/Tools'
 import Plugin_PLS    from './plugins/PersistentLocalStorage'
 
@@ -39,17 +40,8 @@ const router = createRouter(
 
 app.provide('currentRoute', router.currentRoute)
 
-// Install recipe data.
-var recipeData = new Object(
-{
-    currentRecipeId:    "",     //< Current displayed recipe id. Empty string to hide recipe div.
-    currentMode:        "",     //< Current mode: '' for normal mode or 'edit' for edit mode.
-    outdatedRecipe:     ""      //< Current edited recipe (when saved).
-});
-
-app.provide('recipeData', recipeData)   
-
 // Install plugins.
+app.use(Plugin_States)
 app.use(Plugin_Tools)
 app.use(Plugin_PLS)
 

@@ -14,26 +14,26 @@
 
     let props = defineProps(['currentRecipeId', 'edit'])
 
-    let recipeData  = ref(inject('recipeData'))
-    let sessionData = ref(inject('PersistentLocalStorage_sessionData'))
-    let title       = ref('')
-    let months      = ref([])
-    let picture     = ref('')
-    let content     = ref('')
-    let nbOfParts   = ref(0)
-    let ingredients = ref([])
-    let type        = ref('')
-    let temperature = ref('')
-    let diet        = ref([])
-    let prepTime    = ref(0)
-    let cookTime    = ref(0)
-    let restTime    = ref(0)
-    let ingredCost  = ref(0)
-    let energyCost  = ref(0)
-    let energy      = ref(0)
-    let water       = ref(0)
-    let co2         = ref(0)
-    let errorMsg    = ref('')
+    let currentStates = ref(inject('currentStates'))
+    let sessionData   = ref(inject('PersistentLocalStorage_sessionData'))
+    let title         = ref('')
+    let months        = ref([])
+    let picture       = ref('')
+    let content       = ref('')
+    let nbOfParts     = ref(0)
+    let ingredients   = ref([])
+    let type          = ref('')
+    let temperature   = ref('')
+    let diet          = ref([])
+    let prepTime      = ref(0)
+    let cookTime      = ref(0)
+    let restTime      = ref(0)
+    let ingredCost    = ref(0)
+    let energyCost    = ref(0)
+    let energy        = ref(0)
+    let water         = ref(0)
+    let co2           = ref(0)
+    let errorMsg      = ref('')
 
     // Sort ingredients list.
     const sortIngredients = computed(() =>
@@ -63,7 +63,7 @@
 
     function closeRecipe()
     {
-        recipeData.value.currentRecipeId = ''
+        currentStates.value.currentRecipeId = ''
     }
 
     function loadIngredientData(ingredient)

@@ -11,7 +11,7 @@
     import RecipeSheet      from './components/Recipes/RecipeSheet.vue'
     import Header           from './components/Header/Header.vue'
 
-    let recipeData = ref(inject('recipeData'))
+    let currentStates = ref(inject('currentStates'))
 
     // For mobile versions.
     let displayCentralContainer = ref(false)
@@ -30,8 +30,8 @@
 <template>
     <Header @menuItemClicked="showCentralContainer()" />
     <CentralContainer class="CentralContainer_cls" v-bind:class="{CentralContainerHidden_cls: !displayCentralContainer}" @hideCentralContainerRequested="hideCentralContainer()"/>
-    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId" :edit="recipeData.currentMode"></RecipeSheet>
-    <RecipeEditSheet class="RecipeSheet_Cls" :currentRecipeId="recipeData.currentRecipeId" :edit="recipeData.currentMode"></RecipeEditSheet>
+    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="currentStates.currentRecipeId" :edit="currentStates.currentMode"></RecipeSheet>
+    <RecipeEditSheet class="RecipeSheet_Cls" :currentRecipeId="currentStates.currentRecipeId" :edit="currentStates.currentMode"></RecipeEditSheet>
 </template>
 
 <style scoped>

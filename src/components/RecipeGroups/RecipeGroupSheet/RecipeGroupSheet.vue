@@ -17,7 +17,7 @@
     let emit = defineEmits(['listOutdated'])
 
     let sessionData         = ref(inject('PersistentLocalStorage_sessionData'))
-    let recipeData          = ref(inject('recipeData'))
+    let currentStates       = ref(inject('currentStates'))
     let recipeList          = ref([])
     let loadedId            = ref('')
     let errorMsg            = ref('')
@@ -30,14 +30,14 @@
     let props = defineProps(['currentGroupId', 'edit', 'title'])
 
     // Watch modified recipes.
-    watch(recipeData.value, (n) =>
+    watch(currentStates.value, (n) =>
     {
-        if (recipeData.value.outdatedRecipe != '')
+        if (currentStates.value.outdatedRecipe != '')
         {
-            axios.get('https://api.mon-menu.app/getRecipeMetadata/' + recipeData.value.outdatedRecipe)
+            axios.get('https://api.mon-menu.app/getRecipeMetadata/' + currentStates.value.outdatedRecipe)
             .then((response) =>
             {
-                updateRecipeIntoList(response, recipeData.value.outdatedRecipe)
+                updateRecipeIntoList(response, currentStates.value.outdatedRecipe)
             }).catch(function(error)
             {
                 variantsErrorMsg.value = 'Toutes les variantes de la recette n\'ont pas pu être récupérées.'
