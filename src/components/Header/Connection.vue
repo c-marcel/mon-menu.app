@@ -78,7 +78,7 @@
 <template>
     <div class="Connection_Cls">
         <p v-if="sessionData.level != 'admin'" style="text-align: center;">
-            <form autocomplete="off">
+            <form action="javascript:void(0);" autocomplete="off">
                 <table>
                     <tr>
                         <td>Nom d'utilisateur :</td>
