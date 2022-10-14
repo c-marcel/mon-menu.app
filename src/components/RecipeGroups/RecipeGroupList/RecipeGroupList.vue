@@ -75,7 +75,7 @@
         <p class="RecipeGroupList_Title_cls">Recettes</p>
 
         <div v-if="errorMsg" class="ErrorMsgContainer_cls">
-            <ErrorDialog :errorMsg="errorMsg" buttonTitle="Réessayer" @retryButtonClicked="loadRecipeGroups()"></ErrorDialog>
+            <ErrorDialog :errorMsg="errorMsg" buttonTitle="Réessayer" @retryButtonClicked="loadRecipeGroups()" />
         </div>
 
         <ul v-if="!errorMsg">

@@ -74,7 +74,7 @@
         <p class="FoodList_Title_cls">Aliments</p>
 
         <div v-if="errorMsg" class="ErrorMsgContainer_cls">
-            <ErrorDialog :errorMsg="errorMsg" buttonTitle="Réessayer" @retryButtonClicked="loadFoods()"></ErrorDialog>
+            <ErrorDialog :errorMsg="errorMsg" buttonTitle="Réessayer" @retryButtonClicked="loadFoods()" />
         </div>
 
         <ul v-if="!errorMsg">

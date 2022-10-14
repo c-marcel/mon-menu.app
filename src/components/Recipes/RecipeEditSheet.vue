@@ -946,7 +946,7 @@
 
             <!-- Foods list container -->
             <div v-show="selectFood" class="RecipeEditSheetFoodListContainer_Cls">
-                <FoodList class="FoodList_cls" @listItemClicked="(id, title) => { foodSelected(id, title) }"></FoodList>
+                <FoodList class="FoodList_cls" @listItemClicked="(id, title) => { foodSelected(id, title) }" />
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@
 
 <template>
     <div class="BackButton_cls" @click="$emit('backRequested')">
-    Retour
+        Retour
     </div>
 </template>
 

@@ -469,7 +469,7 @@
             </p>
         </div>
         <div v-if="errorMsg != ''" class="ErrorMsgContainer_cls">
-            <ErrorDialog class="ErrorDialog_cls" :errorMsg="errorMsg" buttonTitle=""></ErrorDialog>
+            <ErrorDialog class="ErrorDialog_cls" :errorMsg="errorMsg" buttonTitle="" />
         </div>
     </div>
 </template>

@@ -124,7 +124,7 @@
             <span style="margin-left: 10px; font-size: 0.8em; font-style: italic; color: #c8b273">{{ recipeComputationReport }}</span>
         </span>
         <!-- Mobile version only. -->
-        <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
+        <BackButton @backRequested="$emit('hideCentralContainerRequested')" />
     </div>
 </template>
 

@@ -241,8 +241,7 @@
                     <div class="RecipeSheetTitle_Cls">
                         {{ title }}
                     </div>
-                    <Months class="RecipeSheetMonths_Cls" :months="months">
-                    </Months>
+                    <Months class="RecipeSheetMonths_Cls" :months="months" />
                 </div>
 
                 <!-- Close button -->

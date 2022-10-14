@@ -64,15 +64,15 @@
 
 <template>
     <div>
-        <FoodList @listItemClicked="(id) => { currentId = id ; edit = false }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}"/>
+        <FoodList @listItemClicked="(id) => { currentId = id ; edit = false }" :upToDate="listUpToDate" @upToDateChanged="(state) => {listUpToDate = state}" />
         <!-- Mobile version only. -->
-            <BackButton @backRequested="$emit('hideCentralContainerRequested')"></BackButton>
+            <BackButton @backRequested="$emit('hideCentralContainerRequested')" />
         <!-- -->
         <div class="FoodsContainer_cls" v-bind:class="{FoodsContainerHidden_cls: !currentId}">
             <FoodHeader v-if="sessionData.level == 'admin'" :isEditButtonActive="currentId != 0" :isRemoveButtonActive="currentId != 0" :isAddButtonActive="true" @editFoodRequested="edit = !edit" @removeFoodRequested="deleteCurrentFood()" @addFoodRequested="addNewFood()" />
             <FoodSheet :currentFoodId="currentId" :edit="edit" @listOutdated="() => {listUpToDate = false}"/>
             <!-- Mobile version only. -->
-                <BackButton @backRequested="hideCurrentFoodSheet"></BackButton>
+                <BackButton @backRequested="hideCurrentFoodSheet" />
             <!-- -->
         </div>
     </div>

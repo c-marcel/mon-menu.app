@@ -13,9 +13,9 @@
 
 <template>
     <div class="Header_cls">
-        <Logo class="Logo_cls"></Logo>
-        <Menu @itemClicked="$emit('menuItemClicked')"></Menu>
-        <Connection class="Connection_Cls"></Connection>
+        <Logo class="Logo_cls" />
+        <Menu @itemClicked="$emit('menuItemClicked')" />
+        <Connection class="Connection_Cls" />
     </div>
 </template>
 

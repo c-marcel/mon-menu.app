@@ -12,7 +12,7 @@
 
 <template>
     <p v-if="!edit" class="FoodData_Subtitle_cls">{{ subtitle }}</p>
-    <input v-if="edit" class="FoodData_Subtitle_cls FoodData_Subtitle_Edit_cls" type="text" :value="subtitle" @change="$emit('changeSubtitle', $event.target.value)"/>
+    <input v-if="edit" class="FoodData_Subtitle_cls FoodData_Subtitle_Edit_cls" type="text" :value="subtitle" @change="$emit('changeSubtitle', $event.target.value)" />
 </template>
 
 <style scoped>
