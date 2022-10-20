@@ -41,11 +41,6 @@
     let recipeLoaded  = ref(false)
     let ingrNb        = ref(0)
     let wasteNb       = ref(0)
-    let excl_meat     = ref(false)
-    let excl_fish     = ref(false)
-    let excl_eggs     = ref(false)
-    let excl_diary    = ref(false)
-    let excl_oap      = ref(false)
     let w_water       = ref(0)
     let w_nonrecycl   = ref(0)
     let w_biodeg      = ref(0)
@@ -218,19 +213,16 @@
 
                 // Diet.
                 diet.value = []
-                if (response.data.exclusions.meat && response.data.exclusions.fish)
+                if (response.data.contains != null)
+                {
+                    if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish"))
                     diet.value.push('vegetarian')
 
-                if (response.data.exclusions.meat && response.data.exclusions.fish
-                    && response.data.exclusions.dairy && response.data.exclusions.eggs
-                    && response.data.exclusions.oap)
-                    diet.value.push('vegan')
-
-                excl_meat.value  = response.data.exclusions.meat
-                excl_fish.value  = response.data.exclusions.fish
-                excl_diary.value = response.data.exclusions.dairy
-                excl_eggs.value  = response.data.exclusions.eggs
-                excl_oap.value   = response.data.exclusions.oap
+                    if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish")
+                        && !response.data.contains.includes("eggs") && !response.data.contains.includes("dairy")
+                        && !response.data.contains.includes("oap"))
+                        diet.value.push('vegan')
+                }
 
                 // Compute energy cost.
                 energyCost.value = 0
@@ -319,31 +311,6 @@
     function updateWeight(v)
     {
         weight.value = v
-    }
-
-    function updateExclusionMeat(v)
-    {
-        excl_meat.value = v
-    }
-
-    function updateExclusionFish(v)
-    {
-        excl_fish.value = v
-    }
-
-    function updateExclusionDiary(v)
-    {
-        excl_diary.value = v
-    }
-
-    function updateExclusionEggs(v)
-    {
-        excl_eggs.value = v
-    }
-
-    function updateExclusionOap(v)
-    {
-        excl_oap.value = v
     }
 
     function updateTimePreparation(v)
@@ -477,14 +444,7 @@
             details:            title.value,
             type:               type.value,
             temperature:        l_temperature,
-            exclusions:
-            {
-                meat:           excl_meat.value,
-                fish:           excl_fish.value,
-                dairy:          excl_diary.value,
-                eggs:           excl_eggs.value,
-                oap:            excl_oap.value
-            },
+            contains:           [],                 //< Computed by the server.
             months:             [],                 //< Computed by the server.
             tags:               [],                 //< Not used yet.
             nbOfParts:          nbOfParts.value,
@@ -791,18 +751,6 @@
                                 <input type="radio" id="temperature1" :checked="temperature == 'froid'" name="temperatureGroup" @input="setTemperature1($event.target.value)"><label for="temperature1">froid</label>
                                 <input type="radio" id="temperature2" :checked="temperature == 'chaud'" name="temperatureGroup" @input="setTemperature2($event.target.value)"><label for="temperature2">chaud</label>
                             </fieldset>
-                        </span>
-                    </div>
-
-                    <!-- Exclusions -->
-                    <div class="RecipeEditSheetEntry_Cls">
-                        <span class="RecipeEditSheetEntryTitle_Cls">Exclusions :</span>
-                        <span class="RecipeEditSheetEntryContent_Cls RecipeEditSheetCheckboxList_Cls">
-                            <input type="checkbox" id="excl_meat" :checked="excl_meat" @input="updateExclusionMeat($event.target.checked)"><label for="excl_meat">viande</label>
-                            <input type="checkbox" id="excl_fish" :checked="excl_fish" @input="updateExclusionFish($event.target.checked)"><label for="excl_fish">poisson</label>
-                            <input type="checkbox" id="excl_diary" :checked="excl_diary" @input="updateExclusionDiary($event.target.checked)"><label for="excl_diary">produits laitiers</label>
-                            <input type="checkbox" id="excl_eggs" :checked="excl_eggs" @input="updateExclusionEggs($event.target.checked)"><label for="excl_eggs">oeufs</label>
-                            <input type="checkbox" id="excl_oap" :checked="excl_oap" @input="updateExclusionOap($event.target.checked)"><label for="excl_oap">autres produits animaux</label>
                         </span>
                     </div>
 

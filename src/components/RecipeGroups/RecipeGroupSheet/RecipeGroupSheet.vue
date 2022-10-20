@@ -91,13 +91,16 @@
     {
         // Diet.
         recipe.diet = []
-        if (response.data.exclusions.meat && response.data.exclusions.fish)
-            recipe.diet.push('vegetarian')
+        if (response.data.contains != null)
+        {
+            if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish"))
+                recipe.diet.push('vegetarian')
 
-        if (response.data.exclusions.meat && response.data.exclusions.fish
-            && response.data.exclusions.dairy && response.data.exclusions.eggs
-            && response.data.exclusions.oap)
-            recipe.diet.push('vegan')
+            if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish")
+                && !response.data.contains.includes("eggs") && !response.data.contains.includes("dairy")
+                && !response.data.contains.includes("oap"))
+                recipe.diet.push('vegan')
+        }
 
         // Id.
         recipe.id = response.data.id

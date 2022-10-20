@@ -176,7 +176,8 @@ export default
                 "lupin":        "lupin",
                 "molluscs":     "mollusques",
                 "alcohol":      "alcool",
-                "pork":         "porc"
+                "pork":         "porc",
+                "oap":          "autres produits animaux"
             }
 
             let out = ""

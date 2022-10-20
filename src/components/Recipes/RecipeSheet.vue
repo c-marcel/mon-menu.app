@@ -154,13 +154,16 @@
 
                 // Diet.
                 diet.value = []
-                if (response.data.exclusions.meat && response.data.exclusions.fish)
+                if (response.data.contains != null)
+                {
+                    if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish"))
                     diet.value.push('vegetarian')
 
-                if (response.data.exclusions.meat && response.data.exclusions.fish
-                    && response.data.exclusions.dairy && response.data.exclusions.eggs
-                    && response.data.exclusions.oap)
-                    diet.value.push('vegan')
+                    if (!response.data.contains.includes("meat") && !response.data.contains.includes("fish")
+                        && !response.data.contains.includes("eggs") && !response.data.contains.includes("dairy")
+                        && !response.data.contains.includes("oap"))
+                        diet.value.push('vegan')
+                }
 
                 // Compute energy cost.
                 energyCost.value = 0
