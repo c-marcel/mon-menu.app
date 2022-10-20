@@ -14,6 +14,7 @@
     import DisplayUnit         from './DisplayUnit.vue'
     import ErrorDialog         from '../../ErrorDialog.vue'
     import Nutrition           from './Nutrition.vue'
+    import Contains            from './Contains.vue'
     import Months              from './Months.vue'
     import Title               from './Title.vue'
     import Subtitle            from './Subtitle.vue'
@@ -172,6 +173,20 @@
         foodModified.value  = true
     }
 
+    function updateContains(type, value)
+    {
+        if (!props.edit)
+            return
+
+        foodModified.value  = true
+
+        if (value && !fooddata.value.contains.includes(type))
+            fooddata.value.contains.push(type)
+        
+        else
+            fooddata.value.contains = fooddata.value.contains.filter(e => {return e != type})
+    }
+
     function updateCo2eq(value)
     {
         if (!props.edit)
@@ -237,6 +252,7 @@
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span><SupplyArea :area="fooddata.supplyArea" :edit="edit" @changeSupplyArea="(area) => updateSupplyArea(area)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><Cost :cost="fooddata.cost" :edit="edit" @changeCost="(cost) => updateCost(cost)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Unité d'affichage : </span><DisplayUnit :edit="edit" :conversionEnabled="conversion.enabled" :label="conversion.label" :conversionFactor="conversion.factor" @enableConversion="(value) => enableConversion(value)" @labelChanged="(value) => conversionLabelChanged(value)" @factorChanged="(value) => conversionFactorChanged(value)" /></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Contient : </span><Contains :edit="edit" :contains="fooddata.contains" @changeContains="(type, value) => updateContains(type, value)"/></p>
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" />
             <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)" />

@@ -151,5 +151,45 @@ export default
 
             return ' (' + app.config.globalProperties.$formatIngredientQuantity(quantity, units) + ' après usage)'
         }
+
+        // Convert 'contains' array to human readable string.
+        app.config.globalProperties.$containsToString = (contains) =>
+        {
+            if (contains == undefined)
+                return ""
+                
+            let dict = 
+            {
+                "meat":         "viande",
+                "fish":         "poisson",
+                "dairy":        "produits laitiers",
+                "eggs":         "oeufs",
+                "gluten":       "gluten",
+                "shellfish":    "crustacés",
+                "peanuts":      "arachides",
+                "soy":          "soja",
+                "nuts":         "fruits à coques",
+                "celery":       "céleri",
+                "mustard":      "moutarde",
+                "sesame":       "graines de sésame",
+                "SOx":          "sulfites",
+                "lupin":        "lupin",
+                "molluscs":     "mollusques",
+                "alcohol":      "alcool",
+                "pork":         "porc"
+            }
+
+            let out = ""
+
+            for (let i = 0 ; i < contains.length ; i++)
+            {
+                if (i > 0)
+                    out += ", "
+
+                out += dict[contains[i]]
+            }
+
+            return out
+        }
     }
 }
