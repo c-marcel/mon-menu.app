@@ -100,6 +100,15 @@
                 && !response.data.contains.includes("eggs") && !response.data.contains.includes("dairy")
                 && !response.data.contains.includes("oap"))
                 recipe.diet.push('vegan')
+
+            if (!response.data.contains.includes("pork"))
+                recipe.diet.push('no_pork')
+
+            if (!response.data.contains.includes("gluten"))
+                recipe.diet.push('no_gluten')
+
+            if (!response.data.contains.includes("alcohol"))
+                recipe.diet.push('no_alcohol')
         }
 
         // Id.

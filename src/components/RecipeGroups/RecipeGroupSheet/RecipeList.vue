@@ -79,7 +79,7 @@
         </div>
         <div class="RecipeListEntry_Cls RecipeListHeaders_Cls">
             <span class="RecipeListTitle_Cls"></span>
-            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'diet'}" title="Indique les régimes alimentaires spéciaux : végétariens, végétaliens." @click="$emit('sortRequested', 'diet')">Régime</span>
+            <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'diet'}" title="Indique les régimes alimentaires spéciaux : végétariens, végétaliens, sans gluten, sans porc, sans alcool." @click="$emit('sortRequested', 'diet')">Régime</span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'season'}" title="Indique si la recette est actuellement de saison." @click="$emit('sortRequested', 'season')">Saison</span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'cost'}" title="Indique le coût financier par part pour les ingrédients et l'énergie nécessaires." @click="$emit('sortRequested', 'cost')">Coût*</span>
             <span class="RecipeListColumn_Cls" v-bind:class="{RecipeListColumnUnderline_Cls: sortKey == 'energy'}" title="Indique la quantité d'énergie nécessaire par part." @click="$emit('sortRequested', 'energy')">Energie*</span>
@@ -94,6 +94,9 @@
                     <span class="RecipeListColumn_Cls RecipeListDietIcons_Cls">
                         <img v-if="entry.diet.includes('vegan')" class="RecipeListImageVegan_Cls" title="Végétalien" />
                         <img v-if="entry.diet.includes('vegetarian')" class="RecipeListImageVegetarian_Cls" title="Végétarien" />
+                        <img v-if="entry.diet.includes('no_pork')" class="RecipeListImageNoPork_Cls" title="Sans porc" />
+                        <img v-if="entry.diet.includes('no_gluten')" class="RecipeListImageNoGluten_Cls" title="Sans gluten" />
+                        <img v-if="entry.diet.includes('no_alcohol')" class="RecipeListImageNoAlcohol_Cls" title="Sans alcool" />
                     </span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.available ? '✔️' : '' }}</span>
                     <span class="RecipeListColumn_Cls RecipeInfos_Cls">{{ entry.cost == '-' ? '-' : $formatFloat($roundFloat(entry.cost, 2)) + ' €' }}</span>
@@ -206,6 +209,24 @@
     {
         height:             20px;
         content:            url(/images/vegetarian.png);
+    }
+
+    .RecipeListImageNoPork_Cls
+    {
+        height:             20px;
+        content:            url(/images/no_pork.png);
+    }
+
+    .RecipeListImageNoGluten_Cls
+    {
+        height:             20px;
+        content:            url(/images/no_gluten.png);
+    }
+
+    .RecipeListImageNoAlcohol_Cls
+    {
+        height:             20px;
+        content:            url(/images/no_alcohol.png);
     }
 
     .RecipeListColumnAction_Cls

@@ -163,6 +163,15 @@
                         && !response.data.contains.includes("eggs") && !response.data.contains.includes("dairy")
                         && !response.data.contains.includes("oap"))
                         diet.value.push('vegan')
+
+                    if (!response.data.contains.includes("pork"))
+                        diet.value.push('no_pork')
+
+                    if (!response.data.contains.includes("gluten"))
+                        diet.value.push('no_gluten')
+
+                    if (!response.data.contains.includes("alcohol"))
+                        diet.value.push('no_alcohol')
                 }
 
                 // Compute energy cost.
@@ -313,6 +322,9 @@
                                     <td class="RecipeSheetDataValue_Cls">
                                         <img v-if="diet.includes('vegan')" class="RecipeSheetImageVegan_Cls" title="Végétalien" />
                                         <img v-if="diet.includes('vegetarian')" class="RecipeSheetImageVegetarian_Cls" title="Végétarien" />
+                                        <img v-if="diet.includes('no_gluten')" class="RecipeSheetImageNoGluten_Cls" title="Sans gluten" />
+                                        <img v-if="diet.includes('no_pork')" class="RecipeSheetImageNoPork_Cls" title="Sans porc" />
+                                        <img v-if="diet.includes('no_alcohol')" class="RecipeSheetImageNoAlcohol_Cls" title="Sans alcool" />
                                     </td>
                                 </tr>
                             </table>
@@ -651,5 +663,33 @@
         height:             20px;
         margin-left:        5px;
         content:            url(/images/vegetarian.png);
+    }
+
+    .RecipeSheetImageNoGluten_Cls
+    {
+        height:             20px;
+        margin-left:        5px;
+        content:            url(/images/no_gluten.png);
+    }
+
+    .RecipeSheetImageNoGluten_Cls
+    {
+        height:             20px;
+        margin-left:        5px;
+        content:            url(/images/no_gluten.png);
+    }
+
+    .RecipeSheetImageNoPork_Cls
+    {
+        height:             20px;
+        margin-left:        5px;
+        content:            url(/images/no_pork.png);
+    }
+
+    .RecipeSheetImageNoAlcohol_Cls
+    {
+        height:             20px;
+        margin-left:        5px;
+        content:            url(/images/no_alcohol.png);
     }
 </style>
