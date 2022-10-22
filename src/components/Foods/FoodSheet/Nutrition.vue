@@ -7,7 +7,7 @@
     import { ref } from 'vue'
     const props = defineProps(['data', 'edit'])
 
-    defineEmits(['changeNutritionData', 'changeNutritionDataSource'])
+    defineEmits(['changeNutritionData', 'changeNutritionDataSource', 'databaseSelectionRequested'])
 
     const metadata = ref([
         { "key": "energy_kj", "title": "Energie", "units": "kJ/100 g", "conversion": 10.0 },
@@ -33,7 +33,7 @@
         { "key": "lactose", "title": "Lactose", "units": "g/100 g", "conversion": 0.01 },
         { "key": "glucose", "title": "Glucose", "units": "g/100 g", "conversion": 0.01 },
         { "key": "maltose", "title": "Maltose", "units": "g/100 g", "conversion": 0.01 },
-        { "key": "saccharose", "title": "Saccharose", "units": "g/100 g", "conversion": 0.01 },
+        { "key": "sucrose", "title": "Saccharose", "units": "g/100 g", "conversion": 0.01 },
         { "key": "starch", "title": "Amidon", "units": "g/100 g", "conversion": 0.01 },
         { "key": "polyols", "title": "Polyols", "units": "g/100 g", "conversion": 0.01 },
         { "key": "fibers", "title": "Fibres", "units": "g/100 g", "conversion": 0.01 },
@@ -77,7 +77,10 @@
 
 <template>
     <div>
-        <p class="Nutrition_cls">Informations nutritionnelles :</p>
+        <p class="Nutrition_cls">
+            Informations nutritionnelles :
+            <span v-if="edit" class="NutritionLink_cls" @click="$emit('databaseSelectionRequested')">Base Ciqual/CALNUT</span>
+        </p>
         <div class="NutritionContent_cls">
             <span class="Spacer_cls"></span>
             <div class="NutritionGrid_cls">
@@ -102,26 +105,37 @@
 <style scoped>
     .Nutrition_cls
     {
-        color:          #c8b273;
-        font-weight:    bold;
-        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:              #c8b273;
+        font-weight:        bold;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 
     .NutritionContent_cls
     {
-        display: flex;
+        display:            flex;
     }
 
     .Spacer_cls
     {
-        width: 200px;
+        width:              200px;
     }
 
     .NutritionGrid_cls
     {
-        display:    flex;
-        flex-wrap:  wrap;
-        flex:       1;
+        display:            flex;
+        flex-wrap:          wrap;
+        flex:               1;
+    }
+
+    .NutritionLink_cls
+    {
+        font-weight:        normal;
+    }
+
+    .NutritionLink_cls:hover
+    {
+        text-decoration:    underline;
+        cursor:             pointer;
     }
 
     .NutritionGridEntry_cls

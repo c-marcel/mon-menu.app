@@ -10,16 +10,17 @@
 
     axios.defaults.withCredentials = true
 
-    import EnvironmentalImpact from './EnvironmentalImpact.vue'
-    import DisplayUnit         from './DisplayUnit.vue'
-    import ErrorDialog         from '../../ErrorDialog.vue'
-    import Nutrition           from './Nutrition.vue'
-    import Contains            from './Contains.vue'
-    import Months              from './Months.vue'
-    import Title               from './Title.vue'
-    import Subtitle            from './Subtitle.vue'
-    import SupplyArea          from './SupplyArea.vue'
-    import Cost                from './Cost.vue'
+    import ExternalDatabaseSelection from './ExternalDatabaseSelection.vue'
+    import EnvironmentalImpact       from './EnvironmentalImpact.vue'
+    import DisplayUnit               from './DisplayUnit.vue'
+    import ErrorDialog               from '../../ErrorDialog.vue'
+    import Nutrition                 from './Nutrition.vue'
+    import Contains                  from './Contains.vue'
+    import Months                    from './Months.vue'
+    import Title                     from './Title.vue'
+    import Subtitle                  from './Subtitle.vue'
+    import SupplyArea                from './SupplyArea.vue'
+    import Cost                      from './Cost.vue'
 
     let emit = defineEmits(['listOutdated'])
 
@@ -28,6 +29,10 @@
     let loadedId     = ref(0)
     let foodModified = ref(false)
     let conversion   = ref({enabled: false, label: "", factor: 0.0})
+    let carbonDb     = ref([])
+    let nutritionDb  = ref([])
+    let co2SelOpen   = ref(false)
+    let nutSelOpen   = ref(false)
 
     let props = defineProps(['currentFoodId', 'edit'])
 
@@ -240,11 +245,114 @@
         conversion.value.factor = factor
         foodModified.value      = true
     }
+
+    function loadCarbonDatabase()
+    {
+        carbonDb.value = []
+
+        axios.get('https://mon-menu.app/databases/agribalyse.json')
+        .then((response) =>
+        {
+            for (let i = 0 ;  i < response.data.length ; i++)
+            {
+                let item = 
+                {
+                    title: response.data[i].title,
+                    value: response.data[i].value
+                }
+
+                carbonDb.value.push(item)
+            }
+        })
+        .catch(function(error)
+        {
+            // TODO
+            console.log("Error while reading Carbon database.")
+            console.log(error)
+        });
+    }
+
+    loadCarbonDatabase()
+
+    function setCarbonValue(value)
+    {
+        if (!props.edit)
+            return
+
+        fooddata.value.environmentalImpact.co2eq.kgco2e_kg = value
+        fooddata.value.environmentalImpact.co2eq.source    = "ADEME Base carbone® v19.0 (AGRIBALYSE)"
+        foodModified.value                                 = true
+        co2SelOpen.value                                   = false
+    }
+
+    function openCarbonDatabase()
+    {
+        co2SelOpen.value = true
+    }
+
+    function loadNutritionatabase()
+    {
+        nutritionDb.value = []
+
+        axios.get('https://mon-menu.app/databases/ciqual_calnut.json')
+        .then((response) =>
+        {
+            for (let i = 0 ;  i < response.data.length ; i++)
+            {
+                let item = 
+                {
+                    title: response.data[i].title,
+                    value: response.data[i]
+                }
+
+                nutritionDb.value.push(item)
+            }
+        })
+        .catch(function(error)
+        {
+            // TODO
+            console.log("Error while reading nutrition database.")
+            console.log(error)
+        });
+    }
+
+    loadNutritionatabase()
+
+    function setNutritionValues(values)
+    {
+        if (!props.edit)
+            return
+
+        let keys = ["energy_kj", "energy", "water", "salt", "sodium", "magnesium", "phosphorus", "potassium", "calcium", "manganese", "iron", "copper", "zinc", "selenium", "iodine", "proteins", "carbohydrates", "sugars", "fructose", "galactose", "lactose", "glucose", "maltose", "sucrose", "starch", "polyols", "fibers", "lipids", "satured_fa", "monounsaturated_fa", "polyunsaturated_fa", "butyric_fa", "caproic_fa", "caprylic_fa", "whimsical_fa", "lauric_fa", "myristic_fa", "palmitic_fa", "stearic_fa", "omega9", "omega6_la", "omega3_ala", "omega6_ara", "omega3_epa", "omega3_dha", "retinol", "betacarotene", "vitamin_d", "vitamin_e", "vitamin_k1", "vitamin_k2", "vitamin_c", "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6", "vitamin_b12", "vitamin_b9", "alcohol", "organic_acids", "cholesterol"]
+
+        for (let i = 0 ; i < keys.length; i++)
+        {
+            if (!fooddata.value.nutrition.hasOwnProperty(keys[i]))
+            {
+                fooddata.value.nutrition[keys[i]] =
+                {
+                    value: 0.0,
+                    source: ''
+                }
+            }
+
+            fooddata.value.nutrition[keys[i]].value = values[keys[i]]
+            fooddata.value.nutrition[keys[i]].source = values[keys[i] + '_src']
+        }
+
+        foodModified.value = true
+        nutSelOpen.value   = false
+    }
+
+    function openNutritionDatabase()
+    {
+        nutSelOpen.value = true
+    }
 </script>
 
 <template>
     <div class="FoodSheet_cls">
-        <div v-if="fooddata" class="FoodData_cls">
+        <div v-if="fooddata && !co2SelOpen && !nutSelOpen" class="FoodData_cls">
             <Title :title="fooddata.title" :edit="edit" @changeTitle="(title) => updateTitle(title)" />
             <Subtitle :subtitle="fooddata.details" :edit="edit" @changeSubtitle="(subtitle) => updateSubtitle(subtitle)" />
             <div class="FoodData_Spacer_cls"></div>
@@ -254,13 +362,21 @@
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Unité d'affichage : </span><DisplayUnit :edit="edit" :conversionEnabled="conversion.enabled" :label="conversion.label" :conversionFactor="conversion.factor" @enableConversion="(value) => enableConversion(value)" @labelChanged="(value) => conversionLabelChanged(value)" @factorChanged="(value) => conversionFactorChanged(value)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Contient : </span><Contains :edit="edit" :contains="fooddata.contains" @changeContains="(type, value) => updateContains(type, value)"/></p>
             <div class="FoodData_Spacer_cls"></div>
-            <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" />
-            <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)" />
+            <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" @databaseSelectionRequested="openCarbonDatabase()"/>
+            <Nutrition :data="fooddata.nutrition" :edit="edit" @changeNutritionData="(field, value) => updateNutrition(field, value)" @changeNutritionDataSource="(field, value) => updateNutritionSource(field, value)" @databaseSelectionRequested="openNutritionDatabase()"/>
             <div class="FoodData_Spacer_cls"></div>
         </div>
 
-        <div v-if="errorMsg" class="ErrorMsgContainer_cls">
+        <div v-if="errorMsg && !co2SelOpen && !nutSelOpen" class="DialogContainer_cls">
             <ErrorDialog class="ErrorDialog_cls" :errorMsg="errorMsg" buttonTitle="" />
+        </div>
+
+        <div v-if="co2SelOpen" class="DialogContainer_cls">
+            <ExternalDatabaseSelection class="ExtDbSelection_Cls" title="Base Carbone ADEME - Agribalyse" :items="carbonDb" @listItemClicked="(value) => setCarbonValue(value)"/>
+        </div>
+
+        <div v-if="nutSelOpen" class="DialogContainer_cls">
+            <ExternalDatabaseSelection class="ExtDbSelection_Cls" title="Base nutrition Ciqual/CALNUT" :items="nutritionDb" @listItemClicked="(values) => setNutritionValues(values)"/>
         </div>
     </div>
 </template>
@@ -273,7 +389,7 @@
         overflow:   auto;
     }
 
-    .ErrorMsgContainer_cls
+    .DialogContainer_cls
     {
         display:    block;
         width:      100%;
@@ -313,6 +429,13 @@
     .FoodData_Spacer_cls
     {
         height: 20px;
+    }
+
+    .ExtDbSelection_Cls
+    {
+        left:           50%;
+        transform:      translate(-50%, 0px);
+        width:          90%;
     }
 
     @media (max-width: 1280px) and (orientation: portrait)

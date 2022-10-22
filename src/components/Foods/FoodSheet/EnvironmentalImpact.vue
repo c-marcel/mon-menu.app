@@ -8,7 +8,7 @@
     import { ref } from 'vue'
     const props = defineProps(['data', 'edit'])
 
-    defineEmits(['changeCo2eq', 'changeCo2eqSource'])
+    defineEmits(['changeCo2eq', 'changeCo2eqSource', 'databaseSelectionRequested'])
 </script>
 
 <template>
@@ -23,6 +23,7 @@
             </span>
             <span v-if="!edit && data.co2eq.source" class="EnvironmentalImpactSourceIcon_cls" :title=data.co2eq.source>❔</span>
             <span class="EnvironmentalImpactText_cls" v-if="edit">. Source : <input class="EnvironmentalImpactInputText_cls" type="text" :value="data.co2eq.source" @change="$emit('changeCo2eqSource', $event.target.value)" /></span>
+            <span v-if="edit" class="EnvironmentalImpactLink_cls" @click="$emit('databaseSelectionRequested')">Base Carbone</span>
         </div>
         
         <!--
@@ -33,31 +34,44 @@
 <style scoped>
     .EnvironmentalImpactTitle_cls
     {
-        color:          #c8b273;
-        font-weight:    bold;
-        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:              #c8b273;
+        font-weight:        bold;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 
     .EnvironmentalImpact_CO2_cls
     {
-        display: flex;
+        display:            flex;
     }
 
     .Spacer_cls
     {
-        width: 200px;
+        width:              200px;
     }
 
     .EnvironmentalImpactText_cls
     {
-        font-family:    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    .EnvironmentalImpactLink_cls
+    {
+        font-family:        'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color:              #c8b273;
+        margin-left:        10px;
+    }
+
+    .EnvironmentalImpactLink_cls:hover
+    {
+        text-decoration:    underline;
+        cursor:             pointer;
     }
 
     .EnvironmentalImpactSourceIcon_cls
     {
-        font-size:      0.8em;
-        margin-left:    10px;
-        user-select:    none;
+        font-size:          0.8em;
+        margin-left:        10px;
+        user-select:        none;
     }
 
     input
@@ -70,46 +84,46 @@
 
     .EnvironmentalImpactInputFloat_cls
     {
-        width: 70px;
+        width:              70px;
     }
 
     .EnvironmentalImpactInputText_cls
     {
-        width: 200px;
+        width:              200px;
     }
 
     @media (max-width: 1280px) and (orientation: portrait)
     {
         .EnvironmentalImpactTitle_cls
         {
-            font-size: 2em;
+            font-size:      2em;
         }
 
         .EnvironmentalImpactText_cls
         {
-            font-size: 2em;
+            font-size:      2em;
         }
 
         .EnvironmentalImpactSourceIcon_cls
         {
-            display: none;
+            display:        none;
         }
 
         input
         {
-            border:     solid 2px #c8b273;
-            font-size:  1em;
+            border:         solid 2px #c8b273;
+            font-size:      1em;
         }
 
         .EnvironmentalImpactInputFloat_cls
         {
-            width: 100px;
+            width:          100px;
         }
 
         .EnvironmentalImpactInputText_cls
         {
-            width: 200px;
-            font-size: 2em;
+            width:          200px;
+            font-size:      2em;
         }
     }
 </style>
