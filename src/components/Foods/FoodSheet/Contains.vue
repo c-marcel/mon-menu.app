@@ -22,7 +22,7 @@
         <input type="checkbox" id="contains_oap" :checked="contains.includes('oap')" @input="$emit('changeContains', 'oap', $event.target.checked)"><label for="contains_oap">autres produits animaux</label>
         <input type="checkbox" id="contains_gluten" :checked="contains.includes('gluten')" @input="$emit('changeContains', 'gluten', $event.target.checked)"><label for="contains_gluten">gluten</label>
         <input type="checkbox" id="contains_shellfish" :checked="contains.includes('shellfish')" @input="$emit('changeContains', 'shellfish', $event.target.checked)"><label for="contains_shellfish">crustacés</label>
-        <input type="checkbox" id="contains_peanuts" :checked="contains.includes('peanuts')" @input="$emit('changeContains', 'peanuts', $event.target.checked)"><label for="contains_peanuts">peanuts</label>
+        <input type="checkbox" id="contains_peanuts" :checked="contains.includes('peanuts')" @input="$emit('changeContains', 'peanuts', $event.target.checked)"><label for="contains_peanuts">arachides</label>
         <input type="checkbox" id="contains_soy" :checked="contains.includes('soy')" @input="$emit('changeContains', 'soy', $event.target.checked)"><label for="contains_soy">soja</label>
         <input type="checkbox" id="contains_nuts" :checked="contains.includes('nuts')" @input="$emit('changeContains', 'nuts', $event.target.checked)"><label for="contains_nuts">fruits à coques</label>
         <input type="checkbox" id="contains_celery" :checked="contains.includes('celery')" @input="$emit('changeContains', 'celery', $event.target.checked)"><label for="contains_celery">céleri</label>
