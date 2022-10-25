@@ -29,6 +29,7 @@
     let prepTime      = ref(0)
     let cookTime      = ref(0)
     let restTime      = ref(0)
+    let totalTime     = ref(0)
     let ingredCost    = ref(0)
     let energyCost    = ref(0)
     let energy        = ref(0)
@@ -158,6 +159,7 @@
                 prepTime.value      = response.data.times.preparation
                 cookTime.value      = response.data.times.cooking
                 restTime.value      = response.data.times.rest
+                totalTime.value     = response.data.times.total
                 ingredCost.value    = response.data.ingredientsCost
                 water.value         = response.data.resources.water
                 energy.value        = response.data.resources.energy.oven + response.data.resources.energy.hob
@@ -328,6 +330,11 @@
         restTime.value = v
     }
 
+    function updateTotalTime(v)
+    {
+        totalTime.value = v
+    }
+
     function updateResourceWater(v)
     {
         water.value = v
@@ -456,7 +463,8 @@
             {
                 preparation:    prepTime.value,
                 cooking:        cookTime.value,
-                rest:           restTime.value
+                rest:           restTime.value,
+                total:          totalTime.value
             },
             resources:
             {
@@ -764,6 +772,8 @@
                             <input type="number" min="0" max="999" step="1" :value="cookTime" style="width: 60px;" @input="updateTimeCooking($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
                             <span class="RecipeEditSheetLabel_Cls">Repos :</span>
                             <input type="number" min="0" max="999" step="1" :value="restTime" style="width: 60px;" @input="updateTimeRest($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
+                            <span class="RecipeEditSheetLabel_Cls">Total :</span>
+                            <input type="number" min="0" max="999" step="1" :value="totalTime" style="width: 60px;" @input="updateTotalTime($event.target.value)"/> <span class="RecipeEditSheetUnit_Cls">'</span>
                         </span>
                     </div>
 
@@ -1069,6 +1079,7 @@
     .RecipeEditSheetCheckboxList_Cls
     {
         display:            flex;
+        flex-wrap:          wrap;
         gap:                10px;
     }
 

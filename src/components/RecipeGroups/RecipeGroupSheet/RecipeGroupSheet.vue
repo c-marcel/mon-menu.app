@@ -192,7 +192,7 @@
             recipe.co2 = '-'
 
         // Time.
-        recipe.time = parseFloat(response.data.times.preparation) + parseFloat(response.data.times.cooking) + parseFloat(response.data.times.rest)
+        recipe.time = parseFloat(response.data.times.total)
     }
 
     function updateRecipeIntoList(response, id)

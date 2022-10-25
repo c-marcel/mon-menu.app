@@ -28,6 +28,7 @@
     let prepTime      = ref(0)
     let cookTime      = ref(0)
     let restTime      = ref(0)
+    let totalTime     = ref(0)
     let ingredCost    = ref(0)
     let energyCost    = ref(0)
     let energy        = ref(0)
@@ -119,6 +120,7 @@
                 prepTime.value   = response.data.times.preparation
                 cookTime.value   = response.data.times.cooking
                 restTime.value   = response.data.times.rest
+                totalTime.value  = response.data.times.total
                 ingredCost.value = response.data.ingredientsCost
                 water.value      = response.data.resources.water
                 energy.value     = parseFloat(response.data.resources.energy.oven)
@@ -344,6 +346,10 @@
                                 <tr>
                                     <td class="RecipeSheetDataTitle_Cls">Repos :</td>
                                     <td class="RecipeSheetDataValue_Cls">{{ $formatTime(restTime) }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="RecipeSheetDataTitle_Cls">Total :</td>
+                                    <td class="RecipeSheetDataValue_Cls">{{ $formatTime(totalTime) }}</td>
                                 </tr>
                             </table>
                         </div>
