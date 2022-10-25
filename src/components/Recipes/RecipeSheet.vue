@@ -480,6 +480,8 @@
     {
         flex-grow:          100;
         overflow:           hidden;
+        display:            flex;
+        flex-direction:     column;
     }
 
     .RecipeSheetNbOfParts_Cls
@@ -491,18 +493,16 @@
 
     .RecipeSheetIngredientList_Cls
     {
-        display:            flex;
-        flex-direction:     column;
-        gap:                10px;
         margin:             10px;
+        overflow:           auto;
     }
-
 
     .RecipeSheetIngredientEntry_Cls
     {
         display:            flex;
         height:             40px;
-        width:              40%;
+        width:              90%;
+        margin-top:         10px;
         overflow:           hidden;
     }
 

@@ -885,6 +885,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Spacer -->
+                    <div style="min-height: 30px;"></div>
                 </div>
 
                 <!-- Right part: recipe content -->
@@ -958,7 +961,7 @@
     {
         display:            flex;
         flex-grow:          1;
-        overflow:           hidden;
+        overflow:           auto;
     }
 
     .RecipeEditSheetLoadingPage_Cls
