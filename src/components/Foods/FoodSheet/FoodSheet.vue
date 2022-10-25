@@ -106,13 +106,27 @@
 
                 if(response.data.units)
                 {
-                    conversion.value.label  = response.data.units.label
+                    if (typeof response.data.units.label == "string")
+                    {
+                        conversion.value.label  = [response.data.units.label, ""]
+                    }
+
+                    else if (Array.isArray(response.data.units.label))
+                    {
+                        conversion.value.label  = response.data.units.label
+                    }
+
+                    else
+                    {
+                        conversion.value.label  = ["", ""]
+                    }
+                    
                     conversion.value.factor = response.data.units.conversion
                 }
 
                 else
                 {
-                    conversion.value.label  = ""
+                    conversion.value.label  = ["", ""]
                     conversion.value.factor = 0.0
                 }
             }
@@ -236,8 +250,14 @@
 
     function conversionLabelChanged(label)
     {
-        conversion.value.label = label
-        foodModified.value     = true
+        conversion.value.label[0] = label
+        foodModified.value        = true
+    }
+
+    function conversionPluralLabelChanged(value)
+    {
+        conversion.value.label[1] = value
+        foodModified.value        = true
     }
 
     function conversionFactorChanged(factor)
@@ -359,7 +379,7 @@
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Disponibilité : </span><Months :months="fooddata.months" :edit="edit" @toogleMonth="(month) => toogleMonth(month)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Approvisionnement : </span><SupplyArea :area="fooddata.supplyArea" :edit="edit" @changeSupplyArea="(area) => updateSupplyArea(area)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Prix : </span><Cost :cost="fooddata.cost" :edit="edit" @changeCost="(cost) => updateCost(cost)" /></p>
-            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Unité d'affichage : </span><DisplayUnit :edit="edit" :conversionEnabled="conversion.enabled" :label="conversion.label" :conversionFactor="conversion.factor" @enableConversion="(value) => enableConversion(value)" @labelChanged="(value) => conversionLabelChanged(value)" @factorChanged="(value) => conversionFactorChanged(value)" /></p>
+            <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Unité d'affichage : </span><DisplayUnit :edit="edit" :conversionEnabled="conversion.enabled" :label="conversion.label[0]" :pluralLabel="conversion.label[1]" :conversionFactor="conversion.factor" @enableConversion="(value) => enableConversion(value)" @labelChanged="(value) => conversionLabelChanged(value)" @factorChanged="(value) => conversionFactorChanged(value)" @pluralLabelChanged="(value) => conversionPluralLabelChanged(value)" /></p>
             <p class="FoodData_Entry_cls"><span class="FoodData_Entry_Title">Contient : </span><Contains :edit="edit" :contains="fooddata.contains" @changeContains="(type, value) => updateContains(type, value)"/></p>
             <div class="FoodData_Spacer_cls"></div>
             <EnvironmentalImpact :data="fooddata.environmentalImpact" :edit="edit" @changeCo2eq="(value) => updateCo2eq(value)" @changeCo2eqSource="(value) => changeCo2eqSource(value)" @databaseSelectionRequested="openCarbonDatabase()"/>

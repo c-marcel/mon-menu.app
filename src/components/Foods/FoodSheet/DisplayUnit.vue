@@ -5,19 +5,20 @@
 // Widget for displaying and editing unit used for food display.
 <script setup>
     import { ref } from 'vue'
-    const props = defineProps(['edit', 'conversionEnabled', 'label', 'conversionFactor'])
+    const props = defineProps(['edit', 'conversionEnabled', 'label', 'pluralLabel', 'conversionFactor'])
 
-    defineEmits(['enableConversion', 'labelChanged', 'factorChanged'])
+    defineEmits(['enableConversion', 'labelChanged', 'factorChanged', 'pluralLabelChanged'])
 </script>
 
 <template>
-    <span v-if="!edit" class="DisplayUnitText_cls">{{ String(conversionEnabled) == "true" ? label + ' (facteur de conversion : ' + $formatFloat(conversionFactor) + ')' : 'kg' }}</span>
+    <span v-if="!edit" class="DisplayUnitText_cls">{{ String(conversionEnabled) == "true" ? label + ' / ' + pluralLabel + ' (facteur de conversion : ' + $formatFloat(conversionFactor) + ')' : 'kg' }}</span>
     <span v-if="edit">
         <label class="DisplayUnitText_cls">
             <input type="checkbox" class="ConversionCheckbox_cls" :checked="conversionEnabled" :value="conversionEnabled" @change="$emit('enableConversion', $event.target.checked)" />
             unité d'affichage spécifique : 
         </label>
-        <input type="text" class="ConversionSelect_cls" :enable="conversionEnabled" :value="label" @input="$emit('labelChanged', $event.target.value)"/>
+        <input type="text" class="ConversionSelect_cls" :enable="conversionEnabled" :value="label" @input="$emit('labelChanged', $event.target.value)"/> /
+        <input type="text" class="ConversionSelect_cls" :enable="conversionEnabled" :value="pluralLabel" @input="$emit('pluralLabelChanged', $event.target.value)"/>
         <span class="DisplayUnitText_cls"> Facteur de conversion : </span>
         <input type="number" class="ConversionSelect_cls" step="0.001" :value="conversionFactor" @input="$emit('factorChanged', $event.target.value)" />
         <span class="DisplayUnitText_cls"> unité(s) par kg.</span>

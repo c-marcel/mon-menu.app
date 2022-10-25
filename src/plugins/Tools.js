@@ -125,19 +125,19 @@ export default
                   || units.label.length < 1)
                 return app.config.globalProperties.$formatFloat(app.config.globalProperties.$formatWeight(quantity))
 
-            let v = quantity * units.conversion
+            let v = app.config.globalProperties.$roundFloat(quantity * units.conversion, 1)
             let u = units.label[0]
 
             // Lesser than 2: singular.
             if (v < 2.0)
-                return String(v) + ' ' + u
+                return app.config.globalProperties.$formatFloat(String(v)) + ' ' + u
 
             // Else: use plural.
             u = units.label[0] + 's'
             if (units.label.length == 2)
                 u = units.label[1]
 
-            return String(v) + ' ' + u
+            return app.config.globalProperties.$formatFloat(String(v)) + ' ' + u
         }
 
         // Convert ingredient remaining quantity and unit option to human readable.
