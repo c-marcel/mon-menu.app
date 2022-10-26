@@ -16,19 +16,21 @@ import Plugin_States from './plugins/CurrentStates'
 import Plugin_Tools  from './plugins/Tools'
 import Plugin_PLS    from './plugins/PersistentLocalStorage'
 
-import Configuration from './components/Configuration/Configuration.vue';
-import RecipeGroups  from './components/RecipeGroups/RecipeGroups.vue';
-import Foods         from './components/Foods/Foods.vue';
+import RecipeSheetStatic    from './components/Recipes/RecipeSheetStatic.vue'
+import Configuration        from './components/Configuration/Configuration.vue';
+import RecipeGroups         from './components/RecipeGroups/RecipeGroups.vue';
+import Foods                from './components/Foods/Foods.vue';
 
 const app = createApp(App)
 
 // Define routes.
 const routes =
 [
-    { path: '/foods',   component: Foods         },
-    { path: '/recipes', component: RecipeGroups  },
-    { path: '/config',  component: Configuration },
-    { path: '/',        component: RecipeGroups  },
+    { path: '/foods',       component: Foods                },
+    { path: '/recipes',     component: RecipeGroups         },
+    { path: '/config',      component: Configuration        },
+    { path: '/static/:id',  component: RecipeSheetStatic    },
+    { path: '/',            component: RecipeGroups         }
 ]
 
 // Create router and register current route.

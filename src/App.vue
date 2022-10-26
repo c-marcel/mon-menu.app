@@ -30,7 +30,7 @@
 <template>
     <Header @menuItemClicked="showCentralContainer()" />
     <CentralContainer class="CentralContainer_cls" v-bind:class="{CentralContainerHidden_cls: !displayCentralContainer}" @hideCentralContainerRequested="hideCentralContainer()"/>
-    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="currentStates.currentRecipeId" :edit="currentStates.currentMode" />
+    <RecipeSheet class="RecipeSheet_Cls" :currentRecipeId="currentStates.currentRecipeId" :edit="currentStates.currentMode" :displayPermalink="true"/>
     <RecipeEditSheet class="RecipeSheet_Cls" :currentRecipeId="currentStates.currentRecipeId" :edit="currentStates.currentMode" />
 </template>
 

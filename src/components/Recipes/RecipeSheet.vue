@@ -12,7 +12,9 @@
 
     axios.defaults.withCredentials = true
 
-    let props = defineProps(['currentRecipeId', 'edit'])
+    let props = defineProps(['currentRecipeId', 'edit', 'displayPermalink'])
+
+    let emit = defineEmits(['closeRecipeRequested'])
 
     let currentStates = ref(inject('currentStates'))
     let sessionData   = ref(inject('PersistentLocalStorage_sessionData'))
@@ -64,6 +66,7 @@
 
     function closeRecipe()
     {
+        emit('closeRecipeRequested')
         currentStates.value.currentRecipeId = ''
     }
 
@@ -239,6 +242,13 @@
         if (value.currentRecipeId != '' && value.edit != 'edit')
             loadRecipeData(value.currentRecipeId)
     })
+
+    // Load recipe if currentRecipeId is defined.
+    if (props.currentRecipeId)
+    {
+        loadRecipeData(props.currentRecipeId)
+    }
+    
 </script>
 
 <template>
@@ -392,6 +402,7 @@
                     </div>
                     <div class="RecipeSheetContent_Cls" v-dompurify-html="markedContent">
                     </div>
+                    <span v-if="displayPermalink" class="RecipeSheepPermalink_Cls"><a :href="'#/static/' + currentRecipeId" target="_blank">Lien permanent vers la recette</a></span>
                 </div>
             </div>
         </div>
@@ -697,5 +708,11 @@
         height:             20px;
         margin-left:        5px;
         content:            url(/images/no_alcohol.png);
+    }
+
+    .RecipeSheepPermalink_Cls
+    {
+        font-size:          0.8em;
+        margin-bottom:      10px;
     }
 </style>
